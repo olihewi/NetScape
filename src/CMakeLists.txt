@@ -11,7 +11,7 @@ file(GLOB_RECURSE HEADER_LIST
 
 ## cpp files go here, [h]pp files are globbed so don't need to be explicitly added ##
 set(GAMELIB_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR} Scene.cpp Sprite.cpp AnimatedSprite.cpp Text.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR} Scene.cpp Sprite.cpp AnimatedSprite.cpp Text.cpp ScalableSprite.cpp UIButton.cpp)
 
 ## create the game library
 add_library(${GAMELIB} STATIC ${GAMELIB_SOURCES} "${HEADER_LIST}")

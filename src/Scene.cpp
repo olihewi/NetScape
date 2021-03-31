@@ -2,7 +2,7 @@
 // Created by hewis on 31/03/2021.
 //
 
-#include "ASGEGameLib/Scenes/Scene.h"
+#include "Scenes/Scene.h"
 
 void Scene::keyInput(const ASGE::KeyEvent* key)
 {

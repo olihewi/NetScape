@@ -2,7 +2,7 @@
 // Created by hewis on 31/03/2021.
 //
 
-#include "ASGEGameLib/GameObjects/Sprites/Sprite.h"
+#include "GameObjects/Sprites/Sprite.h"
 Sprite::Sprite(ASGE::Renderer* renderer, const std::string& file_path, ASGE::Point2D _position)
 {
   loadSprite(renderer, file_path);

@@ -10,9 +10,9 @@ class Text : public GameObject
 {
  public:
   Text(
-    ASGE::Renderer* renderer, std::string _contents, ASGE::Point2D position = ASGE::Point2D(),
-    int font_index = 0, ASGE::Colour colour = ASGE::COLOURS::WHITE, float scale = 1,
-    short z_order = 1);
+    ASGE::Renderer* renderer, const std::string& _contents,
+    ASGE::Point2D position = ASGE::Point2D(), int font_index = 0,
+    ASGE::Colour colour = ASGE::COLOURS::WHITE, float scale = 1, short z_order = 1);
 
   [[nodiscard]] std::string contents();
   void contents(std::string _contents);

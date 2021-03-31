@@ -3,13 +3,12 @@
 //
 
 #include "GameObjects/Sprites/Text.h"
-#include <utility>
 
 Text::Text(
-  ASGE::Renderer* renderer, std::string _contents, ASGE::Point2D _position, int _font_index,
+  ASGE::Renderer* renderer, const std::string& _contents, ASGE::Point2D _position, int _font_index,
   ASGE::Colour _colour, float _scale, short _z_order)
 {
-  contents(std::move(_contents));
+  contents(_contents);
   position(_position);
   setFont(renderer, _font_index);
   colour(_colour);
