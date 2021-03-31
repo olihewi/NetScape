@@ -1,30 +1,28 @@
 #include "ASGEGame.hpp"
-#include <ASGEGameLib/GComponent.hpp>
 
-/// Initialises the game.
-/// Setup your game and initialise the core components.
-/// @param settings
+/// Initialises the game
 ASGEGame::ASGEGame(const ASGE::GameSettings& settings) :
   OGLGame(settings),
-  key_callback_id(inputs->addCallbackFnc(ASGE::E_KEY, &ASGEGame::keyHandler, this))
+  key_callback_id(inputs->addCallbackFnc(ASGE::E_KEY, &ASGEGame::keyHandler, this)),
+  click_callback_id(inputs->addCallbackFnc(ASGE::E_MOUSE_CLICK, &ASGEGame::clickHandler, this)),
+  mouse_callback_id(inputs->addCallbackFnc(ASGE::E_MOUSE_MOVE, &ASGEGame::mouseHandler, this)),
+  scroll_callback_id(inputs->addCallbackFnc(ASGE::E_MOUSE_SCROLL, &ASGEGame::scrollHandler, this))
 {
   inputs->use_threads = true;
   toggleFPS();
+  scene = std::make_unique<Scene>();
 }
 
-/// Destroys the game.
+/// Destroys the game
 ASGEGame::~ASGEGame()
 {
   this->inputs->unregisterCallback(static_cast<unsigned int>(key_callback_id));
+  this->inputs->unregisterCallback(static_cast<unsigned int>(click_callback_id));
+  this->inputs->unregisterCallback(static_cast<unsigned int>(mouse_callback_id));
+  this->inputs->unregisterCallback(static_cast<unsigned int>(scroll_callback_id));
 }
 
-/// Processes key inputs.
-/// This function is added as a callback to handle the game's
-/// keyboard input. For this game, calls to this function
-/// are not thread safe, so you may alter the game's state
-/// but your code needs to designed to prevent data-races.
-/// @param data
-/// @see KeyEvent
+/// Processes key inputs
 void ASGEGame::keyHandler(ASGE::SharedEventData data)
 {
   const auto* key = dynamic_cast<const ASGE::KeyEvent*>(data.get());
@@ -33,29 +31,40 @@ void ASGEGame::keyHandler(ASGE::SharedEventData data)
   {
     signalExit();
   }
+  scene->keyInput(key);
 }
-
-/// Updates your game and all it's components.
-/// @param us
+/// Processes mouse clicks
+void ASGEGame::clickHandler(ASGE::SharedEventData data)
+{
+  const auto* click = dynamic_cast<const ASGE::ClickEvent*>(data.get());
+  scene->clickInput(click);
+}
+/// Processes mouse movement
+void ASGEGame::mouseHandler(ASGE::SharedEventData data)
+{
+  const auto* mouse = dynamic_cast<const ASGE::MoveEvent*>(data.get());
+  scene->mouseInput(mouse);
+}
+/// Processes mouse scrolling
+void ASGEGame::scrollHandler(ASGE::SharedEventData data)
+{
+  const auto* scroll = dynamic_cast<const ASGE::ScrollEvent*>(data.get());
+  scene->scrollInput(scroll);
+}
+/// Updates the current scene every frame
 void ASGEGame::update(const ASGE::GameTime& us)
 {
-  for (auto& gc : game_components)
-  {
-    gc->update(us.deltaInSecs());
-  }
+  auto dt = static_cast<float>(us.deltaInSecs());
+  scene->update(dt);
 }
 
-/// Render your game and its scenes here.
-void ASGEGame::render() {}
+/// Renders the current scene
+void ASGEGame::render()
+{
+  scene->render(renderer.get());
+}
 
-/// Calls to fixedUpdate use the same fixed timestep
-/// irrespective of how much time is passed. This allows
-/// calculations to resolve correctly and stop physics
-/// simulations from imploding
-///
-/// https://gamedev.stackexchange.com/questions/1589/when-should-i-use-a-fixed-or-variable-time-step
-/// "Use variable timesteps for your game and fixed steps for physics"
-/// @param us
+/// Fixed Update can be used for physics stuff
 void ASGEGame::fixedUpdate(const ASGE::GameTime& us)
 {
   Game::fixedUpdate(us);
