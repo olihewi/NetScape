@@ -18,7 +18,7 @@ AnimatedSprite::AnimatedSprite(
 }
 void AnimatedSprite::update(float dt)
 {
-  timer           = fmod(timer + dt, static_cast<float>(frames) / speed);
-  auto this_frame = floor(timer * speed);
+  timer            = std::fmod(timer + dt, static_cast<float>(frames) / speed);
+  float this_frame = std::floor(timer * speed);
   Sprite::srcRect(this_frame * sprite_size, 0, sprite_size, sprite_size);
 }
