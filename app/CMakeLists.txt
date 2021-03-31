@@ -11,7 +11,7 @@ file(GLOB_RECURSE HEADER_LIST
 ## source files get listed here ##
 set(GAME_SOURCES
         ASGEGame/main.cpp
-        ASGEGame/ASGEGame.cpp ../include/ASGEGameLib/GameObjects/GameObject.h ../src/Scene.cpp ../include/ASGEGameLib/Scenes/Scene.h)
+        ASGEGame/ASGEGame.cpp)
 
 ## the ASGE Game, which spawns the Game window ##
 add_executable(${GAME} ${HEADER_LIST} ${GAME_SOURCES})
