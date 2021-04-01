@@ -5,9 +5,9 @@
 #ifndef ASGEMOVIEGAME_SCALABLESPRITE_H
 #define ASGEMOVIEGAME_SCALABLESPRITE_H
 
+#include <ASGEGameLib/GameObjects/GameObject.h>
 #include <Engine/Renderer.h>
 #include <Engine/Sprite.h>
-#include <GameObjects/GameObject.h>
 class ScalableSprite : public GameObject
 {
  public:

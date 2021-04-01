@@ -1,5 +1,5 @@
 #include "ASGEGame.hpp"
-#include <ASGEGameLib/Scenes/TestScene.h>
+#include <ASGEGameLib/Scenes/LevelEditor.h>
 #include <ASGEGameLib/Utilities/FontManager.h>
 
 /// Initialises the game
@@ -13,7 +13,7 @@ ASGEGame::ASGEGame(const ASGE::GameSettings& settings) :
   inputs->use_threads = true;
   toggleFPS();
   FontManager::loadFonts(renderer.get());
-  scene = std::make_unique<TestScene>(renderer.get());
+  scene = std::make_unique<LevelEditor>(renderer.get());
 }
 
 /// Destroys the game

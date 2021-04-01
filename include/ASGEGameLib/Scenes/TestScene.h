@@ -9,7 +9,7 @@
 class TestScene : public Scene
 {
  public:
-  TestScene(ASGE::Renderer* renderer);
+  explicit TestScene(ASGE::Renderer* renderer);
 };
 
 #endif // ASGEMOVIEGAME_TESTSCENE_H

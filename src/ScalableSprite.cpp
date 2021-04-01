@@ -37,15 +37,15 @@ void ScalableSprite::position(ASGE::Point2D _position)
       auto& spr = sprites[y * 3 + x];
       spr->xPos(_position.x + offset_x);
       spr->yPos(_position.y + offset_y);
-      offset_x += spr->width();
       offset_y += spr->height();
     }
+    offset_x += sprites[x]->width();
   }
 }
 void ScalableSprite::dimensions(ASGE::Point2D _dimensions)
 {
   float centre_w = _dimensions.x - sprites[3]->width() - sprites[5]->width();
-  float centre_h = _dimensions.y - sprites[1]->width() - sprites[6]->height();
+  float centre_h = _dimensions.y - sprites[1]->height() - sprites[6]->height();
   sprites[4]->width(centre_w);
   sprites[4]->height(centre_h);
   sprites[1]->width(centre_w);
