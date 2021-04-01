@@ -1,4 +1,5 @@
-# ASSETS
-Place your assets and game data in this folder. The +GD build target will then package them for you. 
+# Credits
 
-**Don't forget to credit original authors**.
+**Tilesets**
+- [Japanese City](https://guttykreum.itch.io/japanese-town) by [GuttyKreum](https://guttykreum.itch.io/) (Commercial Rights owned)
+- [Dotonbori City](https://guttykreum.itch.io/dotonbori-city-game-assets) by [GuttyKreum](https://guttykreum.itch.io/) (Commercial Rights owned)

@@ -1,4 +1,6 @@
 #include "ASGEGame.hpp"
+#include <ASGEGameLib/Scenes/TestScene.h>
+#include <ASGEGameLib/Utilities/FontManager.h>
 
 /// Initialises the game
 ASGEGame::ASGEGame(const ASGE::GameSettings& settings) :
@@ -10,7 +12,8 @@ ASGEGame::ASGEGame(const ASGE::GameSettings& settings) :
 {
   inputs->use_threads = true;
   toggleFPS();
-  scene = std::make_unique<Scene>();
+  FontManager::loadFonts(renderer.get());
+  scene = std::make_unique<TestScene>(renderer.get());
 }
 
 /// Destroys the game

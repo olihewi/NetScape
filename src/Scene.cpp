@@ -46,3 +46,7 @@ void Scene::render(ASGE::Renderer* renderer)
     game_object->render(renderer);
   }
 }
+void Scene::addObject(std::unique_ptr<GameObject> object)
+{
+  game_objects.emplace_back(std::move(object));
+}
