@@ -6,7 +6,7 @@
 #include <cmath>
 EditorTileSet::EditorTileSet(
   ASGE::Renderer* renderer, const std::string& file_path, int _sprite_size) :
-  sprite_sheet(renderer, file_path),
+  sprite_sheet(renderer, file_path, ASGE::Point2D(0, 64)),
   cursor(
     renderer, "data/images/tilesets/cursor.png", std::array<float, 6>{ 3, 3, 28, 28, 3, 3 },
     ASGE::Point2D(), ASGE::Point2D(32, 32)),
@@ -25,12 +25,10 @@ void EditorTileSet::clickInput(const ASGE::ClickEvent* click)
   if (sprite_sheet.isInside(click_pos) && click->action != ASGE::KEYS::KEY_REPEATED)
   {
     auto click_x = std::floor(
-      (click_pos.x - sprite_sheet.position().x) /
-      (sprite_sheet.position().x + sprite_sheet.dimensions().x) *
+      (click_pos.x - sprite_sheet.position().x) / sprite_sheet.dimensions().x *
       (sprite_sheet.dimensions().x / static_cast<float>(sprite_size)));
     auto click_y = std::floor(
-      (click_pos.y - sprite_sheet.position().y) /
-      (sprite_sheet.position().y + sprite_sheet.dimensions().y) *
+      (click_pos.y - sprite_sheet.position().y) / sprite_sheet.dimensions().y *
       (sprite_sheet.dimensions().y / static_cast<float>(sprite_size)));
     if (click->action == ASGE::KEYS::KEY_PRESSED)
     {
@@ -48,8 +46,9 @@ void EditorTileSet::clickInput(const ASGE::ClickEvent* click)
     int cursor_pos_x = (selection_end % 8 > selection_start % 8)
                          ? selection_start % 8 * sprite_size - 1
                          : selection_end % 8 * sprite_size - 1;
-    cursor.position(
-      ASGE::Point2D(static_cast<float>(cursor_pos_x), static_cast<float>(cursor_pos_y)));
+    cursor.position(ASGE::Point2D(
+      static_cast<float>(cursor_pos_x) + sprite_sheet.position().x,
+      static_cast<float>(cursor_pos_y) + sprite_sheet.position().y));
     float cursor_width =
       std::fabs(static_cast<float>(selection_start % 8 - selection_end % 8)) * 32 + 32;
     int selection_vert_height = std::abs(selection_start / 8 - selection_end / 8);

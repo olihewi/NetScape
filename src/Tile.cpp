@@ -3,7 +3,6 @@
 //
 
 #include "GameObjects/Tilemap/Tile.h"
-Tile::Tile() : collision(-1) {}
 Tile::Tile(
   ASGE::Renderer* renderer, const std::string& tileset_path, std::array<float, 4> rect,
   ASGE::Point2D position, int collision_layer) :

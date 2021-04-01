@@ -8,7 +8,7 @@
 class Tile : public GameObject
 {
  public:
-  Tile();
+  Tile() = default;
   Tile(
     ASGE::Renderer* renderer, const std::string& tileset_path, std::array<float, 4> rect,
     ASGE::Point2D position, int collision_layer = -1);
@@ -18,7 +18,7 @@ class Tile : public GameObject
 
  private:
   std::unique_ptr<Sprite> sprite;
-  int collision;
+  int collision = -1;
 };
 
 #endif // ASGEMOVIEGAME_TILE_H
