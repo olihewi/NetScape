@@ -11,7 +11,7 @@
 class LevelEditor : public Scene
 {
  public:
-  explicit LevelEditor(ASGE::Renderer* renderer);
+  explicit LevelEditor(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback);
   void update(float dt) override;
   void render(ASGE::Renderer* renderer) override;
   void keyInput(const ASGE::KeyEvent* key) override;

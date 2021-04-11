@@ -9,7 +9,7 @@ EditorTileSet::EditorTileSet(
   sprite_sheet(renderer, file_path, ASGE::Point2D(0, 64)),
   cursor(
     renderer, "data/images/tilesets/cursor.png", std::array<float, 6>{ 3, 3, 28, 28, 3, 3 },
-    ASGE::Point2D(), ASGE::Point2D(32, 32)),
+    ASGE::Point2D(0, 64), ASGE::Point2D(32, 32)),
   sprite_size(_sprite_size)
 {
 }

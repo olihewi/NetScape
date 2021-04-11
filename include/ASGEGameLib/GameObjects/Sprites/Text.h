@@ -5,7 +5,7 @@
 #ifndef ASGEMOVIEGAME_TEXT_H
 #define ASGEMOVIEGAME_TEXT_H
 
-#include <GameObjects/GameObject.h>
+#include <ASGEGameLib/GameObjects/GameObject.h>
 class Text : public GameObject
 {
  public:
@@ -23,6 +23,7 @@ class Text : public GameObject
   [[nodiscard]] ASGE::Point2D position();
   void position(ASGE::Point2D _position);
   void translate(ASGE::Point2D _translation);
+  void centrePos(ASGE::Point2D _position);
 
   [[nodiscard]] ASGE::Colour colour();
   void colour(ASGE::Colour _colour);

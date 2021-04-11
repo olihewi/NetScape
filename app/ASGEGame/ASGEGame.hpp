@@ -26,6 +26,8 @@ class ASGEGame : public ASGE::OGLGame
   void render() override;
   void fixedUpdate(const ASGE::GameTime& us) override;
 
+  void setScene(Scene::Scenes _scene);
+
  private:
   std::unique_ptr<Scene> scene;
   /// Callback IDs are used to unregister the callback when the game is closed.

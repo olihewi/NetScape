@@ -50,3 +50,11 @@ void Scene::addObject(std::unique_ptr<GameObject> object)
 {
   game_objects.emplace_back(std::move(object));
 }
+Scene::Scene(std::function<void(Scenes)> _scene_callback) :
+  scene_callback(std::move(_scene_callback))
+{
+}
+void Scene::setScene(Scene::Scenes _scene)
+{
+  scene_callback(_scene);
+}

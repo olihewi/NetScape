@@ -67,3 +67,10 @@ bool ScalableSprite::isInside(ASGE::Point2D position)
     position.x >= sprites[0]->xPos() && position.x <= sprites[8]->xPos() + sprites[8]->width() &&
     position.y >= sprites[0]->yPos() && position.y <= sprites[8]->yPos() + sprites[8]->height());
 }
+ASGE::Point2D ScalableSprite::dimensions()
+{
+  auto dim1 = ASGE::Point2D(sprites[0]->width(), sprites[0]->height());
+  auto dim2 = ASGE::Point2D(sprites[4]->width(), sprites[4]->height());
+  auto dim3 = ASGE::Point2D(sprites[8]->width(), sprites[8]->height());
+  return ASGE::Point2D(dim1.x + dim2.x + dim3.x, dim1.y + dim2.y + dim3.y);
+}

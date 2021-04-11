@@ -1,5 +1,6 @@
 #include "ASGEGame.hpp"
 #include <ASGEGameLib/Scenes/LevelEditor.h>
+#include <ASGEGameLib/Scenes/TitleScene.h>
 #include <ASGEGameLib/Utilities/FontManager.h>
 
 /// Initialises the game
@@ -13,7 +14,8 @@ ASGEGame::ASGEGame(const ASGE::GameSettings& settings) :
   inputs->use_threads = true;
   toggleFPS();
   FontManager::loadFonts(renderer.get());
-  scene = std::make_unique<LevelEditor>(renderer.get());
+  setScene(Scene::LEVEL_EDITOR);
+  setScene(Scene::TITLE);
 }
 
 /// Destroys the game
@@ -71,4 +73,24 @@ void ASGEGame::render()
 void ASGEGame::fixedUpdate(const ASGE::GameTime& us)
 {
   Game::fixedUpdate(us);
+}
+void ASGEGame::setScene(Scene::Scenes _scene)
+{
+  scene = nullptr;
+  switch (_scene)
+  {
+    case Scene::TITLE:
+    {
+      scene = std::make_unique<TitleScene>(renderer.get(), [this](auto&& PH1) { setScene(PH1); });
+      break;
+    }
+    case Scene::LEVEL_EDITOR:
+    {
+      scene = std::make_unique<LevelEditor>(renderer.get(), [this](auto&& PH1) { setScene(PH1); });
+      break;
+    }
+    case Scene::QUIT_GAME:
+      signalExit();
+      break;
+  }
 }

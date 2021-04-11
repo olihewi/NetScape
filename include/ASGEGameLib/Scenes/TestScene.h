@@ -9,7 +9,7 @@
 class TestScene : public Scene
 {
  public:
-  explicit TestScene(ASGE::Renderer* renderer);
+  TestScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback);
 };
 
 #endif // ASGEMOVIEGAME_TESTSCENE_H

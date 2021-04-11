@@ -24,5 +24,5 @@ int FontManager::loadFont(ASGE::Renderer* renderer, const std::string& file_path
 void FontManager::loadFonts(ASGE::Renderer* renderer)
 {
   /// Load required fonts here!
-  loadFont(renderer, "data/fonts/RobotoMono-Regular.ttf", 64);
+  loadFont(renderer, "data/fonts/RobotoMono-Regular.ttf", 48);
 }

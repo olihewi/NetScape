@@ -76,3 +76,7 @@ void Text::render(ASGE::Renderer* renderer)
 {
   renderer->renderText(text);
 }
+void Text::centrePos(ASGE::Point2D _position)
+{
+  text.setPosition(ASGE::Point2D(_position.x - text.getWidth() / 2, _position.y));
+}

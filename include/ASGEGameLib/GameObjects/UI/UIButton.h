@@ -6,7 +6,7 @@
 #define ASGEMOVIEGAME_UIBUTTON_H
 
 #include "ScalableSprite.h"
-#include <GameObjects/Sprites/Text.h>
+#include <ASGEGameLib/GameObjects/Sprites/Text.h>
 #include <functional>
 class UIButton : public ScalableSprite
 {
@@ -16,10 +16,14 @@ class UIButton : public ScalableSprite
     int font_index, std::function<void()> _callback, std::array<float, 6> part_sizes,
     ASGE::Point2D _position, ASGE::Point2D _dimensions);
   void clickInput(const ASGE::ClickEvent* click) override;
+  void mouseInput(const ASGE::MoveEvent* mouse) override;
+  void render(ASGE::Renderer* renderer) override;
 
  private:
   Text text;
   std::function<void()> callback;
+  bool is_selected = false;
+  float image_size = 0;
 };
 
 #endif // ASGEMOVIEGAME_UIBUTTON_H

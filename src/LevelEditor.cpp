@@ -3,8 +3,11 @@
 //
 
 #include "Scenes/LevelEditor.h"
-LevelEditor::LevelEditor(ASGE::Renderer* renderer) :
-  tile_map(renderer, 1), tile_set(renderer, "data/images/tilesets/japanese_city.png")
+
+#include <utility>
+LevelEditor::LevelEditor(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
+  Scene(std::move(_scene_callback)), tile_map(renderer, 1),
+  tile_set(renderer, "data/images/tilesets/japanese_city.png")
 {
 }
 void LevelEditor::update(float dt)
