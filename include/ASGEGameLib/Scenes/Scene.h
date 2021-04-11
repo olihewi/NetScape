@@ -6,6 +6,7 @@
 #define ASGEMOVIEGAME_SCENE_H
 
 #include <ASGEGameLib/GameObjects/GameObject.h>
+#include <Engine/Gamepad.h>
 #include <Engine/InputEvents.h>
 #include <Engine/Renderer.h>
 #include <functional>
@@ -27,6 +28,7 @@ class Scene
   virtual void clickInput(const ASGE::ClickEvent* click);
   virtual void mouseInput(const ASGE::MoveEvent* mouse);
   virtual void scrollInput(const ASGE::ScrollEvent* scroll);
+  virtual void controllerInput(std::array<ASGE::GamePadData, 4> /*controllers*/) {}
 
   virtual void update(float dt);
   virtual void render(ASGE::Renderer* renderer);

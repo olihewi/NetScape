@@ -61,6 +61,10 @@ void ASGEGame::update(const ASGE::GameTime& us)
 {
   auto dt = static_cast<float>(us.deltaInSecs());
   scene->update(dt);
+  std::array<ASGE::GamePadData, 4> controllers{
+    inputs->getGamePad(0), inputs->getGamePad(1), inputs->getGamePad(2), inputs->getGamePad(3)
+  };
+  scene->controllerInput(controllers);
 }
 
 /// Renders the current scene
