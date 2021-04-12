@@ -5,7 +5,7 @@
 #include "GameObjects/UI/Cursor.h"
 Cursor::Cursor(ASGE::Renderer* renderer) : Sprite(renderer, "data/images/ui/cursors.png")
 {
-  float sprite_size = Sprite::dimensions().y;
+  float sprite_size = Sprite::getTextureSize().y;
   Sprite::dimensions(ASGE::Point2D(sprite_size, sprite_size));
   Sprite::srcRect(0, 0, sprite_size, sprite_size);
   Sprite::zOrder(2);
@@ -17,7 +17,7 @@ void Cursor::position(ASGE::Point2D _position)
 }
 void Cursor::setCursor(Cursor::CursorMode _mode)
 {
-  float sprite_size = Sprite::dimensions().y;
+  float sprite_size = Sprite::getTextureSize().y;
   auto x_offset     = static_cast<float>(_mode) * sprite_size;
   Sprite::srcRect(x_offset, 0, sprite_size, sprite_size);
 }

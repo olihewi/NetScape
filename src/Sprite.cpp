@@ -6,7 +6,8 @@
 Sprite::Sprite(ASGE::Renderer* renderer, const std::string& file_path, ASGE::Point2D _position)
 {
   loadSprite(renderer, file_path);
-  position(_position);
+  sprite->xPos(_position.x);
+  sprite->yPos(_position.y);
 }
 bool Sprite::loadSprite(ASGE::Renderer* renderer, const std::string& file_path)
 {
@@ -108,4 +109,9 @@ void Sprite::srcRect(float x, float y, float w, float h)
   src_rect[1]    = y;
   src_rect[2]    = w;
   src_rect[3]    = h;
+}
+ASGE::Point2D Sprite::getTextureSize()
+{
+  auto* texture = sprite->getTexture();
+  return ASGE::Point2D(texture->getWidth(), texture->getHeight());
 }

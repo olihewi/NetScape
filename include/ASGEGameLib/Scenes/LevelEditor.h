@@ -8,6 +8,8 @@
 #include "Scene.h"
 #include <ASGEGameLib/GameObjects/Tilemap/EditorTileSet.h>
 #include <ASGEGameLib/GameObjects/Tilemap/TileMap.h>
+#include <ASGEGameLib/GameObjects/UI/Cursor.h>
+#include <ASGEGameLib/GameObjects/UI/UIButton.h>
 class LevelEditor : public Scene
 {
  public:
@@ -21,6 +23,8 @@ class LevelEditor : public Scene
  private:
   TileMap tile_map;
   EditorTileSet tile_set;
+  std::array<UIButton, 1> scene_change_buttons;
+  Cursor cursor;
   bool mouse_pressed = false;
 };
 

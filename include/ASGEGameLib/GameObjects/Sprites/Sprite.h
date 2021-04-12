@@ -46,6 +46,8 @@ class Sprite : public GameObject
 
   void srcRect(float x, float y, float w, float h);
 
+  [[nodiscard]] ASGE::Point2D getTextureSize();
+
  private:
   std::unique_ptr<ASGE::Sprite> sprite;
   bool visible = true;
