@@ -57,6 +57,8 @@ void ASGEGame::scrollHandler(ASGE::SharedEventData data)
   const auto* scroll = dynamic_cast<const ASGE::ScrollEvent*>(data.get());
   scene->scrollInput(scroll);
 }
+
+
 /// Updates the current scene every frame
 void ASGEGame::update(const ASGE::GameTime& us)
 {

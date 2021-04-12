@@ -35,4 +35,6 @@ class ASGEGame : public ASGE::OGLGame
   int click_callback_id  = -1;
   int mouse_callback_id  = -1;
   int scroll_callback_id = -1;
+
+
 };
