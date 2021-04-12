@@ -16,11 +16,13 @@ class TitleScene : public Scene
   void clickInput(const ASGE::ClickEvent* click) override;
   void mouseInput(const ASGE::MoveEvent* mouse) override;
   void render(ASGE::Renderer* renderer) override;
-  void controllerInput(std::array<ASGE::GamePadData, 4> controllers) override;
+  void controllerInput(ControllerTracker& controllers, float /*dt*/) override;
 
  private:
+  void selectButton(size_t _index);
   std::array<UIButton, 5> scene_change_buttons;
   Cursor cursor;
+  size_t button_selection = 0;
 };
 
 #endif // ASGEMOVIEGAME_TITLESCENE_H

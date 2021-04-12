@@ -3,6 +3,7 @@
 //
 
 #include "GameObjects/UI/UIButton.h"
+#include <Engine/Mouse.h>
 #include <utility>
 
 UIButton::UIButton(
@@ -16,37 +17,45 @@ UIButton::UIButton(
     font_index),
   callback(std::move(_callback))
 {
-  image_size += sprites[0]->srcRect()[3];
-  image_size += sprites[3]->srcRect()[3];
-  image_size += sprites[6]->srcRect()[3];
+  image_size = sprites[0]->getTexture()->getHeight() / 2;
   text.centrePos(ASGE::Point2D(
     sprites[4]->xPos() + sprites[4]->width() / 2,
     sprites[4]->yPos() + sprites[4]->height() / 2 + 20));
 }
 void UIButton::clickInput(const ASGE::ClickEvent* click)
 {
-  if (isInside(ASGE::Point2D(static_cast<float>(click->xpos), static_cast<float>(click->ypos))))
+  if (click->action == ASGE::KEYS::KEY_RELEASED && click->button == ASGE::MOUSE::MOUSE_BTN1)
   {
-    callback();
+    press();
   }
 }
 void UIButton::mouseInput(const ASGE::MoveEvent* mouse)
 {
-  bool last_selected = is_selected;
-  is_selected =
-    isInside(ASGE::Point2D(static_cast<float>(mouse->xpos), static_cast<float>(mouse->ypos)));
-  if (last_selected != is_selected)
-  {
-    for (auto& sprite : sprites)
-    {
-      auto* src    = sprite->srcRect();
-      float offset = (is_selected ? image_size : -image_size);
-      src[1]       = src[1] + offset;
-    }
-  }
+  select(isInside(ASGE::Point2D(static_cast<float>(mouse->xpos), static_cast<float>(mouse->ypos))));
 }
 void UIButton::render(ASGE::Renderer* renderer)
 {
   ScalableSprite::render(renderer);
   text.render(renderer);
+}
+void UIButton::select(bool _selection)
+{
+  if (_selection != is_selected)
+  {
+    float offset = (_selection ? image_size : -image_size);
+    for (auto& sprite : sprites)
+    {
+      auto* src = sprite->srcRect();
+      src[1]    = src[1] + offset;
+    }
+    is_selected = _selection;
+  }
+}
+bool UIButton::press()
+{
+  if (is_selected)
+  {
+    callback();
+  }
+  return is_selected;
 }

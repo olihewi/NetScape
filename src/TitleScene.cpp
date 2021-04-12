@@ -4,6 +4,7 @@
 
 #include "Scenes/TitleScene.h"
 #include "Utilities/FontManager.h"
+#include <cmath>
 #include <iostream>
 TitleScene::TitleScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
   Scene(std::move(_scene_callback)),
@@ -21,7 +22,7 @@ TitleScene::TitleScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _sc
       std::array<float, 6>{ 11, 11, 114, 50, 11, 11 }, ASGE::Point2D(1920 / 2.F - 375, 650),
       ASGE::Point2D(375, 125)),
     UIButton(
-      renderer, "data/images/ui/buttons/neon/blue.png", "Credits", FONTS::ROBOTO, []() {},
+      renderer, "data/images/ui/buttons/neon/green.png", "Credits", FONTS::ROBOTO, []() {},
       std::array<float, 6>{ 11, 11, 114, 50, 11, 11 }, ASGE::Point2D(1920 / 2.F, 650),
       ASGE::Point2D(375, 125)),
     UIButton(
@@ -53,6 +54,7 @@ void TitleScene::mouseInput(const ASGE::MoveEvent* mouse)
 {
   Scene::mouseInput(mouse);
   cursor.setCursor(Cursor::POINTER);
+  size_t index = 0;
   for (auto& button : scene_change_buttons)
   {
     button.mouseInput(mouse);
@@ -60,7 +62,9 @@ void TitleScene::mouseInput(const ASGE::MoveEvent* mouse)
           ASGE::Point2D(static_cast<float>(mouse->xpos), static_cast<float>(mouse->ypos))))
     {
       cursor.setCursor(Cursor::SELECT);
+      button_selection = index;
     }
+    index++;
   }
   cursor.mouseInput(mouse);
 }
@@ -73,13 +77,56 @@ void TitleScene::render(ASGE::Renderer* renderer)
   }
   cursor.render(renderer);
 }
-void TitleScene::controllerInput(std::array<ASGE::GamePadData, 4> controllers)
+void TitleScene::controllerInput(ControllerTracker& controllers, float /*dt*/)
 {
-  if (controllers[0].is_connected)
+  if (controllers.getButtonDown(0, CONTROLLER::BUTTONS::A))
   {
-    if (static_cast<bool>(controllers[0].buttons[ASGE::GAMEPAD::BUTTON_A]))
+    for (auto& button : scene_change_buttons)
     {
-      std::cout << controllers[0].buttons[ASGE::GAMEPAD::BUTTON_A] << std::endl;
+      if (button.press())
+      {
+        return;
+      }
     }
   }
+  else if (
+    (controllers.getAxisUp(0, CONTROLLER::AXIS::LEFT_STICK_Y) ||
+     controllers.getButtonDown(0, CONTROLLER::BUTTONS::DPAD_DOWN)) &&
+    button_selection < scene_change_buttons.size() - 1)
+  {
+    button_selection += (button_selection == 2 ? 2 : 1);
+    selectButton(button_selection);
+  }
+  else if (
+    (controllers.getAxisDown(0, CONTROLLER::AXIS::LEFT_STICK_Y) ||
+     controllers.getButtonDown(0, CONTROLLER::BUTTONS::DPAD_UP)) &&
+    button_selection > 0)
+  {
+    button_selection -= (button_selection == 4 ? 2 : 1);
+    selectButton(button_selection);
+  }
+  else if (
+    (controllers.getAxisDown(0, CONTROLLER::AXIS::LEFT_STICK_X) ||
+     controllers.getButtonDown(0, CONTROLLER::BUTTONS::DPAD_LEFT)) &&
+    button_selection == 3)
+  {
+    button_selection--;
+    selectButton(button_selection);
+  }
+  else if (
+    (controllers.getAxisUp(0, CONTROLLER::AXIS::LEFT_STICK_X) ||
+     controllers.getButtonDown(0, CONTROLLER::BUTTONS::DPAD_RIGHT)) &&
+    button_selection == 2)
+  {
+    button_selection++;
+    selectButton(button_selection);
+  }
+}
+void TitleScene::selectButton(size_t _index)
+{
+  for (auto& button : scene_change_buttons)
+  {
+    button.select(false);
+  }
+  scene_change_buttons[_index].select(true);
 }

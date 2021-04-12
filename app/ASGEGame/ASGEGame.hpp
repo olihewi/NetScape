@@ -30,6 +30,7 @@ class ASGEGame : public ASGE::OGLGame
 
  private:
   std::unique_ptr<Scene> scene;
+  ControllerTracker controllers;
   /// Callback IDs are used to unregister the callback when the game is closed.
   int key_callback_id    = -1;
   int click_callback_id  = -1;

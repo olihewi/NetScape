@@ -5,7 +5,7 @@
 
 /// Initialises the game
 ASGEGame::ASGEGame(const ASGE::GameSettings& settings) :
-  OGLGame(settings),
+  OGLGame(settings), controllers(inputs.get()),
   key_callback_id(inputs->addCallbackFnc(ASGE::E_KEY, &ASGEGame::keyHandler, this)),
   click_callback_id(inputs->addCallbackFnc(ASGE::E_MOUSE_CLICK, &ASGEGame::clickHandler, this)),
   mouse_callback_id(inputs->addCallbackFnc(ASGE::E_MOUSE_MOVE, &ASGEGame::mouseHandler, this)),
@@ -62,10 +62,8 @@ void ASGEGame::update(const ASGE::GameTime& us)
 {
   auto dt = static_cast<float>(us.deltaInSecs());
   scene->update(dt);
-  std::array<ASGE::GamePadData, 4> controllers{
-    inputs->getGamePad(0), inputs->getGamePad(1), inputs->getGamePad(2), inputs->getGamePad(3)
-  };
-  scene->controllerInput(controllers);
+  controllers.updateInput();
+  scene->controllerInput(controllers, dt);
 }
 
 /// Renders the current scene

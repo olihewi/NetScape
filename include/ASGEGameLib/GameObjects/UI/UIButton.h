@@ -19,6 +19,9 @@ class UIButton : public ScalableSprite
   void mouseInput(const ASGE::MoveEvent* mouse) override;
   void render(ASGE::Renderer* renderer) override;
 
+  void select(bool _selection);
+  bool press();
+
  private:
   Text text;
   std::function<void()> callback;
