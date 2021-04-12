@@ -6,6 +6,7 @@
 #define ASGEMOVIEGAME_TITLESCENE_H
 
 #include "Scene.h"
+#include <ASGEGameLib/GameObjects/UI/Cursor.h>
 #include <ASGEGameLib/GameObjects/UI/UIButton.h>
 class TitleScene : public Scene
 {
@@ -18,7 +19,8 @@ class TitleScene : public Scene
   void controllerInput(std::array<ASGE::GamePadData, 4> controllers) override;
 
  private:
-  std::array<UIButton, 4> scene_change_buttons;
+  std::array<UIButton, 5> scene_change_buttons;
+  Cursor cursor;
 };
 
 #endif // ASGEMOVIEGAME_TITLESCENE_H

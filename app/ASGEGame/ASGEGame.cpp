@@ -16,6 +16,7 @@ ASGEGame::ASGEGame(const ASGE::GameSettings& settings) :
   FontManager::loadFonts(renderer.get());
   setScene(Scene::LEVEL_EDITOR);
   setScene(Scene::TITLE);
+  inputs->setCursorMode(ASGE::MOUSE::CursorMode::HIDDEN);
 }
 
 /// Destroys the game

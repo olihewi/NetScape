@@ -21,7 +21,7 @@ class Sprite : public GameObject
   void visibility(bool _visibility);
 
   [[nodiscard]] ASGE::Point2D position();
-  void position(ASGE::Point2D _position);
+  virtual void position(ASGE::Point2D _position);
   void translate(ASGE::Point2D _translation);
 
   [[nodiscard]] ASGE::Point2D dimensions();
