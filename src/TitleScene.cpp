@@ -10,9 +10,9 @@ TitleScene::TitleScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _sc
   Scene(std::move(_scene_callback)),
   scene_change_buttons(std::array<UIButton, 5>{
     UIButton(
-      renderer, "data/images/ui/buttons/neon/pink.png", "Play", FONTS::ROBOTO, []() {},
-      std::array<float, 6>{ 11, 11, 114, 50, 11, 11 }, ASGE::Point2D(1920 / 2.F - 375, 400),
-      ASGE::Point2D(750, 125)),
+      renderer, "data/images/ui/buttons/neon/pink.png", "Play", FONTS::ROBOTO,
+      [this]() { setScene(Scenes::GAME); }, std::array<float, 6>{ 11, 11, 114, 50, 11, 11 },
+      ASGE::Point2D(1920 / 2.F - 375, 400), ASGE::Point2D(750, 125)),
     UIButton(
       renderer, "data/images/ui/buttons/neon/purple.png", "Level Editor", FONTS::ROBOTO,
       [this]() { setScene(Scenes::LEVEL_EDITOR); }, std::array<float, 6>{ 11, 11, 114, 50, 11, 11 },
@@ -29,12 +29,15 @@ TitleScene::TitleScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _sc
       renderer, "data/images/ui/buttons/neon/yellow.png", "Quit Game", FONTS::ROBOTO,
       [this]() { setScene(Scenes::QUIT_GAME); }, std::array<float, 6>{ 11, 11, 114, 50, 11, 11 },
       ASGE::Point2D(1920 / 2.F - 375, 775), ASGE::Point2D(750, 125)) }),
-  cursor(renderer)
+  cursor(renderer), test_clip(audio_engine.get(), "data/audio/8ball.wav")
 {
   std::unique_ptr<Text> game_title =
     std::make_unique<Text>(renderer, "NetScape", ASGE::Point2D(), FONTS::ROBOTO);
   game_title->centrePos(ASGE::Point2D(1920 / 2.F, 350));
   addObject(std::move(game_title));
+  selectButton(button_selection);
+  test_clip.getSound().setLooping(true);
+  test_clip.play();
 }
 void TitleScene::clickInput(const ASGE::ClickEvent* click)
 {
@@ -96,14 +99,16 @@ void TitleScene::controllerInput(ControllerTracker& controllers, float /*dt*/)
   {
     button_selection += (button_selection == 2 ? 2 : 1);
     selectButton(button_selection);
+    cursor.visibility(false);
   }
   else if (
     (controllers.getAxisDown(0, CONTROLLER::AXIS::LEFT_STICK_Y) ||
      controllers.getButtonDown(0, CONTROLLER::BUTTONS::DPAD_UP)) &&
     button_selection > 0)
   {
-    button_selection -= (button_selection == 4 ? 2 : 1);
+    button_selection -= (button_selection >= 3 ? 2 : 1);
     selectButton(button_selection);
+    cursor.visibility(false);
   }
   else if (
     (controllers.getAxisDown(0, CONTROLLER::AXIS::LEFT_STICK_X) ||
@@ -112,6 +117,7 @@ void TitleScene::controllerInput(ControllerTracker& controllers, float /*dt*/)
   {
     button_selection--;
     selectButton(button_selection);
+    cursor.visibility(false);
   }
   else if (
     (controllers.getAxisUp(0, CONTROLLER::AXIS::LEFT_STICK_X) ||
@@ -120,6 +126,7 @@ void TitleScene::controllerInput(ControllerTracker& controllers, float /*dt*/)
   {
     button_selection++;
     selectButton(button_selection);
+    cursor.visibility(false);
   }
 }
 void TitleScene::selectButton(size_t _index)

@@ -8,6 +8,7 @@
 #include "Scene.h"
 #include <ASGEGameLib/GameObjects/UI/Cursor.h>
 #include <ASGEGameLib/GameObjects/UI/UIButton.h>
+#include <ASGEGameLib/Utilities/Sound.h>
 class TitleScene : public Scene
 {
  public:
@@ -23,6 +24,7 @@ class TitleScene : public Scene
   std::array<UIButton, 5> scene_change_buttons;
   Cursor cursor;
   size_t button_selection = 0;
+  Sound test_clip;
 };
 
 #endif // ASGEMOVIEGAME_TITLESCENE_H

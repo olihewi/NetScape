@@ -11,13 +11,13 @@ file(GLOB_RECURSE HEADER_LIST
 ## source files get listed here ##
 set(GAME_SOURCES
         ASGEGame/main.cpp
-        ASGEGame/ASGEGame.cpp ../src/Player.cpp ../include/ASGEGameLib/GameObjects/Player/Player.hpp)
+        ASGEGame/ASGEGame.cpp)
 
 ## the ASGE Game, which spawns the Game window ##
 add_executable(${GAME} ${HEADER_LIST} ${GAME_SOURCES})
 
 ## configure the target. Dependency targets go in the LIBS variable i.e. soloud ##
-list(APPEND LIBS "ASGEGameLib" "magic_enum::magic_enum")
+list(APPEND LIBS "ASGEGameLib" "magic_enum::magic_enum" "soloud")
 configure_target(${GAME} "${CMAKE_CURRENT_SOURCE_DIR}" "${HEADER_LIST}" "${LIBS}")
 add_asge_dependency(${GAME})
 

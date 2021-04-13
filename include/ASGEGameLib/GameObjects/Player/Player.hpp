@@ -7,8 +7,7 @@
 
 class Player
 {
-
-  float move_speed = 5.0f;
+  // float move_speed = 5.0f;
 };
 
 #endif // ASGEMOVIEGAME_PLAYER_HPP

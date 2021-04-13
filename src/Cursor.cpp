@@ -9,6 +9,7 @@ Cursor::Cursor(ASGE::Renderer* renderer) : Sprite(renderer, "data/images/ui/curs
   Sprite::dimensions(ASGE::Point2D(sprite_size, sprite_size));
   Sprite::srcRect(0, 0, sprite_size, sprite_size);
   Sprite::zOrder(2);
+  visibility(false);
 }
 void Cursor::position(ASGE::Point2D _position)
 {
@@ -24,4 +25,5 @@ void Cursor::setCursor(Cursor::CursorMode _mode)
 void Cursor::mouseInput(const ASGE::MoveEvent* mouse)
 {
   position(ASGE::Point2D(static_cast<float>(mouse->xpos), static_cast<float>(mouse->ypos)));
+  visibility(true);
 }
