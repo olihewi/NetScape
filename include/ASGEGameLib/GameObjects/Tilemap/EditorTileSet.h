@@ -11,9 +11,9 @@
 struct TileSetSelection
 {
  public:
-  TileSetSelection(std::vector<std::array<float, 4>> _tiles, int _width);
+  TileSetSelection(std::vector<std::array<float, 4>> _tiles, size_t _width);
   std::vector<std::array<float, 4>> tiles;
-  int selection_width;
+  size_t selection_width;
 };
 class EditorTileSet : public GameObject
 {

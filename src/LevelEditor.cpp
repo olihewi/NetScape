@@ -73,16 +73,20 @@ void LevelEditor::placeTiles(ASGE::Point2D _position)
 {
   if (_position.x >= 256 && mouse_pressed)
   {
-    auto x_pos   = static_cast<size_t>(_position.x) / 32;
-    auto y_pos   = static_cast<size_t>(_position.y) / 32;
-    auto tiles   = tile_set.getSelection();
-    int offset_x = 0;
-    int offset_y = 0;
+    auto x_pos      = static_cast<size_t>(_position.x) / 32;
+    auto y_pos      = static_cast<size_t>(_position.y) / 32;
+    auto tiles      = tile_set.getSelection();
+    size_t offset_x = 0;
+    size_t offset_y = 0;
     for (auto& tile : tiles.tiles)
     {
+      if (x_pos + offset_x >= 50 || y_pos + offset_y >= 50)
+      {
+        continue;
+      }
       tile_map.setTile(
         0,
-        x_pos + y_pos * 50 + static_cast<size_t>(offset_x) + static_cast<size_t>(offset_y) * 50,
+        x_pos + y_pos * 50 + offset_x + offset_y * 50,
         "data/images/tilesets/japanese_city.png",
         tile);
       offset_x++;
@@ -91,11 +95,6 @@ void LevelEditor::placeTiles(ASGE::Point2D _position)
         offset_x = 0;
         offset_y++;
       }
-    }
-    if (x_pos < 50 && y_pos < 50)
-    {
-      tile_map.setTile(
-        0, x_pos + y_pos * 50, "data/images/tilesets/japanese_city.png", tile_set.getCurrentRect());
     }
   }
 }

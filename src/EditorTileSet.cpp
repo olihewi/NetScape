@@ -116,9 +116,9 @@ TileSetSelection EditorTileSet::getSelection() const
                                                 static_cast<float>(sprite_size) });
     }
   }
-  return TileSetSelection(vector, end_x - start_x + 1);
+  return TileSetSelection(vector, static_cast<size_t>(end_x - start_x + 1));
 }
-TileSetSelection::TileSetSelection(std::vector<std::array<float, 4>> _tiles, int _width) :
+TileSetSelection::TileSetSelection(std::vector<std::array<float, 4>> _tiles, size_t _width) :
   tiles(std::move(_tiles)), selection_width(_width)
 {
 }
