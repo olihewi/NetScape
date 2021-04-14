@@ -41,16 +41,7 @@ void LevelEditor::clickInput(const ASGE::ClickEvent* click)
   tile_set.clickInput(click);
   mouse_pressed  = click->action != ASGE::KEYS::KEY_RELEASED;
   auto click_pos = ASGE::Point2D(static_cast<float>(click->xpos), static_cast<float>(click->ypos));
-  if (click_pos.x >= 256 && click->action == ASGE::KEYS::KEY_PRESSED)
-  {
-    auto x_pos = static_cast<size_t>(click_pos.x) / 32;
-    auto y_pos = static_cast<size_t>(click_pos.y) / 32;
-    if (x_pos < 50 && y_pos < 50)
-    {
-      tile_map.setTile(
-        0, x_pos + y_pos * 50, "data/images/tilesets/japanese_city.png", tile_set.getCurrentRect());
-    }
-  }
+  placeTiles(click_pos);
   for (auto& button : scene_change_buttons)
   {
     bool should_return = button.isInside(click_pos);
@@ -64,17 +55,9 @@ void LevelEditor::clickInput(const ASGE::ClickEvent* click)
 void LevelEditor::mouseInput(const ASGE::MoveEvent* mouse)
 {
   Scene::mouseInput(mouse);
+  tile_set.mouseInput(mouse);
   auto mouse_pos = ASGE::Point2D(static_cast<float>(mouse->xpos), static_cast<float>(mouse->ypos));
-  if (mouse_pos.x >= 256 && mouse_pressed)
-  {
-    auto x_pos = static_cast<size_t>(mouse_pos.x) / 32;
-    auto y_pos = static_cast<size_t>(mouse_pos.y) / 32;
-    if (x_pos < 50 && y_pos < 50)
-    {
-      tile_map.setTile(
-        0, x_pos + y_pos * 50, "data/images/tilesets/japanese_city.png", tile_set.getCurrentRect());
-    }
-  }
+  placeTiles(mouse_pos);
   cursor.setCursor(Cursor::POINTER);
   for (auto& button : scene_change_buttons)
   {
@@ -85,4 +68,34 @@ void LevelEditor::mouseInput(const ASGE::MoveEvent* mouse)
     }
   }
   cursor.mouseInput(mouse);
+}
+void LevelEditor::placeTiles(ASGE::Point2D _position)
+{
+  if (_position.x >= 256 && mouse_pressed)
+  {
+    auto x_pos   = static_cast<size_t>(_position.x) / 32;
+    auto y_pos   = static_cast<size_t>(_position.y) / 32;
+    auto tiles   = tile_set.getSelection();
+    int offset_x = 0;
+    int offset_y = 0;
+    for (auto& tile : tiles.tiles)
+    {
+      tile_map.setTile(
+        0,
+        x_pos + y_pos * 50 + static_cast<size_t>(offset_x) + static_cast<size_t>(offset_y) * 50,
+        "data/images/tilesets/japanese_city.png",
+        tile);
+      offset_x++;
+      if (offset_x % tiles.selection_width == 0)
+      {
+        offset_x = 0;
+        offset_y++;
+      }
+    }
+    if (x_pos < 50 && y_pos < 50)
+    {
+      tile_map.setTile(
+        0, x_pos + y_pos * 50, "data/images/tilesets/japanese_city.png", tile_set.getCurrentRect());
+    }
+  }
 }
