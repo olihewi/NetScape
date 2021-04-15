@@ -15,7 +15,7 @@ class AnimatedSprite : public Sprite
   AnimatedSprite(
     ASGE::Renderer* renderer, const std::string& file_path, float playback_speed = 1,
     ASGE::Point2D position = ASGE::Point2D());
-  void update(float dt) override;
+  void update(InputTracker& input, float dt) override;
 
  private:
   size_t frames;

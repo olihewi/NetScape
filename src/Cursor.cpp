@@ -22,8 +22,11 @@ void Cursor::setCursor(Cursor::CursorMode _mode)
   auto x_offset     = static_cast<float>(_mode) * sprite_size;
   Sprite::srcRect(x_offset, 0, sprite_size, sprite_size);
 }
-void Cursor::mouseInput(const ASGE::MoveEvent* mouse)
+void Cursor::update(InputTracker& input, float /*dt*/)
 {
-  position(ASGE::Point2D(static_cast<float>(mouse->xpos), static_cast<float>(mouse->ypos)));
-  visibility(true);
+  position(input.getMousePos());
+  if (input.hasHadMouseInput())
+  {
+    visibility(true);
+  }
 }

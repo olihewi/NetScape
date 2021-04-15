@@ -19,4 +19,7 @@ void GameScene::render(ASGE::Renderer* renderer)
 {
   Scene::render(renderer);
 }
-void GameScene::controllerInput(ControllerTracker& /*controllers*/, float /*dt*/) {}
+void GameScene::update(InputTracker& input, float dt)
+{
+  Scene::update(input, dt);
+}

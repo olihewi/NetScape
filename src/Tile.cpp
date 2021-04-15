@@ -12,13 +12,13 @@ Tile::Tile(
   sprite->dimensions(ASGE::Point2D(rect[2], rect[3]));
   sprite->srcRect(rect[0], rect[1], rect[2], rect[3]);
 }
-void Tile::update(float dt)
+void Tile::update(InputTracker& input, float dt)
 {
   if (sprite == nullptr)
   {
     return;
   }
-  sprite->update(dt);
+  sprite->update(input, dt);
 }
 void Tile::render(ASGE::Renderer* renderer)
 {

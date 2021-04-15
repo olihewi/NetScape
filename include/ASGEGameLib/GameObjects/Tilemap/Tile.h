@@ -12,7 +12,7 @@ class Tile : public GameObject
   Tile(
     ASGE::Renderer* renderer, const std::string& tileset_path, std::array<float, 4> rect,
     ASGE::Point2D position, int collision_layer = -1);
-  void update(float dt) override;
+  void update(InputTracker& input, float dt) override;
   void render(ASGE::Renderer* renderer) override;
   [[nodiscard]] int collisionLayer() const;
 

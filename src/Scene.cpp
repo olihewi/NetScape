@@ -4,39 +4,12 @@
 
 #include "Scenes/Scene.h"
 
-void Scene::keyInput(const ASGE::KeyEvent* key)
+void Scene::update(InputTracker& input, float dt)
 {
+  input.update();
   for (auto& game_object : game_objects)
   {
-    game_object->keyInput(key);
-  }
-}
-void Scene::clickInput(const ASGE::ClickEvent* click)
-{
-  for (auto& game_object : game_objects)
-  {
-    game_object->clickInput(click);
-  }
-}
-void Scene::mouseInput(const ASGE::MoveEvent* mouse)
-{
-  for (auto& game_object : game_objects)
-  {
-    game_object->mouseInput(mouse);
-  }
-}
-void Scene::scrollInput(const ASGE::ScrollEvent* scroll)
-{
-  for (auto& game_object : game_objects)
-  {
-    game_object->scrollInput(scroll);
-  }
-}
-void Scene::update(float dt)
-{
-  for (auto& game_object : game_objects)
-  {
-    game_object->update(dt);
+    game_object->update(input, dt);
   }
 }
 void Scene::render(ASGE::Renderer* renderer)

@@ -17,7 +17,7 @@ class Cursor : public Sprite
   explicit Cursor(ASGE::Renderer* renderer);
   void position(ASGE::Point2D _position) override;
   void setCursor(CursorMode _mode);
-  void mouseInput(const ASGE::MoveEvent* mouse) override;
+  void update(InputTracker& input, float dt) override;
 };
 
 #endif // ASGEMOVIEGAME_CURSOR_H

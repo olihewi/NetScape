@@ -16,7 +16,7 @@ class GameScene : public Scene
   GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback);
 
   void render(ASGE::Renderer* renderer) override;
-  void controllerInput(ControllerTracker& controllers, float dt) override;
+  void update(InputTracker& input, float dt) override;
 
  private:
 };

@@ -11,7 +11,7 @@ class TileMap : public GameObject
 {
  public:
   TileMap(ASGE::Renderer* _renderer, size_t num_layers);
-  void update(float dt) override;
+  void update(InputTracker& input, float dt) override;
   void render(ASGE::Renderer* _renderer) override;
   void
   setTile(size_t layer, size_t index, const std::string& tileset_path, std::array<float, 4> rect);

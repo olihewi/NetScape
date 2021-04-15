@@ -14,11 +14,8 @@ class LevelEditor : public Scene
 {
  public:
   explicit LevelEditor(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback);
-  void update(float dt) override;
+  void update(InputTracker& input, float dt) override;
   void render(ASGE::Renderer* renderer) override;
-  void keyInput(const ASGE::KeyEvent* key) override;
-  void clickInput(const ASGE::ClickEvent* click) override;
-  void mouseInput(const ASGE::MoveEvent* mouse) override;
 
  private:
   void placeTiles(ASGE::Point2D _position);
@@ -26,7 +23,6 @@ class LevelEditor : public Scene
   EditorTileSet tile_set;
   std::array<UIButton, 1> scene_change_buttons;
   Cursor cursor;
-  bool mouse_pressed = false;
 };
 
 #endif // ASGEMOVIEGAME_LEVELEDITOR_H

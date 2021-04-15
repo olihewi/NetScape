@@ -14,10 +14,8 @@ class TitleScene : public Scene
  public:
   TitleScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback);
 
-  void clickInput(const ASGE::ClickEvent* click) override;
-  void mouseInput(const ASGE::MoveEvent* mouse) override;
+  void update(InputTracker& input, float dt) override;
   void render(ASGE::Renderer* renderer) override;
-  void controllerInput(ControllerTracker& controllers, float /*dt*/) override;
 
  private:
   void selectButton(size_t _index);

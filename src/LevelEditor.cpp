@@ -16,11 +16,6 @@ LevelEditor::LevelEditor(ASGE::Renderer* renderer, std::function<void(Scenes)> _
   cursor(renderer)
 {
 }
-void LevelEditor::update(float dt)
-{
-  Scene::update(dt);
-  tile_map.update(dt);
-}
 void LevelEditor::render(ASGE::Renderer* renderer)
 {
   Scene::render(renderer);
@@ -32,46 +27,33 @@ void LevelEditor::render(ASGE::Renderer* renderer)
   }
   cursor.render(renderer);
 }
-void LevelEditor::keyInput(const ASGE::KeyEvent* key)
+void LevelEditor::update(InputTracker& input, float dt)
 {
-  Scene::keyInput(key);
-}
-void LevelEditor::clickInput(const ASGE::ClickEvent* click)
-{
-  tile_set.clickInput(click);
-  mouse_pressed  = click->action != ASGE::KEYS::KEY_RELEASED;
-  auto click_pos = ASGE::Point2D(static_cast<float>(click->xpos), static_cast<float>(click->ypos));
-  placeTiles(click_pos);
+  Scene::update(input, dt);
+  tile_set.update(input, dt);
+  cursor.update(input, dt);
+  if (input.getMouseButton(MOUSE::LEFT_CLICK))
+  {
+    placeTiles(input.getMousePos());
+  }
+  cursor.setCursor(Cursor::POINTER);
   for (auto& button : scene_change_buttons)
   {
-    bool should_return = button.isInside(click_pos);
-    button.clickInput(click);
+    bool should_return = button.isInside(input.getMousePos());
     if (should_return)
+    {
+      cursor.setCursor(Cursor::SELECT);
+    }
+    button.update(input, dt);
+    if (should_return && input.getMouseButton(MOUSE::LEFT_CLICK))
     {
       return;
     }
   }
 }
-void LevelEditor::mouseInput(const ASGE::MoveEvent* mouse)
-{
-  Scene::mouseInput(mouse);
-  tile_set.mouseInput(mouse);
-  auto mouse_pos = ASGE::Point2D(static_cast<float>(mouse->xpos), static_cast<float>(mouse->ypos));
-  placeTiles(mouse_pos);
-  cursor.setCursor(Cursor::POINTER);
-  for (auto& button : scene_change_buttons)
-  {
-    button.mouseInput(mouse);
-    if (button.isInside(mouse_pos))
-    {
-      cursor.setCursor(Cursor::SELECT);
-    }
-  }
-  cursor.mouseInput(mouse);
-}
 void LevelEditor::placeTiles(ASGE::Point2D _position)
 {
-  if (_position.x >= 256 && mouse_pressed)
+  if (_position.x >= 256)
   {
     auto x_pos      = static_cast<size_t>(_position.x) / 32;
     auto y_pos      = static_cast<size_t>(_position.y) / 32;

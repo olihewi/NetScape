@@ -22,16 +22,18 @@ UIButton::UIButton(
     sprites[4]->xPos() + sprites[4]->width() / 2,
     sprites[4]->yPos() + sprites[4]->height() / 2 + 20));
 }
-void UIButton::clickInput(const ASGE::ClickEvent* click)
+void UIButton::update(InputTracker& input, float /*dt*/)
 {
-  if (click->action == ASGE::KEYS::KEY_RELEASED && click->button == ASGE::MOUSE::MOUSE_BTN1)
+  if (input.hasHadMouseInput())
+  {
+    select(isInside(input.getMousePos()));
+  }
+  if (
+    input.getMouseButtonDown(MOUSE::LEFT_CLICK) ||
+    input.getControllerButtonDown(0, CONTROLLER::BUTTONS::A))
   {
     press();
   }
-}
-void UIButton::mouseInput(const ASGE::MoveEvent* mouse)
-{
-  select(isInside(ASGE::Point2D(static_cast<float>(mouse->xpos), static_cast<float>(mouse->ypos))));
 }
 void UIButton::render(ASGE::Renderer* renderer)
 {

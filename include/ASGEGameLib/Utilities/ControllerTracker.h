@@ -37,6 +37,11 @@ namespace CONTROLLER
     constexpr int LEFT_TRIGGER  = 4;
     constexpr int RIGHT_TRIGGER = 5;
   } // namespace AXIS
+  namespace STICKS
+  {
+    constexpr int LEFT  = 0;
+    constexpr int RIGHT = 1;
+  }
   struct LocalController
   {
    public:

@@ -6,7 +6,7 @@
 #define ASGEMOVIEGAME_SCENE_H
 
 #include <ASGEGameLib/GameObjects/GameObject.h>
-#include <ASGEGameLib/Utilities/ControllerTracker.h>
+#include <ASGEGameLib/Utilities/InputTracker.h>
 #include <Engine/InputEvents.h>
 #include <Engine/Renderer.h>
 #include <functional>
@@ -30,13 +30,7 @@ class Scene
   Scene& operator=(Scene other) = delete;
   virtual ~Scene();
 
-  virtual void keyInput(const ASGE::KeyEvent* key);
-  virtual void clickInput(const ASGE::ClickEvent* click);
-  virtual void mouseInput(const ASGE::MoveEvent* mouse);
-  virtual void scrollInput(const ASGE::ScrollEvent* scroll);
-  virtual void controllerInput(ControllerTracker& /*controllers*/, float /*dt*/) {}
-
-  virtual void update(float dt);
+  virtual void update(InputTracker& input, float dt);
   virtual void render(ASGE::Renderer* renderer);
 
   void addObject(std::unique_ptr<GameObject> object);

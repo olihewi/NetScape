@@ -14,36 +14,36 @@ EditorTileSet::EditorTileSet(
   sprite_size(_sprite_size)
 {
 }
+void EditorTileSet::update(InputTracker& input, float /*dt*/)
+{
+  ASGE::Point2D mouse_pos = input.getMousePos();
+  if (input.getMouseButtonDown(MOUSE::LEFT_CLICK) && sprite_sheet.isInside(mouse_pos))
+  {
+    auto click_x = std::floor(
+      (mouse_pos.x - sprite_sheet.position().x) / sprite_sheet.dimensions().x *
+      (sprite_sheet.dimensions().x / static_cast<float>(sprite_size)));
+    auto click_y = std::floor(
+      (mouse_pos.y - sprite_sheet.position().y) / sprite_sheet.dimensions().y *
+      (sprite_sheet.dimensions().y / static_cast<float>(sprite_size)));
+    mouse_held      = true;
+    selection_start = static_cast<int>(
+      click_x + click_y * (sprite_sheet.dimensions().x / static_cast<float>(sprite_size)));
+    selection_end = selection_start;
+    mouse_held    = true;
+  }
+  if (input.getMouseButtonUp(MOUSE::LEFT_CLICK))
+  {
+    mouse_held = false;
+  }
+  if (mouse_held)
+  {
+    updateSelection(mouse_pos);
+  }
+}
 void EditorTileSet::render(ASGE::Renderer* renderer)
 {
   sprite_sheet.render(renderer);
   cursor.render(renderer);
-}
-void EditorTileSet::clickInput(const ASGE::ClickEvent* click)
-{
-  ASGE::Point2D click_pos =
-    ASGE::Point2D(static_cast<float>(click->xpos), static_cast<float>(click->ypos));
-  if (sprite_sheet.isInside(click_pos) && click->action != ASGE::KEYS::KEY_REPEATED)
-  {
-    if (click->action == ASGE::KEYS::KEY_PRESSED)
-    {
-      auto click_x = std::floor(
-        (click_pos.x - sprite_sheet.position().x) / sprite_sheet.dimensions().x *
-        (sprite_sheet.dimensions().x / static_cast<float>(sprite_size)));
-      auto click_y = std::floor(
-        (click_pos.y - sprite_sheet.position().y) / sprite_sheet.dimensions().y *
-        (sprite_sheet.dimensions().y / static_cast<float>(sprite_size)));
-      mouse_held      = true;
-      selection_start = static_cast<int>(
-        click_x + click_y * (sprite_sheet.dimensions().x / static_cast<float>(sprite_size)));
-      selection_end = selection_start;
-    }
-    updateSelection(click_pos);
-  }
-  if (click->action == ASGE::KEYS::KEY_RELEASED)
-  {
-    mouse_held = false;
-  }
 }
 std::array<float, 4> EditorTileSet::getCurrentRect()
 {
@@ -55,14 +55,6 @@ std::array<float, 4> EditorTileSet::getCurrentRect()
     x, y, static_cast<float>(sprite_size), static_cast<float>(sprite_size)
   };
   return rect;
-}
-void EditorTileSet::mouseInput(const ASGE::MoveEvent* mouse)
-{
-  if (mouse_held)
-  {
-    updateSelection(
-      ASGE::Point2D(static_cast<float>(mouse->xpos), static_cast<float>(mouse->ypos)));
-  }
 }
 void EditorTileSet::updateSelection(ASGE::Point2D mouse_pos)
 {

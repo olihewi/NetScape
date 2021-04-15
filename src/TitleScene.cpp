@@ -39,37 +39,72 @@ TitleScene::TitleScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _sc
   test_clip.getSound().setLooping(true);
   test_clip.play();
 }
-void TitleScene::clickInput(const ASGE::ClickEvent* click)
+void TitleScene::update(InputTracker& input, float dt)
 {
-  Scene::clickInput(click);
-  for (auto& button : scene_change_buttons)
-  {
-    bool should_return = button.isInside(
-      ASGE::Point2D(static_cast<float>(click->xpos), static_cast<float>(click->ypos)));
-    button.clickInput(click);
-    if (should_return)
-    {
-      return;
-    }
-  }
-}
-void TitleScene::mouseInput(const ASGE::MoveEvent* mouse)
-{
-  Scene::mouseInput(mouse);
+  Scene::update(input, dt);
   cursor.setCursor(Cursor::POINTER);
+  cursor.update(input, dt);
+  if (
+    (input.getControllerAxisUp(0, CONTROLLER::AXIS::LEFT_STICK_Y) ||
+     input.getControllerButtonDown(0, CONTROLLER::BUTTONS::DPAD_DOWN) ||
+     input.getKeyDown(ASGE::KEYS::KEY_S)) &&
+    button_selection < scene_change_buttons.size() - 1)
+  {
+    button_selection += (button_selection == 2 ? 2 : 1);
+    selectButton(button_selection);
+    cursor.visibility(false);
+  }
+  if (
+    (input.getControllerAxisDown(0, CONTROLLER::AXIS::LEFT_STICK_Y) ||
+     input.getControllerButtonDown(0, CONTROLLER::BUTTONS::DPAD_UP) ||
+     input.getKeyDown(ASGE::KEYS::KEY_W)) &&
+    button_selection > 0)
+  {
+    button_selection -= (button_selection >= 3 ? 2 : 1);
+    selectButton(button_selection);
+    cursor.visibility(false);
+  }
+  if (
+    (input.getControllerAxisDown(0, CONTROLLER::AXIS::LEFT_STICK_X) ||
+     input.getControllerButtonDown(0, CONTROLLER::BUTTONS::DPAD_LEFT) ||
+     input.getKeyDown(ASGE::KEYS::KEY_A)) &&
+    button_selection == 3)
+  {
+    button_selection--;
+    selectButton(button_selection);
+    cursor.visibility(false);
+  }
+  if (
+    (input.getControllerAxisUp(0, CONTROLLER::AXIS::LEFT_STICK_X) ||
+     input.getControllerButtonDown(0, CONTROLLER::BUTTONS::DPAD_RIGHT) ||
+     input.getKeyDown(ASGE::KEYS::KEY_D)) &&
+    button_selection == 2)
+  {
+    button_selection++;
+    selectButton(button_selection);
+    cursor.visibility(false);
+  }
   size_t index = 0;
   for (auto& button : scene_change_buttons)
   {
-    button.mouseInput(mouse);
-    if (button.isInside(
-          ASGE::Point2D(static_cast<float>(mouse->xpos), static_cast<float>(mouse->ypos))))
+    bool should_return = button.isInside(input.getMousePos());
+    if (should_return)
     {
       cursor.setCursor(Cursor::SELECT);
-      button_selection = index;
+      if (input.hasHadMouseInput())
+      {
+        button_selection = index;
+      }
+    }
+    button.update(input, dt);
+    if (
+      should_return && (input.getMouseButton(MOUSE::LEFT_CLICK) ||
+                        input.getControllerButton(0, CONTROLLER::BUTTONS::A)))
+    {
+      return;
     }
     index++;
   }
-  cursor.mouseInput(mouse);
 }
 void TitleScene::render(ASGE::Renderer* renderer)
 {
@@ -79,55 +114,6 @@ void TitleScene::render(ASGE::Renderer* renderer)
     button.render(renderer);
   }
   cursor.render(renderer);
-}
-void TitleScene::controllerInput(ControllerTracker& controllers, float /*dt*/)
-{
-  if (controllers.getButtonDown(0, CONTROLLER::BUTTONS::A))
-  {
-    for (auto& button : scene_change_buttons)
-    {
-      if (button.press())
-      {
-        return;
-      }
-    }
-  }
-  else if (
-    (controllers.getAxisUp(0, CONTROLLER::AXIS::LEFT_STICK_Y) ||
-     controllers.getButtonDown(0, CONTROLLER::BUTTONS::DPAD_DOWN)) &&
-    button_selection < scene_change_buttons.size() - 1)
-  {
-    button_selection += (button_selection == 2 ? 2 : 1);
-    selectButton(button_selection);
-    cursor.visibility(false);
-  }
-  else if (
-    (controllers.getAxisDown(0, CONTROLLER::AXIS::LEFT_STICK_Y) ||
-     controllers.getButtonDown(0, CONTROLLER::BUTTONS::DPAD_UP)) &&
-    button_selection > 0)
-  {
-    button_selection -= (button_selection >= 3 ? 2 : 1);
-    selectButton(button_selection);
-    cursor.visibility(false);
-  }
-  else if (
-    (controllers.getAxisDown(0, CONTROLLER::AXIS::LEFT_STICK_X) ||
-     controllers.getButtonDown(0, CONTROLLER::BUTTONS::DPAD_LEFT)) &&
-    button_selection == 3)
-  {
-    button_selection--;
-    selectButton(button_selection);
-    cursor.visibility(false);
-  }
-  else if (
-    (controllers.getAxisUp(0, CONTROLLER::AXIS::LEFT_STICK_X) ||
-     controllers.getButtonDown(0, CONTROLLER::BUTTONS::DPAD_RIGHT)) &&
-    button_selection == 2)
-  {
-    button_selection++;
-    selectButton(button_selection);
-    cursor.visibility(false);
-  }
 }
 void TitleScene::selectButton(size_t _index)
 {

@@ -16,7 +16,7 @@ AnimatedSprite::AnimatedSprite(
   Sprite::srcRect(0, 0, dims.y, dims.y);
   Sprite::dimensions(ASGE::Point2D(dims.y, dims.y));
 }
-void AnimatedSprite::update(float dt)
+void AnimatedSprite::update(InputTracker& /*input*/, float dt)
 {
   timer            = std::fmod(timer + dt, static_cast<float>(frames) / speed);
   float this_frame = std::floor(timer * speed);

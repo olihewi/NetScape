@@ -20,8 +20,7 @@ class EditorTileSet : public GameObject
  public:
   EditorTileSet(ASGE::Renderer* renderer, const std::string& file_path, int _sprite_size = 32);
   void render(ASGE::Renderer* renderer) override;
-  void clickInput(const ASGE::ClickEvent* click) override;
-  void mouseInput(const ASGE::MoveEvent* mouse) override;
+  void update(InputTracker& input, float dt) override;
   void updateSelection(ASGE::Point2D mouse_pos);
   [[nodiscard]] std::array<float, 4> getCurrentRect();
   [[nodiscard]] TileSetSelection getSelection() const;

@@ -10,13 +10,13 @@ TileMap::TileMap(ASGE::Renderer* _renderer, size_t num_layers) : renderer(_rende
     tiles.emplace_back(std::array<Tile, 2500>());
   }
 }
-void TileMap::update(float dt)
+void TileMap::update(InputTracker& input, float dt)
 {
   for (auto& layer : tiles)
   {
     for (auto& tile : layer)
     {
-      tile.update(dt);
+      tile.update(input, dt);
     }
   }
 }
