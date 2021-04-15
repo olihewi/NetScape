@@ -4,8 +4,4 @@
 
 #include "../include/ASGEGameLib/GameObjects/Player/Player.hpp"
 
-Player::Player(ASGE::Renderer* renderer)
-{
-
-}
 void Player::movement() {}

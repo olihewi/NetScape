@@ -101,8 +101,6 @@ void ASGEGame::setScene(Scene::Scenes _scene)
       scene = std::make_unique<LevelEditor>(renderer.get(), [this](auto&& PH1) { setScene(PH1); });
       break;
     }
-    case Scene::GAME:
-      scene = std::make_unique<GameScene>(renderer.get(), [this](auto&& PH1) { setScene(PH1); });
     case Scene::QUIT_GAME:
       signalExit();
       break;

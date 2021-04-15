@@ -11,7 +11,7 @@
 class Player : public GameObject
 {
  public:
-  Player(ASGE::Renderer);
+//  Player(ASGE::Renderer);
 
   void movement();
 

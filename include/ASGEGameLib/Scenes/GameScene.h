@@ -19,7 +19,6 @@ class GameScene : public Scene
   void controllerInput(ControllerTracker& controllers, float /*dt*/) override;
 
  private:
-  Player player;
 
 };
 

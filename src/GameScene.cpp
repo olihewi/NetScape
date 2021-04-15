@@ -12,4 +12,13 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scene::Scenes)
   Scene(std::move(_scene_callback))
 {
   addObject(std::make_unique<Text>(renderer, "Game Scene", ASGE::Point2D(200, 200)));
+
+}
+void GameScene::render(ASGE::Renderer* renderer)
+{
+  Scene::render(renderer);
+}
+void GameScene::controllerInput(ControllerTracker& controllers, float)
+{
+
 }
