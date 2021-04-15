@@ -15,7 +15,7 @@ class Player : public GameObject
 
   void movement();
 
-  float move_speed = 5.0f;
+  float move_speed = 5.0F;
 };
 
 #endif // ASGEMOVIEGAME_PLAYER_HPP
