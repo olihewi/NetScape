@@ -13,7 +13,7 @@ LevelEditor::LevelEditor(ASGE::Renderer* renderer, std::function<void(Scenes)> _
     renderer, "data/images/ui/buttons/neon/yellow.png", "Exit", FONTS::ROBOTO,
     [this]() { setScene(Scenes::TITLE); }, std::array<float, 6>{ 11, 11, 114, 50, 11, 11 },
     ASGE::Point2D(1920 - 375, 0), ASGE::Point2D(375, 125)) }),
-  cursor(renderer)
+  cursor(renderer, true)
 {
 }
 void LevelEditor::render(ASGE::Renderer* renderer)
@@ -35,6 +35,16 @@ void LevelEditor::update(InputTracker& input, float dt)
   if (input.getMouseButton(MOUSE::LEFT_CLICK))
   {
     placeTiles(input.getMousePos());
+  }
+  if (input.getMouseButton(MOUSE::RIGHT_CLICK))
+  {
+    auto mouse_pos = input.getMousePos();
+    auto x_pos     = static_cast<size_t>(mouse_pos.x) / 32;
+    auto y_pos     = static_cast<size_t>(mouse_pos.y) / 32;
+    if (mouse_pos.x >= 256)
+    {
+      tile_map.deleteTile(0, x_pos + y_pos * 50);
+    }
   }
   cursor.setCursor(Cursor::POINTER);
   for (auto& button : scene_change_buttons)

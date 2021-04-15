@@ -38,6 +38,7 @@ class Sprite : public GameObject
   void opacity(float _opacity);
 
   [[nodiscard]] ASGE::Point2D centre();
+  void centrePos(ASGE::Point2D position);
 
   [[nodiscard]] bool isInside(ASGE::Point2D _position);
 

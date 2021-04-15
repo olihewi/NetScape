@@ -115,3 +115,8 @@ ASGE::Point2D Sprite::getTextureSize()
   auto* texture = sprite->getTexture();
   return ASGE::Point2D(texture->getWidth(), texture->getHeight());
 }
+void Sprite::centrePos(ASGE::Point2D position)
+{
+  sprite->xPos(position.x - sprite->width() / 2);
+  sprite->yPos(position.y - sprite->height() / 2);
+}

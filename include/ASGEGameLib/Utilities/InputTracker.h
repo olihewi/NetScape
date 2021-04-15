@@ -14,26 +14,26 @@ class InputTracker
 
   void update();
 
-  bool getKey(int _key);
-  bool getKeyDown(int _key);
-  bool getKeyUp(int _key);
+  [[nodiscard]] bool getKey(int _key);
+  [[nodiscard]] bool getKeyDown(int _key);
+  [[nodiscard]] bool getKeyUp(int _key);
 
-  bool getMouseButton(int _button);
-  bool getMouseButtonDown(int _button);
-  bool getMouseButtonUp(int _button);
-  ASGE::Point2D getMousePos();
-  ASGE::Point2D getMouseDelta();
-  ASGE::Point2D getMouseScroll();
+  [[nodiscard]] bool getMouseButton(int _button);
+  [[nodiscard]] bool getMouseButtonDown(int _button);
+  [[nodiscard]] bool getMouseButtonUp(int _button);
+  [[nodiscard]] ASGE::Point2D getMousePos();
+  [[nodiscard]] ASGE::Point2D getMouseDelta();
+  [[nodiscard]] ASGE::Point2D getMouseScroll();
 
-  bool getControllerButton(size_t _controller_index, size_t _button);
-  bool getControllerButtonDown(size_t _controller_index, size_t _button);
-  bool getControllerButtonUp(size_t _controller_index, size_t _button);
-  float getControllerAxis(size_t _controller_index, size_t _axis);
-  bool getControllerAxisUp(size_t _controller_index, size_t _axis);
-  bool getControllerAxisDown(size_t _controller_index, size_t _axis);
-  ASGE::Point2D getControllerStick(size_t _controller_index, size_t _stick);
+  [[nodiscard]] bool getControllerButton(size_t _controller_index, size_t _button);
+  [[nodiscard]] bool getControllerButtonDown(size_t _controller_index, size_t _button);
+  [[nodiscard]] bool getControllerButtonUp(size_t _controller_index, size_t _button);
+  [[nodiscard]] float getControllerAxis(size_t _controller_index, size_t _axis);
+  [[nodiscard]] bool getControllerAxisUp(size_t _controller_index, size_t _axis);
+  [[nodiscard]] bool getControllerAxisDown(size_t _controller_index, size_t _axis);
+  [[nodiscard]] ASGE::Point2D getControllerStick(size_t _controller_index, size_t _stick);
 
-  bool hasHadMouseInput();
+  [[nodiscard]] bool hasHadMouseInput();
 
  private:
   KeyboardTracker keyboard;

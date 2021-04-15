@@ -3,13 +3,14 @@
 //
 
 #include "GameObjects/UI/Cursor.h"
-Cursor::Cursor(ASGE::Renderer* renderer) : Sprite(renderer, "data/images/ui/cursors.png")
+Cursor::Cursor(ASGE::Renderer* renderer, bool visible) :
+  Sprite(renderer, "data/images/ui/cursors.png")
 {
   float sprite_size = Sprite::getTextureSize().y;
   Sprite::dimensions(ASGE::Point2D(sprite_size, sprite_size));
   Sprite::srcRect(0, 0, sprite_size, sprite_size);
   Sprite::zOrder(2);
-  visibility(false);
+  visibility(visible);
 }
 void Cursor::position(ASGE::Point2D _position)
 {
