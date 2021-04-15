@@ -13,6 +13,9 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scene::Scenes)
 {
   addObject(std::make_unique<Text>(renderer, "Game Scene", ASGE::Point2D(200, 200)));
 
+  addObject(std::make_unique<Sprite>(renderer, "data/images/player/survivor-idle_shotgun_0.png", ASGE::Point2D(200, 200)));
+
+
 }
 void GameScene::render(ASGE::Renderer* renderer)
 {
