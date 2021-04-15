@@ -23,6 +23,7 @@ class LevelEditor : public Scene
   EditorTileSet tile_set;
   std::array<UIButton, 1> scene_change_buttons;
   Cursor cursor;
+  size_t current_layer = 0;
 };
 
 #endif // ASGEMOVIEGAME_LEVELEDITOR_H

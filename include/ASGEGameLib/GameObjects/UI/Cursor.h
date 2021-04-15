@@ -14,7 +14,7 @@ class Cursor : public Sprite
     POINTER,
     SELECT
   };
-  Cursor(ASGE::Renderer* renderer, bool visible = false);
+  explicit Cursor(ASGE::Renderer* renderer, bool visible = false);
   void position(ASGE::Point2D _position) override;
   void setCursor(CursorMode _mode);
   void update(InputTracker& input, float dt) override;

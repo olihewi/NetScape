@@ -7,7 +7,7 @@
 #include "Utilities/FontManager.h"
 #include <utility>
 LevelEditor::LevelEditor(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
-  Scene(std::move(_scene_callback)), tile_map(renderer, 1),
+  Scene(std::move(_scene_callback)), tile_map(renderer, 2),
   tile_set(renderer, "data/images/tilesets/japanese_city.png"),
   scene_change_buttons(std::array<UIButton, 1>{ UIButton(
     renderer, "data/images/ui/buttons/neon/yellow.png", "Exit", FONTS::ROBOTO,
@@ -32,6 +32,14 @@ void LevelEditor::update(InputTracker& input, float dt)
   Scene::update(input, dt);
   tile_set.update(input, dt);
   cursor.update(input, dt);
+  if (input.getKeyDown(ASGE::KEYS::KEY_1))
+  {
+    current_layer = 0;
+  }
+  else if (input.getKeyDown(ASGE::KEYS::KEY_2))
+  {
+    current_layer = 1;
+  }
   if (input.getMouseButton(MOUSE::LEFT_CLICK))
   {
     placeTiles(input.getMousePos());
@@ -43,7 +51,7 @@ void LevelEditor::update(InputTracker& input, float dt)
     auto y_pos     = static_cast<size_t>(mouse_pos.y) / 32;
     if (mouse_pos.x >= 256)
     {
-      tile_map.deleteTile(0, x_pos + y_pos * 50);
+      tile_map.deleteTile(current_layer, x_pos + y_pos * 50);
     }
   }
   cursor.setCursor(Cursor::POINTER);
@@ -77,7 +85,7 @@ void LevelEditor::placeTiles(ASGE::Point2D _position)
         continue;
       }
       tile_map.setTile(
-        0,
+        current_layer,
         x_pos + y_pos * 50 + offset_x + offset_y * 50,
         "data/images/tilesets/japanese_city.png",
         tile);
