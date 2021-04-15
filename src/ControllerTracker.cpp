@@ -14,14 +14,8 @@ void ControllerTracker::updateInput()
     {
       continue;
     }
-    for (unsigned char& button : new_data[index].buttons)
-    {
-      gamepad.buttons.emplace_back(button);
-    }
-    for (float& axi : new_data[index].axis)
-    {
-      gamepad.axis.emplace_back(axi);
-    }
+    gamepad.buttons = new_data[index].buttons;
+    gamepad.axis    = new_data[index].axis;
     index++;
   }
   index = 0;
@@ -33,13 +27,13 @@ void ControllerTracker::updateInput()
       continue;
     }
     const auto& new_stuff = input->getGamePad(static_cast<int>(index));
-    for (int i = 0; i < new_stuff.no_of_buttons; i++)
+    for (size_t i = 0; i < static_cast<size_t>(new_stuff.no_of_buttons); i++)
     {
-      gamepad.buttons.emplace_back(new_stuff.buttons[static_cast<size_t>(i)]);
+      gamepad.buttons[i] = static_cast<bool>(new_stuff.buttons[i]);
     }
-    for (int i = 0; i < new_stuff.no_of_axis; i++)
+    for (size_t i = 0; i < static_cast<size_t>(new_stuff.no_of_axis); i++)
     {
-      gamepad.axis.emplace_back(new_stuff.axis[static_cast<size_t>(i)]);
+      gamepad.axis[i] = new_stuff.axis[i];
     }
     index++;
   }
@@ -50,7 +44,7 @@ bool ControllerTracker::getButton(size_t controller_index, size_t button)
   {
     return false;
   }
-  return static_cast<bool>(new_data[controller_index].buttons[button]);
+  return new_data[controller_index].buttons[button];
 }
 bool ControllerTracker::getButtonUp(size_t controller_index, size_t button)
 {
@@ -58,8 +52,8 @@ bool ControllerTracker::getButtonUp(size_t controller_index, size_t button)
   {
     return false;
   }
-  auto up = !static_cast<bool>(new_data[controller_index].buttons[button]);
-  return up && static_cast<bool>(old_data[controller_index].buttons[button]);
+  auto up = !new_data[controller_index].buttons[button];
+  return up && old_data[controller_index].buttons[button];
 }
 bool ControllerTracker::getButtonDown(size_t controller_index, size_t button)
 {
@@ -67,8 +61,8 @@ bool ControllerTracker::getButtonDown(size_t controller_index, size_t button)
   {
     return false;
   }
-  auto down = static_cast<bool>(new_data[controller_index].buttons[button]);
-  return down && !static_cast<bool>(old_data[controller_index].buttons[button]);
+  auto down = new_data[controller_index].buttons[button];
+  return down && !old_data[controller_index].buttons[button];
 }
 float ControllerTracker::getAxis(size_t controller_index, size_t axis)
 {

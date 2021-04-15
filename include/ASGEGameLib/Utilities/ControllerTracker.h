@@ -40,8 +40,8 @@ namespace CONTROLLER
   struct LocalController
   {
    public:
-    std::vector<unsigned char> buttons;
-    std::vector<float> axis;
+    std::unordered_map<size_t, bool> buttons;
+    std::unordered_map<size_t, float> axis;
   };
 } // namespace CONTROLLER
 class ControllerTracker

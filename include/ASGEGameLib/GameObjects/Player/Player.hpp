@@ -11,13 +11,11 @@
 class Player : public GameObject
 {
  public:
-//  Player(ASGE::Renderer);
+  //  Player(ASGE::Renderer);
 
   void movement();
 
   float move_speed = 5.0f;
-
-
 };
 
 #endif // ASGEMOVIEGAME_PLAYER_HPP
