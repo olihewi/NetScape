@@ -13,7 +13,7 @@ file(GLOB_RECURSE HEADER_LIST
 set(GAMELIB_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR} Scene.cpp Sprite.cpp AnimatedSprite.cpp Text.cpp ScalableSprite.cpp UIButton.cpp
         TestScene.cpp FontManager.cpp LevelEditor.cpp Tile.cpp TileMap.cpp EditorTileSet.cpp TitleScene.cpp GameScene.cpp
-        Cursor.cpp ControllerTracker.cpp)
+        Cursor.cpp ControllerTracker.cpp Sound.cpp Player.cpp)
 
 ## create the game library
 add_library(${GAMELIB} STATIC ${GAMELIB_SOURCES} "${HEADER_LIST}")
@@ -22,6 +22,6 @@ target_include_directories(${GAMELIB} PRIVATE ${CMAKE_SOURCE_DIR}/include/${GAME
 target_compile_options(${GAMELIB} PUBLIC $<$<STREQUAL:x${CMAKE_CXX_SIMULATE_ID},xMSVC>:/EHsc>)
 
 ## set the build target properties ##
-list(APPEND LIBS "magic_enum::magic_enum")
+list(APPEND LIBS "magic_enum::magic_enum" "soloud")
 configure_target(${GAMELIB} ${CMAKE_SOURCE_DIR}/include "${HEADER_LIST}" "${LIBS}")
 add_asge_dependency(${GAMELIB})

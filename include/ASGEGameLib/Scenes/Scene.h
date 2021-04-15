@@ -10,6 +10,8 @@
 #include <Engine/InputEvents.h>
 #include <Engine/Renderer.h>
 #include <functional>
+#include <soloud.h>
+#include <soloud_wav.h>
 #include <vector>
 
 class Scene
@@ -18,12 +20,16 @@ class Scene
   enum Scenes
   {
     TITLE,
+    GAME,
     LEVEL_EDITOR,
     GAME,
     QUIT_GAME
   };
   explicit Scene(std::function<void(Scenes)> _scene_callback);
-  virtual ~Scene() = default;
+
+  Scene(const Scene& copy) = delete;
+  Scene& operator=(Scene other) = delete;
+  virtual ~Scene();
 
   virtual void keyInput(const ASGE::KeyEvent* key);
   virtual void clickInput(const ASGE::ClickEvent* click);
@@ -38,6 +44,7 @@ class Scene
 
  protected:
   void setScene(Scenes _scene);
+  std::unique_ptr<SoLoud::Soloud> audio_engine;
 
  private:
   std::vector<std::unique_ptr<GameObject>> game_objects;

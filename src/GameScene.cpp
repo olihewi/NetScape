@@ -6,14 +6,10 @@
 #include "Utilities/FontManager.h"
 #include "GameObjects/Sprites/AnimatedSprite.h"
 
-GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
-Scene(std::move(_scene_callback))
+#include <GameObjects/Sprites/Text.h>
+#include <utility>
+GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scene::Scenes)> _scene_callback) :
+  Scene(std::move(_scene_callback))
 {
-  player.player->render(renderer);
-
-}
-
-void GameScene::controllerInput(ControllerTracker& controllers, float)
-{
-
+  addObject(std::make_unique<Text>(renderer, "Game Scene", ASGE::Point2D(200, 200)));
 }

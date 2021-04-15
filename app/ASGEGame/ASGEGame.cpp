@@ -1,4 +1,5 @@
 #include "ASGEGame.hpp"
+#include <ASGEGameLib/Scenes/GameScene.h>
 #include <ASGEGameLib/Scenes/LevelEditor.h>
 #include <ASGEGameLib/Scenes/TitleScene.h>
 #include <ASGEGameLib/Scenes/GameScene.h>
@@ -15,6 +16,7 @@ ASGEGame::ASGEGame(const ASGE::GameSettings& settings) :
   inputs->use_threads = true;
   toggleFPS();
   FontManager::loadFonts(renderer.get());
+  setScene(Scene::GAME);
   setScene(Scene::LEVEL_EDITOR);
   setScene(Scene::TITLE);
   inputs->setCursorMode(ASGE::MOUSE::CursorMode::HIDDEN);
@@ -59,7 +61,6 @@ void ASGEGame::scrollHandler(ASGE::SharedEventData data)
   scene->scrollInput(scroll);
 }
 
-
 /// Updates the current scene every frame
 void ASGEGame::update(const ASGE::GameTime& us)
 {
@@ -88,6 +89,11 @@ void ASGEGame::setScene(Scene::Scenes _scene)
     case Scene::TITLE:
     {
       scene = std::make_unique<TitleScene>(renderer.get(), [this](auto&& PH1) { setScene(PH1); });
+      break;
+    }
+    case Scene::GAME:
+    {
+      scene = std::make_unique<GameScene>(renderer.get(), [this](auto&& PH1) { setScene(PH1); });
       break;
     }
     case Scene::LEVEL_EDITOR:

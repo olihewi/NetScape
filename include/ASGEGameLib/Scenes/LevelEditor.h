@@ -21,6 +21,7 @@ class LevelEditor : public Scene
   void mouseInput(const ASGE::MoveEvent* mouse) override;
 
  private:
+  void placeTiles(ASGE::Point2D _position);
   TileMap tile_map;
   EditorTileSet tile_set;
   std::array<UIButton, 1> scene_change_buttons;
