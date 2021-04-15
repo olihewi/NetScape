@@ -87,8 +87,7 @@ void TitleScene::update(InputTracker& input, float dt)
   size_t index = 0;
   for (auto& button : scene_change_buttons)
   {
-    bool should_return = button.isInside(input.getMousePos());
-    if (should_return)
+    if (button.isInside(input.getMousePos()))
     {
       cursor.setCursor(Cursor::SELECT);
       if (input.hasHadMouseInput())
@@ -96,10 +95,11 @@ void TitleScene::update(InputTracker& input, float dt)
         button_selection = index;
       }
     }
+    bool should_return =
+      (input.getMouseButton(MOUSE::LEFT_CLICK) && button.isInside(input.getMousePos())) ||
+      (input.getControllerButton(0, CONTROLLER::BUTTONS::A) && button_selection == index);
     button.update(input, dt);
-    if (
-      should_return && (input.getMouseButton(MOUSE::LEFT_CLICK) ||
-                        input.getControllerButton(0, CONTROLLER::BUTTONS::A)))
+    if (should_return)
     {
       return;
     }
