@@ -8,12 +8,12 @@
 
 #include <GameObjects/Sprites/Text.h>
 #include <utility>
-GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scene::Scenes)> _scene_callback) :
+GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
   Scene(std::move(_scene_callback))
 {
   addObject(std::make_unique<Text>(renderer, "Game Scene", ASGE::Point2D(200, 200)));
-  addObject(std::make_unique<Sprite>(
-    renderer, "data/images/player/survivor-idle_shotgun_0.png", ASGE::Point2D(200, 200)));
+  addObject(std::make_unique<AnimatedSprite>(
+    renderer, "data/images/animations/japanese_city/crow_ground.png", 10, ASGE::Point2D(300, 200)));
 }
 void GameScene::render(ASGE::Renderer* renderer)
 {
