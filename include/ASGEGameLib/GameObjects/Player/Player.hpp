@@ -5,10 +5,19 @@
 #ifndef ASGEMOVIEGAME_PLAYER_HPP
 #define ASGEMOVIEGAME_PLAYER_HPP
 
-class Player
+#include "ASGEGameLib/GameObjects/GameObject.h"
+#include "ASGEGameLib/GameObjects/Sprites/Sprite.h"
+
+class Player : public GameObject
 {
+ public:
+  Player(ASGE::Renderer);
+
+  void movement();
 
   float move_speed = 5.0f;
+
+
 };
 
 #endif // ASGEMOVIEGAME_PLAYER_HPP

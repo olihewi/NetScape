@@ -4,9 +4,23 @@
 
 #ifndef ASGEMOVIEGAME_GAMESCENE_H
 #define ASGEMOVIEGAME_GAMESCENE_H
+
 #include "Scene.h"
+#include <ASGEGameLib/GameObjects/UI/Cursor.h>
+#include <ASGEGameLib/GameObjects/UI/UIButton.h>
+#include <ASGEGameLib/GameObjects/Player/Player.hpp>
+
 class GameScene : public Scene
 {
+ public:
+  GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback);
+
+  void render(ASGE::Renderer* renderer) override;
+  void controllerInput(ControllerTracker& controllers, float /*dt*/) override;
+
+ private:
+  Player player;
+
 };
 
 #endif // ASGEMOVIEGAME_GAMESCENE_H

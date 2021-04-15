@@ -19,6 +19,7 @@ class Scene
   {
     TITLE,
     LEVEL_EDITOR,
+    GAME,
     QUIT_GAME
   };
   explicit Scene(std::function<void(Scenes)> _scene_callback);
