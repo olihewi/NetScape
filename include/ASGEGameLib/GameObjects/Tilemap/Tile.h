@@ -11,14 +11,12 @@ class Tile : public GameObject
   Tile() = default;
   Tile(
     ASGE::Renderer* renderer, const std::string& tileset_path, std::array<float, 4> rect,
-    ASGE::Point2D position, int collision_layer = -1);
+    ASGE::Point2D position, int layer = 0);
   void update(InputTracker& input, float dt) override;
   void render(ASGE::Renderer* renderer) override;
-  [[nodiscard]] int collisionLayer() const;
 
  private:
   std::unique_ptr<Sprite> sprite;
-  int collision = -1;
 };
 
 #endif // ASGEMOVIEGAME_TILE_H

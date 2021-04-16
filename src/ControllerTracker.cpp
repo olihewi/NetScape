@@ -3,7 +3,16 @@
 //
 
 #include "Utilities/ControllerTracker.h"
-ControllerTracker::ControllerTracker(ASGE::Input* _input) : input(_input) {}
+ControllerTracker::ControllerTracker(ASGE::Input* _input) : input(_input)
+{
+  for (auto& controller : bindings)
+  {
+    for (size_t i = 0; i < 14; i++)
+    {
+      controller.insert(std::make_pair(i, i));
+    }
+  }
+}
 void ControllerTracker::updateInput()
 {
   size_t index = 0;
@@ -44,7 +53,7 @@ bool ControllerTracker::getButton(size_t controller_index, size_t button)
   {
     return false;
   }
-  return new_data[controller_index].buttons[button];
+  return new_data[controller_index].buttons[bindings[controller_index][button]];
 }
 bool ControllerTracker::getButtonUp(size_t controller_index, size_t button)
 {
@@ -52,8 +61,8 @@ bool ControllerTracker::getButtonUp(size_t controller_index, size_t button)
   {
     return false;
   }
-  auto up = !new_data[controller_index].buttons[button];
-  return up && old_data[controller_index].buttons[button];
+  auto up = !new_data[controller_index].buttons[bindings[controller_index][button]];
+  return up && old_data[controller_index].buttons[bindings[controller_index][button]];
 }
 bool ControllerTracker::getButtonDown(size_t controller_index, size_t button)
 {
@@ -61,8 +70,8 @@ bool ControllerTracker::getButtonDown(size_t controller_index, size_t button)
   {
     return false;
   }
-  auto down = new_data[controller_index].buttons[button];
-  return down && !old_data[controller_index].buttons[button];
+  auto down = new_data[controller_index].buttons[bindings[controller_index][button]];
+  return down && !old_data[controller_index].buttons[bindings[controller_index][button]];
 }
 float ControllerTracker::getAxis(size_t controller_index, size_t axis)
 {
@@ -98,4 +107,8 @@ ASGE::Point2D ControllerTracker::getStick(size_t controller_index, size_t stick)
   }
   return ASGE::Point2D(
     new_data[controller_index].axis[stick * 2], new_data[controller_index].axis[stick * 2 + 1]);
+}
+void ControllerTracker::setBinding(size_t controller_index, size_t bind, size_t new_bind)
+{
+  bindings[controller_index][bind] = new_bind;
 }

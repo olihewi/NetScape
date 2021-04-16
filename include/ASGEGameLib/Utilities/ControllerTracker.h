@@ -64,10 +64,13 @@ class ControllerTracker
   bool getAxisDown(size_t controller_index, size_t axis);
   ASGE::Point2D getStick(size_t controller_index, size_t stick);
 
+  void setBinding(size_t controller_index, size_t bind, size_t new_bind);
+
  private:
   ASGE::Input* input;
   std::array<CONTROLLER::LocalController, 4> old_data;
   std::array<CONTROLLER::LocalController, 4> new_data;
+  std::array<std::unordered_map<size_t, size_t>, 4> bindings;
 };
 
 #endif // ASGEMOVIEGAME_CONTROLLERTRACKER_H

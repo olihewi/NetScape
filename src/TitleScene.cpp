@@ -4,6 +4,7 @@
 
 #include "Scenes/TitleScene.h"
 #include "Utilities/FontManager.h"
+#include <ASGEGameLib/GameObjects/Sprites/AnimatedSprite.h>
 #include <cmath>
 #include <iostream>
 TitleScene::TitleScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
@@ -38,6 +39,11 @@ TitleScene::TitleScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _sc
   selectButton(button_selection);
   test_clip.getSound().setLooping(true);
   test_clip.play();
+  std::unique_ptr<AnimatedSprite> background = std::make_unique<AnimatedSprite>(
+    renderer, "data/images/animations/background.png", 20, ASGE::Point2D(0, -500));
+  background->dimensions(ASGE::Point2D(1920, 1920));
+  background->zOrder(-1);
+  addObject(std::move(background));
 }
 void TitleScene::update(InputTracker& input, float dt)
 {

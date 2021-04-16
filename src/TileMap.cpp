@@ -38,7 +38,8 @@ void TileMap::setTile(
     renderer,
     tileset_path,
     rect,
-    ASGE::Point2D(static_cast<float>(index % 50) * 32, static_cast<float>(row) * 32));
+    ASGE::Point2D(static_cast<float>(index % 50) * 32, static_cast<float>(row) * 32),
+    static_cast<int>(layer));
 }
 void TileMap::deleteTile(size_t layer, size_t index)
 {
