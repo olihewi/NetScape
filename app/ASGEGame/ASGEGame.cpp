@@ -1,6 +1,7 @@
 #include "ASGEGame.hpp"
 #include <ASGEGameLib/Scenes/GameScene.h>
 #include <ASGEGameLib/Scenes/LevelEditor.h>
+#include <ASGEGameLib/Scenes/OptionsScene.h>
 #include <ASGEGameLib/Scenes/TitleScene.h>
 #include <ASGEGameLib/Utilities/FontManager.h>
 
@@ -55,6 +56,9 @@ void ASGEGame::setScene(Scene::Scenes _scene)
       scene = std::make_unique<LevelEditor>(renderer.get(), [this](auto&& PH1) { setScene(PH1); });
       break;
     }
+    case Scene::OPTIONS:
+      scene = std::make_unique<OptionsScene>(renderer.get(), [this](auto&& PH1) { setScene(PH1); });
+      break;
     case Scene::QUIT_GAME:
       signalExit();
       break;

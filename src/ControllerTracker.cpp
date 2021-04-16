@@ -108,7 +108,8 @@ ASGE::Point2D ControllerTracker::getStick(size_t controller_index, size_t stick)
   return ASGE::Point2D(
     new_data[controller_index].axis[stick * 2], new_data[controller_index].axis[stick * 2 + 1]);
 }
-void ControllerTracker::setBinding(size_t controller_index, size_t bind, size_t new_bind)
+void ControllerTracker::setBinding(
+  size_t controller_index, std::unordered_map<size_t, size_t> new_bindings)
 {
-  bindings[controller_index][bind] = new_bind;
+  bindings[controller_index] = new_bindings;
 }

@@ -64,7 +64,7 @@ class ControllerTracker
   bool getAxisDown(size_t controller_index, size_t axis);
   ASGE::Point2D getStick(size_t controller_index, size_t stick);
 
-  void setBinding(size_t controller_index, size_t bind, size_t new_bind);
+  void setBinding(size_t controller_index, std::unordered_map<size_t, size_t> new_bindings);
 
  private:
   ASGE::Input* input;

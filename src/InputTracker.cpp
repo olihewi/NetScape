@@ -4,6 +4,7 @@
 
 #include "Utilities/InputTracker.h"
 #include <cmath>
+#include <utility>
 InputTracker::InputTracker(ASGE::Input* _input) :
   keyboard(_input), mouse(_input), controller(_input)
 {
@@ -82,4 +83,34 @@ bool InputTracker::hasHadMouseInput()
 {
   auto mouse_delta = mouse.getMouseDelta();
   return (std::fabs(mouse_delta.x) >= 0.1F || std::fabs(mouse_delta.y) >= 0.1F);
+}
+void InputTracker::setControllerBinding(
+  size_t _controller_index, std::unordered_map<size_t, size_t> new_bindings)
+{
+  controller.setBinding(_controller_index, std::move(new_bindings));
+}
+int InputTracker::getLastController()
+{
+  for (size_t i = 0; i < 4; i++)
+  {
+    for (size_t j = 0; j < 14; j++)
+    {
+      if (controller.getButtonDown(i, j))
+      {
+        return static_cast<int>(i);
+      }
+    }
+  }
+  return -1;
+}
+int InputTracker::getLastControllerButton(size_t _controller_index)
+{
+  for (size_t j = 0; j < 14; j++)
+  {
+    if (controller.getButtonDown(_controller_index, j))
+    {
+      return static_cast<int>(j);
+    }
+  }
+  return -1;
 }

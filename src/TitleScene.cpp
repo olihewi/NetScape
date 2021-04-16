@@ -19,9 +19,9 @@ TitleScene::TitleScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _sc
       [this]() { setScene(Scenes::LEVEL_EDITOR); }, std::array<float, 6>{ 11, 11, 114, 50, 11, 11 },
       ASGE::Point2D(1920 / 2.F - 375, 525), ASGE::Point2D(750, 125)),
     UIButton(
-      renderer, "data/images/ui/buttons/neon/blue.png", "Options", FONTS::ROBOTO, []() {},
-      std::array<float, 6>{ 11, 11, 114, 50, 11, 11 }, ASGE::Point2D(1920 / 2.F - 375, 650),
-      ASGE::Point2D(375, 125)),
+      renderer, "data/images/ui/buttons/neon/blue.png", "Options", FONTS::ROBOTO,
+      [this]() { setScene(Scenes::OPTIONS); }, std::array<float, 6>{ 11, 11, 114, 50, 11, 11 },
+      ASGE::Point2D(1920 / 2.F - 375, 650), ASGE::Point2D(375, 125)),
     UIButton(
       renderer, "data/images/ui/buttons/neon/green.png", "Credits", FONTS::ROBOTO, []() {},
       std::array<float, 6>{ 11, 11, 114, 50, 11, 11 }, ASGE::Point2D(1920 / 2.F, 650),

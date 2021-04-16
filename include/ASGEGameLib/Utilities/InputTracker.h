@@ -35,6 +35,11 @@ class InputTracker
 
   [[nodiscard]] bool hasHadMouseInput();
 
+  void
+  setControllerBinding(size_t _controller_index, std::unordered_map<size_t, size_t> new_bindings);
+  [[nodiscard]] int getLastController();
+  [[nodiscard]] int getLastControllerButton(size_t _controller_index);
+
  private:
   KeyboardTracker keyboard;
   MouseTracker mouse;
