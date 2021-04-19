@@ -28,20 +28,33 @@ void OptionsScene::update(InputTracker& input, float dt)
   }
   else
   {
-    auto this_button = input.getLastControllerButton(static_cast<size_t>(this_controller));
-    if (this_button != -1)
+    if (current_input_rebind < 14) /// Buttons
     {
-      current_rebind[current_input_rebind] = static_cast<size_t>(this_button);
-      current_input_rebind++;
-      if (current_input_rebind == 14)
+      auto this_button = input.getLastControllerButton(static_cast<size_t>(this_controller));
+      if (this_button != -1)
       {
-        input.setControllerBinding(static_cast<size_t>(this_controller), current_rebind);
-        setScene(Scene::TITLE);
-        return;
+        button_rebind[current_input_rebind] = static_cast<size_t>(this_button);
+        current_input_rebind++;
       }
-      instruction_text.contents(instructions[current_input_rebind]);
-      instruction_text.centrePos(ASGE::Point2D(1920 / 2.F, 1080 / 2.F));
     }
+    else /// Axis
+    {
+      auto this_axis = input.getLastControllerAxis(static_cast<size_t>(this_controller));
+      if (this_axis != -1)
+      {
+        axis_rebind[current_input_rebind - 14] = this_axis;
+        current_input_rebind++;
+        if (current_input_rebind == 20)
+        {
+          input.setControllerBinding(
+            static_cast<size_t>(this_controller), button_rebind, axis_rebind);
+          setScene(Scene::TITLE);
+          return;
+        }
+      }
+    }
+    instruction_text.contents(instructions[current_input_rebind]);
+    instruction_text.centrePos(ASGE::Point2D(1920 / 2.F, 1080 / 2.F));
   }
 }
 void OptionsScene::render(ASGE::Renderer* renderer)

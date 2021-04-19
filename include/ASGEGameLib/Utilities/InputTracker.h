@@ -35,10 +35,12 @@ class InputTracker
 
   [[nodiscard]] bool hasHadMouseInput();
 
-  void
-  setControllerBinding(size_t _controller_index, std::unordered_map<size_t, size_t> new_bindings);
+  void setControllerBinding(
+    size_t controller_index, std::unordered_map<size_t, size_t> _button_bindings,
+    std::unordered_map<size_t, size_t> _axis_bindings);
   [[nodiscard]] int getLastController();
   [[nodiscard]] int getLastControllerButton(size_t _controller_index);
+  [[nodiscard]] int getLastControllerAxis(size_t _controller_index);
 
  private:
   KeyboardTracker keyboard;

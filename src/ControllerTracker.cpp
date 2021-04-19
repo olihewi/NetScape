@@ -7,9 +7,16 @@
 #include <utility>
 ControllerTracker::ControllerTracker(ASGE::Input* _input) : input(_input)
 {
-  for (auto& controller : bindings)
+  for (auto& controller : button_bindings)
   {
     for (size_t i = 0; i < 14; i++)
+    {
+      controller.insert(std::make_pair(i, i));
+    }
+  }
+  for (auto& controller : axis_bindings)
+  {
+    for (size_t i = 0; i < 6; i++)
     {
       controller.insert(std::make_pair(i, i));
     }
@@ -55,7 +62,7 @@ bool ControllerTracker::getButton(size_t controller_index, size_t button)
   {
     return false;
   }
-  return new_data[controller_index].buttons[bindings[controller_index][button]];
+  return new_data[controller_index].buttons[button_bindings[controller_index][button]];
 }
 bool ControllerTracker::getButtonUp(size_t controller_index, size_t button)
 {
@@ -63,8 +70,8 @@ bool ControllerTracker::getButtonUp(size_t controller_index, size_t button)
   {
     return false;
   }
-  auto up = !new_data[controller_index].buttons[bindings[controller_index][button]];
-  return up && old_data[controller_index].buttons[bindings[controller_index][button]];
+  auto up = !new_data[controller_index].buttons[button_bindings[controller_index][button]];
+  return up && old_data[controller_index].buttons[button_bindings[controller_index][button]];
 }
 bool ControllerTracker::getButtonDown(size_t controller_index, size_t button)
 {
@@ -72,8 +79,8 @@ bool ControllerTracker::getButtonDown(size_t controller_index, size_t button)
   {
     return false;
   }
-  auto down = new_data[controller_index].buttons[bindings[controller_index][button]];
-  return down && !old_data[controller_index].buttons[bindings[controller_index][button]];
+  auto down = new_data[controller_index].buttons[button_bindings[controller_index][button]];
+  return down && !old_data[controller_index].buttons[button_bindings[controller_index][button]];
 }
 float ControllerTracker::getAxis(size_t controller_index, size_t axis)
 {
@@ -81,7 +88,7 @@ float ControllerTracker::getAxis(size_t controller_index, size_t axis)
   {
     return 0;
   }
-  auto value = new_data[controller_index].axis[axis];
+  auto value = new_data[controller_index].axis[axis_bindings[controller_index][axis]];
   if (std::fabs(value) < CONTROLLER::AXIS_DEADZONE)
   {
     return 0;
@@ -94,8 +101,10 @@ bool ControllerTracker::getAxisUp(size_t controller_index, size_t axis)
   {
     return false;
   }
-  auto up = new_data[controller_index].axis[axis] >= CONTROLLER::AXIS_DEADZONE;
-  return up && old_data[controller_index].axis[axis] < CONTROLLER::AXIS_DEADZONE;
+  auto up = new_data[controller_index].axis[axis_bindings[controller_index][axis]] >=
+            CONTROLLER::AXIS_DEADZONE;
+  return up && old_data[controller_index].axis[axis_bindings[controller_index][axis]] <
+                 CONTROLLER::AXIS_DEADZONE;
 }
 bool ControllerTracker::getAxisDown(size_t controller_index, size_t axis)
 {
@@ -103,8 +112,10 @@ bool ControllerTracker::getAxisDown(size_t controller_index, size_t axis)
   {
     return false;
   }
-  auto up = new_data[controller_index].axis[axis] <= -CONTROLLER::AXIS_DEADZONE;
-  return up && old_data[controller_index].axis[axis] > -CONTROLLER::AXIS_DEADZONE;
+  auto up = new_data[controller_index].axis[axis_bindings[controller_index][axis]] <=
+            -CONTROLLER::AXIS_DEADZONE;
+  return up && old_data[controller_index].axis[axis_bindings[controller_index][axis]] >
+                 -CONTROLLER::AXIS_DEADZONE;
 }
 ASGE::Point2D ControllerTracker::getStick(size_t controller_index, size_t stick)
 {
@@ -113,7 +124,8 @@ ASGE::Point2D ControllerTracker::getStick(size_t controller_index, size_t stick)
     return ASGE::Point2D();
   }
   auto value = ASGE::Point2D(
-    new_data[controller_index].axis[stick * 2], new_data[controller_index].axis[stick * 2 + 1]);
+    new_data[controller_index].axis[axis_bindings[controller_index][stick * 2]],
+    new_data[controller_index].axis[axis_bindings[controller_index][stick * 2 + 1]]);
   if (std::hypotf(value.x, value.y) < CONTROLLER::AXIS_DEADZONE)
   {
     return ASGE::Point2D();
@@ -121,7 +133,38 @@ ASGE::Point2D ControllerTracker::getStick(size_t controller_index, size_t stick)
   return value;
 }
 void ControllerTracker::setBinding(
-  size_t controller_index, std::unordered_map<size_t, size_t> new_bindings)
+  size_t controller_index, std::unordered_map<size_t, size_t> _button_bindings,
+  std::unordered_map<size_t, size_t> _axis_bindings)
 {
-  bindings[controller_index] = std::move(new_bindings);
+  button_bindings[controller_index] = std::move(_button_bindings);
+  axis_bindings[controller_index]   = std::move(_axis_bindings);
+}
+int ControllerTracker::getLastButton(size_t controller_index)
+{
+  const auto& controller = input->getGamePad(static_cast<int>(controller_index));
+  for (int i = 0; i < controller.no_of_buttons; i++)
+  {
+    if (
+      static_cast<bool>(controller.buttons[i]) &&
+      !old_data[controller_index].buttons[static_cast<size_t>(i)])
+    {
+      return i;
+    }
+  }
+  return -1;
+}
+int ControllerTracker::getLastAxis(size_t controller_index)
+{
+  const auto& controller = input->getGamePad(static_cast<int>(controller_index));
+  for (int i = 0; i < controller.no_of_axis; i++)
+  {
+    if (
+      std::fabs(controller.axis[i]) >= CONTROLLER::AXIS_DEADZONE &&
+      std::fabs(old_data[controller_index].axis[static_cast<size_t>(i)]) <
+        CONTROLLER::AXIS_DEADZONE)
+    {
+      return i;
+    }
+  }
+  return -1;
 }

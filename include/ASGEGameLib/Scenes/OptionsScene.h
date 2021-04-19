@@ -15,7 +15,7 @@ class OptionsScene : public Scene
   void render(ASGE::Renderer* renderer) override;
 
  private:
-  std::array<std::string, 14> instructions{ "Press A",
+  std::array<std::string, 20> instructions{ "Press A",
                                             "Press B",
                                             "Press X",
                                             "Press Y",
@@ -28,11 +28,18 @@ class OptionsScene : public Scene
                                             "Press D-Pad Up",
                                             "Press D-Pad Right",
                                             "Press D-Pad Down",
-                                            "Press D-Pad Left`" };
+                                            "Press D-Pad Left",
+                                            "Move Left Stick Horizontally",
+                                            "Move Left Stick Vertically",
+                                            "Move Right Stick Horizontally",
+                                            "Move Right Stick Vertically",
+                                            "Pull Left Trigger",
+                                            "Pull Right Trigger" };
   size_t current_input_rebind = 0;
   int this_controller         = -1;
   Text instruction_text;
-  std::unordered_map<size_t, size_t> current_rebind;
+  std::unordered_map<size_t, size_t> button_rebind;
+  std::unordered_map<size_t, size_t> axis_rebind;
 };
 
 #endif // ASGEMOVIEGAME_OPTIONSSCENE_H

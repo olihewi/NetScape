@@ -85,9 +85,10 @@ bool InputTracker::hasHadMouseInput()
   return (std::fabs(mouse_delta.x) >= 0.1F || std::fabs(mouse_delta.y) >= 0.1F);
 }
 void InputTracker::setControllerBinding(
-  size_t _controller_index, std::unordered_map<size_t, size_t> new_bindings)
+  size_t controller_index, std::unordered_map<size_t, size_t> _button_bindings,
+  std::unordered_map<size_t, size_t> _axis_bindings)
 {
-  controller.setBinding(_controller_index, std::move(new_bindings));
+  controller.setBinding(controller_index, std::move(_button_bindings), std::move(_axis_bindings));
 }
 int InputTracker::getLastController()
 {
@@ -105,12 +106,9 @@ int InputTracker::getLastController()
 }
 int InputTracker::getLastControllerButton(size_t _controller_index)
 {
-  for (size_t j = 0; j < 14; j++)
-  {
-    if (controller.getButtonDown(_controller_index, j))
-    {
-      return static_cast<int>(j);
-    }
-  }
-  return -1;
+  return controller.getLastButton(_controller_index);
+}
+int InputTracker::getLastControllerAxis(size_t _controller_index)
+{
+  return controller.getLastAxis(_controller_index);
 }
