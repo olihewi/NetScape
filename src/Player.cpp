@@ -4,6 +4,7 @@
 
 #include "../include/ASGEGameLib/GameObjects/Player/Player.hpp"
 
+#include "ASGEGameLib/Utilities/LineTrace.h"
 #include <cmath>
 #include <string>
 

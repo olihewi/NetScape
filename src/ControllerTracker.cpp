@@ -4,6 +4,7 @@
 
 #include "Utilities/ControllerTracker.h"
 
+#include <cmath>
 #include <utility>
 ControllerTracker::ControllerTracker(ASGE::Input* _input) : input(_input)
 {
