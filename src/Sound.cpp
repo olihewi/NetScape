@@ -22,3 +22,8 @@ void Sound::play()
 {
   engine->play(clip);
 }
+
+void Sound::stop()
+{
+  engine->stopAudioSource(clip);
+}
