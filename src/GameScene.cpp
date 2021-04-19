@@ -12,16 +12,16 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
   Scene(std::move(_scene_callback)),
   players(std::array<Player, 4>{
     Player(
-      renderer, "data/images/tilesets/cursor.png",
+      renderer, "data/images/player/survivor-idle_shotgun_0.png",
       ASGE::Point2D(400, 400), ASGE::Point2D(50, 50), 1, 1, 1),
     Player(
-      renderer, "data/images/animations/japanese_city/crow_ground.png",
+      renderer, "data/images/player/survivor-idle_shotgun_0.png",
       ASGE::Point2D(500, 500), ASGE::Point2D(50, 50), 1, 1, 2),
     Player(
-      renderer, "data/images/animations/japanese_city/crow_ground.png",
+      renderer, "data/images/player/survivor-idle_shotgun_0.png",
       ASGE::Point2D(600, 600), ASGE::Point2D(50, 50), 1, 1, 3),
     Player(
-      renderer, "data/images/animations/japanese_city/crow_ground.png",
+      renderer, "data/images/player/survivor-idle_shotgun_0.png",
       ASGE::Point2D(700, 700), ASGE::Point2D(50, 50), 1, 1, 4)
           })
 {
