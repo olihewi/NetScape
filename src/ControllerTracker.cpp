@@ -81,7 +81,12 @@ float ControllerTracker::getAxis(size_t controller_index, size_t axis)
   {
     return 0;
   }
-  return new_data[controller_index].axis[axis];
+  auto value = new_data[controller_index].axis[axis];
+  if (std::fabs(value) < CONTROLLER::AXIS_DEADZONE)
+  {
+    return 0;
+  }
+  return value;
 }
 bool ControllerTracker::getAxisUp(size_t controller_index, size_t axis)
 {
@@ -107,8 +112,13 @@ ASGE::Point2D ControllerTracker::getStick(size_t controller_index, size_t stick)
   {
     return ASGE::Point2D();
   }
-  return ASGE::Point2D(
+  auto value = ASGE::Point2D(
     new_data[controller_index].axis[stick * 2], new_data[controller_index].axis[stick * 2 + 1]);
+  if (std::hypotf(value.x, value.y) < CONTROLLER::AXIS_DEADZONE)
+  {
+    return ASGE::Point2D();
+  }
+  return value;
 }
 void ControllerTracker::setBinding(
   size_t controller_index, std::unordered_map<size_t, size_t> new_bindings)
