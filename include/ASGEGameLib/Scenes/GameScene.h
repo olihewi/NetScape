@@ -19,6 +19,7 @@ class GameScene : public Scene
   void update(InputTracker& input, float dt) override;
 
  private:
+  std::array<Player, 4> players;
 };
 
 #endif // ASGEMOVIEGAME_GAMESCENE_H
