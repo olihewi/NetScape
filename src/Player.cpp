@@ -4,14 +4,18 @@
 
 #include "../include/ASGEGameLib/GameObjects/Player/Player.hpp"
 
+#include "Engine/Logger.hpp"
 #include <cmath>
+#include <string>
 
 Player::Player(
   ASGE::Renderer* renderer, const std::string& file_path, ASGE::Point2D _position,
-  ASGE::Point2D _dimensions, size_t playback_speed, short z_order, int control_id) :
-  AnimatedSprite(renderer, file_path, 10, _position)
+  ASGE::Point2D _dimensions, float playback_speed, short z_order, size_t control_id) :
+  AnimatedSprite(renderer, file_path, playback_speed, _position),
+  controller_id(control_id)
 {
-  controller_id = control_id;
+  dimensions(_dimensions);
+  zOrder(z_order);
 }
 
 void Player::render(ASGE::Renderer* renderer)
@@ -21,20 +25,13 @@ void Player::render(ASGE::Renderer* renderer)
 
 void Player::input(InputTracker& input, float dt)
 {
-  if (input.getControllerAxis(controller_id, 0) != 0)
+  /// Movement
+  auto left_stick = input.getControllerStick(controller_id, CONTROLLER::STICKS::LEFT);
+  translate(ASGE::Point2D(left_stick.x * move_speed * dt, left_stick.y * move_speed * dt));
+  /// Rotation
+  auto right_stick = input.getControllerStick(controller_id, CONTROLLER::STICKS::RIGHT);
+  if (std::hypotf(right_stick.x, right_stick.y) >= CONTROLLER::AXIS_DEADZONE)
   {
-    if (input.getControllerAxis(controller_id, 1) != 0)
-    {
-      translate(input.getControllerStick(controller_id, 0));
-    }
-  }
-
-  if (input.getControllerAxis(controller_id, 2) != 0)
-  {
-    if (input.getControllerAxis(controller_id, 3) != 0)
-    {
-      rotation(atan2(
-        input.getControllerAxis(controller_id, 3), input.getControllerAxis(controller_id, 2)));
-    }
+    rotation(std::atan2f(right_stick.y, right_stick.x));
   }
 }

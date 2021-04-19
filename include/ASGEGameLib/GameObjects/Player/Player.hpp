@@ -15,7 +15,7 @@ class Player : public AnimatedSprite
  public:
   Player(
     ASGE::Renderer* renderer, const std::string& file_path, ASGE::Point2D _position,
-    ASGE::Point2D _dimensions, size_t playback_speed, short z_order = 1, int control_id = -1);
+    ASGE::Point2D _dimensions, float playback_speed, short z_order = 1, size_t control_id = -1);
 
   void render(ASGE::Renderer* renderer) override;
 
@@ -25,7 +25,7 @@ class Player : public AnimatedSprite
   float health     = 100;
 
  private:
-  int controller_id;
+  size_t controller_id;
 };
 
 #endif // ASGEMOVIEGAME_PLAYER_HPP
