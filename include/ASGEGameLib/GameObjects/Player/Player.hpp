@@ -9,6 +9,8 @@
 #include "ASGEGameLib/GameObjects/Sprites/AnimatedSprite.h"
 #include "ASGEGameLib/GameObjects/Sprites/Sprite.h"
 #include "ASGEGameLib/Utilities/InputTracker.h"
+#include "ASGEGameLib/Utilities/Sound.h"
+#include "ASGEGameLib/Utilities/LineTrace.h"
 
 class Player : public AnimatedSprite
 {
@@ -20,6 +22,8 @@ class Player : public AnimatedSprite
   void render(ASGE::Renderer* renderer) override;
 
   void input(InputTracker& input, float dt);
+
+  void fire();
 
   float move_speed = 50.0f;
   float health     = 100;

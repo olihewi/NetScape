@@ -4,7 +4,6 @@
 
 #include "../include/ASGEGameLib/GameObjects/Player/Player.hpp"
 
-#include "Engine/Logger.hpp"
 #include <cmath>
 #include <string>
 
@@ -34,4 +33,8 @@ void Player::input(InputTracker& input, float dt)
   {
     rotation(std::atan2f(right_stick.y, right_stick.x));
   }
+}
+void Player::fire()
+{
+  LineTrace(2, position(), rotation());
 }

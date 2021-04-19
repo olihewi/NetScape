@@ -13,6 +13,7 @@ class Sound
   Sound(SoLoud::Soloud* _engine, const std::string& file_path);
   SoLoud::Wav& getSound();
   void play();
+  void stop();
 
  private:
   SoLoud::Soloud* engine;
