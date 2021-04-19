@@ -11,7 +11,7 @@ file(GLOB_RECURSE HEADER_LIST
 ## source files get listed here ##
 set(GAME_SOURCES
         ASGEGame/main.cpp
-        ASGEGame/ASGEGame.cpp ../src/Weapon.cpp ../include/ASGEGameLib/GameObjects/Player/Weapons/Weapon.h ../src/LineTrace.cpp ../include/ASGEGameLib/Utilities/LineTrace.h)
+        ASGEGame/ASGEGame.cpp)
 
 ## the ASGE Game, which spawns the Game window ##
 add_executable(${GAME} ${HEADER_LIST} ${GAME_SOURCES})

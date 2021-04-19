@@ -7,14 +7,12 @@
 
 #include <Engine/Point2D.h>
 
-
 class LineTrace
 {
  public:
-  LineTrace(size_t distance, ASGE::Point2D origin, size_t angle);
+  LineTrace(float distance, ASGE::Point2D origin, float angle);
 
-  ASGE::Point2D hitCheck(size_t distance, ASGE::Point2D origin, size_t angle);
-
+  ASGE::Point2D hitCheck(float distance, ASGE::Point2D origin, float angle);
 };
 
 #endif // ASGEMOVIEGAME_LINETRACE_H
