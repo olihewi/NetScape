@@ -6,8 +6,8 @@
 #define ASGEMOVIEGAME_PLAYER_HPP
 
 #include "ASGEGameLib/GameObjects/GameObject.h"
-#include "ASGEGameLib/GameObjects/Sprites/Sprite.h"
 #include "ASGEGameLib/GameObjects/Sprites/AnimatedSprite.h"
+#include "ASGEGameLib/GameObjects/Sprites/Sprite.h"
 #include "ASGEGameLib/Utilities/InputTracker.h"
 #include "ASGEGameLib/Utilities/Sound.h"
 #include "ASGEGameLib/Utilities/LineTrace.h"
@@ -16,8 +16,8 @@ class Player : public AnimatedSprite
 {
  public:
   Player(
-    ASGE::Renderer* renderer, const std::string& file_path,
-    ASGE::Point2D _position, ASGE::Point2D _dimensions, size_t playback_speed, short z_order = 1, size_t control_id = -1);
+    ASGE::Renderer* renderer, const std::string& file_path, ASGE::Point2D _position,
+    ASGE::Point2D _dimensions, float playback_speed, short z_order = 1, size_t control_id = -1);
 
   void render(ASGE::Renderer* renderer) override;
 
@@ -26,11 +26,10 @@ class Player : public AnimatedSprite
   void fire();
 
   float move_speed = 50.0f;
-  float health = 100;
+  float health     = 100;
 
  private:
-  size_t  controller_id;
-  
+  size_t controller_id;
 };
 
 #endif // ASGEMOVIEGAME_PLAYER_HPP

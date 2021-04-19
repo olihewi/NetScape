@@ -45,3 +45,18 @@ void TileMap::deleteTile(size_t layer, size_t index)
 {
   tiles[layer][index] = Tile();
 }
+TileMap::TileMap(ASGE::Renderer* _renderer, nlohmann::json /*j*/) : renderer(_renderer)
+{
+  /*auto tileset = j["tileset"];
+  auto layers = j["layers"];
+  for (auto& layer : layers)
+  {
+    auto tile_map = std::array<Tile,2500>();
+    tiles.emplace_back(tile_map);
+  }*/
+}
+nlohmann::json TileMap::saveTileMap()
+{
+  auto j = nlohmann::json();
+  return j;
+}
