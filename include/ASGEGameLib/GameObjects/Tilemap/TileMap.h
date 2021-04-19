@@ -6,11 +6,18 @@
 #define ASGEMOVIEGAME_TILEMAP_H
 
 #include <ASGEGameLib/GameObjects/Tilemap/Tile.h>
+#include <nlohmann/json.hpp>
 #include <vector>
 class TileMap : public GameObject
 {
  public:
   TileMap(ASGE::Renderer* _renderer, size_t num_layers);
+
+  /// Load from file
+  TileMap(ASGE::Renderer* _renderer, nlohmann::json j);
+  /// Save to file
+  nlohmann::json saveTileMap();
+
   void update(InputTracker& input, float dt) override;
   void render(ASGE::Renderer* _renderer) override;
   void

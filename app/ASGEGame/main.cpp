@@ -9,7 +9,7 @@ int main(int /*argc*/, char* /*argv*/[])
   game_settings.window_width  = 1920;
   game_settings.window_height = 1080;
 
-  game_settings.mode     = ASGE::GameSettings::WindowMode::BORDERLESS_FULLSCREEN;
+  game_settings.mode     = ASGE::GameSettings::WindowMode::WINDOWED;
   game_settings.fixed_ts = 30;
 
   game_settings.fps_limit  = 120;

@@ -3,6 +3,8 @@
 //
 
 #include "Utilities/ControllerTracker.h"
+
+#include <utility>
 ControllerTracker::ControllerTracker(ASGE::Input* _input) : input(_input)
 {
   for (auto& controller : bindings)
@@ -111,5 +113,5 @@ ASGE::Point2D ControllerTracker::getStick(size_t controller_index, size_t stick)
 void ControllerTracker::setBinding(
   size_t controller_index, std::unordered_map<size_t, size_t> new_bindings)
 {
-  bindings[controller_index] = new_bindings;
+  bindings[controller_index] = std::move(new_bindings);
 }

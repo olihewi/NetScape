@@ -17,7 +17,7 @@ set(GAME_SOURCES
 add_executable(${GAME} ${HEADER_LIST} ${GAME_SOURCES})
 
 ## configure the target. Dependency targets go in the LIBS variable i.e. soloud ##
-list(APPEND LIBS "ASGEGameLib" "magic_enum::magic_enum" "soloud")
+list(APPEND LIBS "ASGEGameLib" "magic_enum::magic_enum" "soloud" "jsonlib")
 configure_target(${GAME} "${CMAKE_CURRENT_SOURCE_DIR}" "${HEADER_LIST}" "${LIBS}")
 add_asge_dependency(${GAME})
 

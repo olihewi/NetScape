@@ -23,6 +23,6 @@ target_include_directories(${GAMELIB} PRIVATE ${CMAKE_SOURCE_DIR}/include/${GAME
 target_compile_options(${GAMELIB} PUBLIC $<$<STREQUAL:x${CMAKE_CXX_SIMULATE_ID},xMSVC>:/EHsc>)
 
 ## set the build target properties ##
-list(APPEND LIBS "magic_enum::magic_enum" "soloud")
+list(APPEND LIBS "magic_enum::magic_enum" "soloud" "jsonlib")
 configure_target(${GAMELIB} ${CMAKE_SOURCE_DIR}/include "${HEADER_LIST}" "${LIBS}")
 add_asge_dependency(${GAMELIB})

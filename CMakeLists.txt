@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.12...3.17)
 #------------------------------------------------------------------------------
 set(ENABLE_ASGE          ON  CACHE BOOL "Adds ASGE to the Project" FORCE)
 set(ENABLE_CLANG_FORMAT  ON  CACHE BOOL "Adds Clang-Format Hooks" FORCE)
-set(ENABLE_JSON          OFF CACHE BOOL "Adds YAML to the Project" FORCE)
+set(ENABLE_JSON          ON CACHE BOOL "Adds YAML to the Project" FORCE)
 set(ENABLE_KISSNET       OFF CACHE BOOL "Adds Kissnet Sockets to Project" FORCE)
 set(ENABLE_LIVE_ANALYSIS OFF CACHE BOOL "Adds live static analysis. SLOW!!!" FORCE)
 set(ENABLE_MAGIC_ENUM    ON  CACHE BOOL "Adds reflection support for ENUMS" FORCE)
