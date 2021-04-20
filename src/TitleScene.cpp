@@ -5,6 +5,7 @@
 #include "Scenes/TitleScene.h"
 #include "Utilities/FontManager.h"
 #include <ASGEGameLib/GameObjects/Sprites/AnimatedSprite.h>
+#include <ASGEGameLib/GameObjects/UI/ControllerDisplay.h>
 #include <cmath>
 #include <iostream>
 TitleScene::TitleScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
@@ -44,6 +45,14 @@ TitleScene::TitleScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _sc
   background->dimensions(ASGE::Point2D(1920, 1920));
   background->zOrder(-1);
   addObject(std::move(background));
+  addObject(std::make_unique<ControllerDisplay>(
+    renderer, 0, ASGE::Point2D(100, 100), ASGE::Point2D(400, 280)));
+  addObject(std::make_unique<ControllerDisplay>(
+    renderer, 1, ASGE::Point2D(1420, 100), ASGE::Point2D(400, 280)));
+  addObject(std::make_unique<ControllerDisplay>(
+    renderer, 2, ASGE::Point2D(100, 700), ASGE::Point2D(400, 280)));
+  addObject(std::make_unique<ControllerDisplay>(
+    renderer, 3, ASGE::Point2D(1420, 700), ASGE::Point2D(400, 280)));
 }
 void TitleScene::update(InputTracker& input, float dt)
 {

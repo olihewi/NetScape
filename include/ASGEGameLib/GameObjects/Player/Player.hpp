@@ -14,7 +14,7 @@ class Player : public AnimatedSprite
  public:
   Player(
     ASGE::Renderer* renderer, const std::string& file_path, ASGE::Point2D _position,
-    ASGE::Point2D _dimensions, float playback_speed, short z_order = 1, size_t control_id = -1);
+    ASGE::Point2D _dimensions, float playback_speed, short z_order, size_t control_id);
 
   void render(ASGE::Renderer* renderer) override;
 

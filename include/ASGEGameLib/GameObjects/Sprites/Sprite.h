@@ -46,6 +46,7 @@ class Sprite : public GameObject
   void zOrder(short z_order);
 
   void srcRect(float x, float y, float w, float h);
+  [[nodiscard]] std::array<float, 4> srcRect();
 
   [[nodiscard]] ASGE::Point2D getTextureSize();
 
