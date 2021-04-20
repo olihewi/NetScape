@@ -10,12 +10,11 @@
 
 Player::Player(
   ASGE::Renderer* renderer, const std::string& file_path, ASGE::Point2D _position,
-  ASGE::Point2D _dimensions, float playback_speed, short z_order, size_t control_id) :
-  AnimatedSprite(renderer, file_path, playback_speed, _position),
-  controller_id(control_id)
+  size_t control_id, SoLoud::Soloud* audio_engine) :
+  AnimatedSprite(renderer, file_path, 20, _position),
+  controller_id(control_id), weapon(audio_engine)
 {
-  dimensions(_dimensions);
-  zOrder(z_order);
+  // zOrder(1);
 }
 
 void Player::render(ASGE::Renderer* renderer)
@@ -33,6 +32,15 @@ void Player::input(InputTracker& input, float dt)
   if (std::hypotf(right_stick.x, right_stick.y) >= CONTROLLER::AXIS_DEADZONE)
   {
     rotation(std::atan2f(right_stick.y, right_stick.x));
+  }
+  /// move this shit to weapon
+  if (input.getControllerAxisUp(controller_id, CONTROLLER::AXIS::RIGHT_TRIGGER))
+  {
+    weapon.fire();
+  }
+  if (input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::X))
+  {
+    weapon.reload();
   }
 }
 void Player::fire()

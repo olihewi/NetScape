@@ -5,16 +5,16 @@
 #ifndef ASGEMOVIEGAME_PLAYER_HPP
 #define ASGEMOVIEGAME_PLAYER_HPP
 
+#include "ASGEGameLib/GameObjects/Player/Weapons/Weapon.h"
 #include "ASGEGameLib/GameObjects/Sprites/AnimatedSprite.h"
 #include "ASGEGameLib/Utilities/InputTracker.h"
-#include "ASGEGameLib/Utilities/Sound.h"
 
 class Player : public AnimatedSprite
 {
  public:
   Player(
     ASGE::Renderer* renderer, const std::string& file_path, ASGE::Point2D _position,
-    ASGE::Point2D _dimensions, float playback_speed, short z_order, size_t control_id);
+    size_t control_id, SoLoud::Soloud* audio_engine);
 
   void render(ASGE::Renderer* renderer) override;
 
@@ -27,6 +27,7 @@ class Player : public AnimatedSprite
 
  private:
   size_t controller_id;
+  Weapon weapon;
 };
 
 #endif // ASGEMOVIEGAME_PLAYER_HPP

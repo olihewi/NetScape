@@ -8,16 +8,16 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
   Scene(std::move(_scene_callback)), tile_map(renderer, "levels/dotonbori.json"),
   players(std::array<Player, 4>{ Player(
                                    renderer, "data/images/player/survivor-idle_shotgun_0.png",
-                                   ASGE::Point2D(400, 400), ASGE::Point2D(50, 50), 1, 1, 0),
+                                   ASGE::Point2D(400, 400), 0, audio_engine.get()),
                                  Player(
                                    renderer, "data/images/player/survivor-idle_shotgun_0.png",
-                                   ASGE::Point2D(500, 500), ASGE::Point2D(50, 50), 1, 1, 1),
+                                   ASGE::Point2D(500, 500), 1, audio_engine.get()),
                                  Player(
                                    renderer, "data/images/player/survivor-idle_shotgun_0.png",
-                                   ASGE::Point2D(600, 600), ASGE::Point2D(50, 50), 1, 1, 2),
+                                   ASGE::Point2D(600, 600), 2, audio_engine.get()),
                                  Player(
                                    renderer, "data/images/player/survivor-idle_shotgun_0.png",
-                                   ASGE::Point2D(700, 700), ASGE::Point2D(50, 50), 1, 1, 3) })
+                                   ASGE::Point2D(700, 700), 3, audio_engine.get()) })
 {
   addObject(std::make_unique<Text>(renderer, "Game Scene", ASGE::Point2D(200, 200)));
 }
