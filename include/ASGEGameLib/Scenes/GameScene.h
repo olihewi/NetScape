@@ -7,6 +7,7 @@
 
 #include "Scene.h"
 #include <ASGEGameLib/GameObjects/Player/Player.hpp>
+#include <ASGEGameLib/GameObjects/Tilemap/TileMap.h>
 #include <ASGEGameLib/GameObjects/UI/Cursor.h>
 #include <ASGEGameLib/GameObjects/UI/UIButton.h>
 
@@ -19,6 +20,7 @@ class GameScene : public Scene
   void update(InputTracker& input, float dt) override;
 
  private:
+  TileMap tile_map;
   std::array<Player, 4> players;
 };
 

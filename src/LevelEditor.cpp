@@ -63,7 +63,7 @@ void LevelEditor::update(InputTracker& input, float dt)
   }
   if (input.getKeyDown(ASGE::KEYS::KEY_L))
   {
-    loadLevel("dotonbori.json");
+    loadLevel("levels/dotonbori.json");
   }
   cursor.setCursor(Cursor::POINTER);
   for (auto& button : scene_change_buttons)
@@ -107,6 +107,7 @@ void LevelEditor::placeTiles(ASGE::Point2D _position)
 }
 void LevelEditor::saveLevel(const std::string& file_name)
 {
+  ASGE::FILEIO::createDir("levels");
   ASGE::FILEIO::File file;
   if (file.open("levels/" + file_name, ASGE::FILEIO::File::IOMode::WRITE))
   {
@@ -121,14 +122,5 @@ void LevelEditor::saveLevel(const std::string& file_name)
 }
 void LevelEditor::loadLevel(const std::string& file_name)
 {
-  ASGE::FILEIO::File file;
-  if (file.open("levels/" + file_name, ASGE::FILEIO::File::IOMode::READ))
-  {
-    ASGE::FILEIO::IOBuffer buffer = file.read();
-    auto json_file = nlohmann::json::parse(buffer.as_char(), buffer.as_char() + buffer.length);
-    file.close();
-    tile_map = TileMap(renderer, json_file);
-
-    std::cout << "Loaded Level from %appdata%/ASGE/NetScape/" << file_name << std::endl;
-  }
+  tile_map = TileMap(renderer, file_name);
 }

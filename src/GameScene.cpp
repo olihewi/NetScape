@@ -5,7 +5,7 @@
 #include "ASGEGameLib/Scenes/GameScene.h"
 #include <utility>
 GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
-  Scene(std::move(_scene_callback)),
+  Scene(std::move(_scene_callback)), tile_map(renderer, "levels/dotonbori.json"),
   players(std::array<Player, 4>{ Player(
                                    renderer, "data/images/player/survivor-idle_shotgun_0.png",
                                    ASGE::Point2D(400, 400), ASGE::Point2D(50, 50), 1, 1, 0),
@@ -25,6 +25,7 @@ void GameScene::render(ASGE::Renderer* renderer)
 {
   Scene::render(renderer);
 
+  tile_map.render(renderer);
   for (auto& player : players)
   {
     player.render(renderer);

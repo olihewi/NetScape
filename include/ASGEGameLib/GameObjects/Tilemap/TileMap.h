@@ -14,7 +14,8 @@ class TileMap : public GameObject
   TileMap(ASGE::Renderer* _renderer, std::string _tileset_path, size_t num_layers);
 
   /// Load from file
-  TileMap(ASGE::Renderer* _renderer, nlohmann::json j);
+  TileMap(ASGE::Renderer* _renderer, const std::string& file_path);
+  void loadFromJson(nlohmann::json j);
   /// Save to file
   nlohmann::json saveTileMap();
 
