@@ -11,7 +11,7 @@
 class TileMap : public GameObject
 {
  public:
-  TileMap(ASGE::Renderer* _renderer, size_t num_layers);
+  TileMap(ASGE::Renderer* _renderer, std::string _tileset_path, size_t num_layers);
 
   /// Load from file
   TileMap(ASGE::Renderer* _renderer, nlohmann::json j);
@@ -20,13 +20,13 @@ class TileMap : public GameObject
 
   void update(InputTracker& input, float dt) override;
   void render(ASGE::Renderer* _renderer) override;
-  void
-  setTile(size_t layer, size_t index, const std::string& tileset_path, std::array<float, 4> rect);
+  void setTile(size_t layer, size_t index, std::array<float, 4> rect);
   void deleteTile(size_t layer, size_t index);
 
  private:
   std::vector<std::array<Tile, 2500>> tiles;
   ASGE::Renderer* renderer;
+  std::string tileset_path;
 };
 
 #endif // ASGEMOVIEGAME_TILEMAP_H

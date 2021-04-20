@@ -28,3 +28,14 @@ void Tile::render(ASGE::Renderer* renderer)
   }
   sprite->render(renderer);
 }
+int Tile::getIndex()
+{
+  if (sprite == nullptr)
+  {
+    return 0;
+  }
+  auto src_rect = sprite->srcRect();
+  int x_index   = static_cast<int>(src_rect[0]) / 32;
+  int y_index   = static_cast<int>(src_rect[1] / 32);
+  return x_index + y_index * 8 + 1;
+}

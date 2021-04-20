@@ -5,9 +5,12 @@
 #include "Scenes/LevelEditor.h"
 
 #include "Utilities/FontManager.h"
+#include <Engine/FileIO.h>
+#include <iostream>
 #include <utility>
-LevelEditor::LevelEditor(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
-  Scene(std::move(_scene_callback)), tile_map(renderer, 2),
+LevelEditor::LevelEditor(ASGE::Renderer* _renderer, std::function<void(Scenes)> _scene_callback) :
+  Scene(std::move(_scene_callback)), renderer(_renderer),
+  tile_map(renderer, "data/images/tilesets/japanese_city.png", 2),
   tile_set(renderer, "data/images/tilesets/japanese_city.png"),
   scene_change_buttons(std::array<UIButton, 1>{ UIButton(
     renderer, "data/images/ui/buttons/neon/yellow.png", "Exit", FONTS::ROBOTO,
@@ -16,7 +19,7 @@ LevelEditor::LevelEditor(ASGE::Renderer* renderer, std::function<void(Scenes)> _
   cursor(renderer, true)
 {
 }
-void LevelEditor::render(ASGE::Renderer* renderer)
+void LevelEditor::render(ASGE::Renderer* /*renderer*/)
 {
   Scene::render(renderer);
   tile_set.render(renderer);
@@ -54,6 +57,14 @@ void LevelEditor::update(InputTracker& input, float dt)
       tile_map.deleteTile(current_layer, x_pos + y_pos * 50);
     }
   }
+  if (input.getKeyDown(ASGE::KEYS::KEY_S))
+  {
+    saveLevel("dotonbori.json");
+  }
+  if (input.getKeyDown(ASGE::KEYS::KEY_L))
+  {
+    loadLevel("dotonbori.json");
+  }
   cursor.setCursor(Cursor::POINTER);
   for (auto& button : scene_change_buttons)
   {
@@ -84,11 +95,7 @@ void LevelEditor::placeTiles(ASGE::Point2D _position)
       {
         continue;
       }
-      tile_map.setTile(
-        current_layer,
-        x_pos + y_pos * 50 + offset_x + offset_y * 50,
-        "data/images/tilesets/japanese_city.png",
-        tile);
+      tile_map.setTile(current_layer, x_pos + y_pos * 50 + offset_x + offset_y * 50, tile);
       offset_x++;
       if (offset_x % tiles.selection_width == 0)
       {
@@ -96,5 +103,32 @@ void LevelEditor::placeTiles(ASGE::Point2D _position)
         offset_y++;
       }
     }
+  }
+}
+void LevelEditor::saveLevel(const std::string& file_name)
+{
+  ASGE::FILEIO::File file;
+  if (file.open("levels/" + file_name, ASGE::FILEIO::File::IOMode::WRITE))
+  {
+    ASGE::FILEIO::IOBuffer buffer = ASGE::FILEIO::IOBuffer();
+    std::string j                 = tile_map.saveTileMap().dump();
+    const auto* as_char           = j.c_str();
+    buffer.append(as_char, j.size());
+    file.write(buffer);
+    std::cout << "Saved Level to %appdata%/ASGE/NetScape/" << file_name << std::endl;
+  }
+  file.close();
+}
+void LevelEditor::loadLevel(const std::string& file_name)
+{
+  ASGE::FILEIO::File file;
+  if (file.open("levels/" + file_name, ASGE::FILEIO::File::IOMode::READ))
+  {
+    ASGE::FILEIO::IOBuffer buffer = file.read();
+    auto json_file = nlohmann::json::parse(buffer.as_char(), buffer.as_char() + buffer.length);
+    file.close();
+    tile_map = TileMap(renderer, json_file);
+
+    std::cout << "Loaded Level from %appdata%/ASGE/NetScape/" << file_name << std::endl;
   }
 }

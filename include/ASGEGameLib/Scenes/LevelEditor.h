@@ -13,12 +13,16 @@
 class LevelEditor : public Scene
 {
  public:
-  explicit LevelEditor(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback);
+  explicit LevelEditor(ASGE::Renderer* _renderer, std::function<void(Scenes)> _scene_callback);
   void update(InputTracker& input, float dt) override;
-  void render(ASGE::Renderer* renderer) override;
+  void render(ASGE::Renderer* /*renderer*/) override;
+
+  void saveLevel(const std::string& file_name);
+  void loadLevel(const std::string& file_name);
 
  private:
   void placeTiles(ASGE::Point2D _position);
+  ASGE::Renderer* renderer;
   TileMap tile_map;
   EditorTileSet tile_set;
   std::array<UIButton, 1> scene_change_buttons;

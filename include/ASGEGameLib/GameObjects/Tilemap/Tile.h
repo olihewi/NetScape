@@ -15,6 +15,8 @@ class Tile : public GameObject
   void update(InputTracker& input, float dt) override;
   void render(ASGE::Renderer* renderer) override;
 
+  [[nodiscard]] int getIndex();
+
  private:
   std::unique_ptr<Sprite> sprite;
 };
