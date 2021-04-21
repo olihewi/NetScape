@@ -54,6 +54,7 @@ nlohmann::json TileMap::saveTileMap()
   auto j          = nlohmann::json();
   j["tileset"]    = tileset_path;
   j["level_name"] = "untitled";
+
   std::vector<std::string> layer_strings;
   for (auto& layer : tiles)
   {
@@ -82,7 +83,8 @@ void TileMap::loadFromJson(nlohmann::json j)
 {
   tileset_path     = j["tileset"].get<std::string>();
   auto tile_layers = j["tile_layers"].get<std::vector<std::string>>();
-  int layer_index  = 0;
+
+  int layer_index = 0;
   tiles.clear();
   for (auto& layer : tile_layers)
   {

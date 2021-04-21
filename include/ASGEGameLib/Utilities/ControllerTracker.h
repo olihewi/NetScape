@@ -48,6 +48,16 @@ namespace CONTROLLER
     std::unordered_map<size_t, bool> buttons;
     std::unordered_map<size_t, float> axis;
   };
+  struct TrackedController
+  {
+   public:
+    explicit TrackedController(int _index);
+    int index;
+    LocalController old_data;
+    LocalController new_data;
+    std::unordered_map<size_t, size_t> button_bindings;
+    std::unordered_map<size_t, size_t> axis_bindings;
+  };
 } // namespace CONTROLLER
 class ControllerTracker
 {
@@ -72,10 +82,7 @@ class ControllerTracker
 
  private:
   ASGE::Input* input;
-  std::array<CONTROLLER::LocalController, 4> old_data;
-  std::array<CONTROLLER::LocalController, 4> new_data;
-  std::array<std::unordered_map<size_t, size_t>, 4> button_bindings;
-  std::array<std::unordered_map<size_t, size_t>, 4> axis_bindings;
+  std::vector<CONTROLLER::TrackedController> controllers;
 };
 
 #endif // ASGEMOVIEGAME_CONTROLLERTRACKER_H

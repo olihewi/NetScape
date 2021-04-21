@@ -6,90 +6,89 @@
 
 #include <cmath>
 #include <utility>
-ControllerTracker::ControllerTracker(ASGE::Input* _input) : input(_input)
-{
-  for (auto& controller : button_bindings)
-  {
-    for (size_t i = 0; i < 14; i++)
-    {
-      controller.insert(std::make_pair(i, i));
-    }
-  }
-  for (auto& controller : axis_bindings)
-  {
-    for (size_t i = 0; i < 6; i++)
-    {
-      controller.insert(std::make_pair(i, i));
-    }
-  }
-}
+ControllerTracker::ControllerTracker(ASGE::Input* _input) : input(_input) {}
 void ControllerTracker::updateInput()
 {
-  size_t index = 0;
-  for (auto& gamepad : old_data)
+  /// Identify controllers to add
+  int controller_i = 0;
+  while (input->getGamePad(controller_i).is_connected)
   {
-    gamepad = CONTROLLER::LocalController();
-    if (!input->getGamePad(static_cast<int>(index)).is_connected)
+    bool already_tracked = false;
+    for (auto& controller : controllers)
     {
-      continue;
+      if (controller.index == controller_i)
+      {
+        already_tracked = true;
+        break;
+      }
     }
-    gamepad.buttons = new_data[index].buttons;
-    gamepad.axis    = new_data[index].axis;
-    index++;
+    if (!already_tracked)
+    {
+      const auto& this_input = input->getGamePad(controller_i);
+      for (int j = 0; j < this_input.no_of_buttons; j++)
+      {
+        if (static_cast<bool>(this_input.buttons[j]))
+        {
+          controllers.emplace_back(CONTROLLER::TrackedController(controller_i));
+        }
+      }
+    }
+    controller_i++;
   }
-  index = 0;
-  for (auto& gamepad : new_data)
+  for (auto& controller : controllers)
   {
-    gamepad = CONTROLLER::LocalController();
-    if (!input->getGamePad(static_cast<int>(index)).is_connected)
+    controller.old_data.buttons = controller.new_data.buttons;
+    controller.old_data.axis    = controller.new_data.axis;
+    const auto& this_input      = input->getGamePad(controller.index);
+    for (size_t i = 0; i < static_cast<size_t>(this_input.no_of_buttons); i++)
     {
-      continue;
+      controller.new_data.buttons[i] = static_cast<bool>(this_input.buttons[i]);
     }
-    const auto& new_stuff = input->getGamePad(static_cast<int>(index));
-    for (size_t i = 0; i < static_cast<size_t>(new_stuff.no_of_buttons); i++)
+    for (size_t i = 0; i < static_cast<size_t>(this_input.no_of_axis); i++)
     {
-      gamepad.buttons[i] = static_cast<bool>(new_stuff.buttons[i]);
+      controller.new_data.axis[i] = this_input.axis[i];
     }
-    for (size_t i = 0; i < static_cast<size_t>(new_stuff.no_of_axis); i++)
-    {
-      gamepad.axis[i] = new_stuff.axis[i];
-    }
-    index++;
   }
 }
 bool ControllerTracker::getButton(size_t controller_index, size_t button)
 {
-  if (static_cast<int>(button) >= input->getGamePad(static_cast<int>(controller_index)).no_of_buttons)
+  if (controller_index >= controllers.size())
   {
     return false;
   }
-  return new_data[controller_index].buttons[button_bindings[controller_index][button]];
+  return controllers[controller_index]
+    .new_data.buttons[controllers[controller_index].button_bindings[button]];
 }
 bool ControllerTracker::getButtonUp(size_t controller_index, size_t button)
 {
-  if (static_cast<int>(button) >= input->getGamePad(static_cast<int>(controller_index)).no_of_buttons)
+  if (controller_index >= controllers.size())
   {
     return false;
   }
-  auto up = !new_data[controller_index].buttons[button_bindings[controller_index][button]];
-  return up && old_data[controller_index].buttons[button_bindings[controller_index][button]];
+  auto up = !controllers[controller_index]
+               .new_data.buttons[controllers[controller_index].button_bindings[button]];
+  return up && controllers[controller_index]
+                 .old_data.buttons[controllers[controller_index].button_bindings[button]];
 }
 bool ControllerTracker::getButtonDown(size_t controller_index, size_t button)
 {
-  if (static_cast<int>(button) >= input->getGamePad(static_cast<int>(controller_index)).no_of_buttons)
+  if (controller_index >= controllers.size())
   {
     return false;
   }
-  auto down = new_data[controller_index].buttons[button_bindings[controller_index][button]];
-  return down && !old_data[controller_index].buttons[button_bindings[controller_index][button]];
+  auto down = controllers[controller_index]
+                .new_data.buttons[controllers[controller_index].button_bindings[button]];
+  return down && !controllers[controller_index]
+                    .old_data.buttons[controllers[controller_index].button_bindings[button]];
 }
 float ControllerTracker::getAxis(size_t controller_index, size_t axis)
 {
-  if (static_cast<int>(axis) >= input->getGamePad(static_cast<int>(controller_index)).no_of_axis)
+  if (controller_index >= controllers.size())
   {
     return 0;
   }
-  auto value = new_data[controller_index].axis[axis_bindings[controller_index][axis]];
+  auto value =
+    controllers[controller_index].new_data.axis[controllers[controller_index].axis_bindings[axis]];
   if (std::fabs(value) < CONTROLLER::AXIS_DEADZONE)
   {
     return 0;
@@ -98,35 +97,41 @@ float ControllerTracker::getAxis(size_t controller_index, size_t axis)
 }
 bool ControllerTracker::getAxisUp(size_t controller_index, size_t axis)
 {
-  if (static_cast<int>(axis) >= input->getGamePad(static_cast<int>(controller_index)).no_of_axis)
+  if (controller_index >= controllers.size())
   {
     return false;
   }
-  auto up = new_data[controller_index].axis[axis_bindings[controller_index][axis]] >=
-            CONTROLLER::AXIS_DEADZONE;
-  return up && old_data[controller_index].axis[axis_bindings[controller_index][axis]] <
+  auto up =
+    controllers[controller_index].new_data.axis[controllers[controller_index].axis_bindings[axis]] >=
+    CONTROLLER::AXIS_DEADZONE;
+  return up && controllers[controller_index]
+                   .old_data.axis[controllers[controller_index].axis_bindings[axis]] <
                  CONTROLLER::AXIS_DEADZONE;
 }
 bool ControllerTracker::getAxisDown(size_t controller_index, size_t axis)
 {
-  if (static_cast<int>(axis) >= input->getGamePad(static_cast<int>(controller_index)).no_of_axis)
+  if (controller_index >= controllers.size())
   {
     return false;
   }
-  auto up = new_data[controller_index].axis[axis_bindings[controller_index][axis]] <=
-            -CONTROLLER::AXIS_DEADZONE;
-  return up && old_data[controller_index].axis[axis_bindings[controller_index][axis]] >
+  auto up =
+    controllers[controller_index].new_data.axis[controllers[controller_index].axis_bindings[axis]] <=
+    -CONTROLLER::AXIS_DEADZONE;
+  return up && controllers[controller_index]
+                   .old_data.axis[controllers[controller_index].axis_bindings[axis]] >
                  -CONTROLLER::AXIS_DEADZONE;
 }
 ASGE::Point2D ControllerTracker::getStick(size_t controller_index, size_t stick)
 {
-  if (static_cast<int>(stick * 2 + 1) >= input->getGamePad(static_cast<int>(controller_index)).no_of_axis)
+  if (controller_index >= controllers.size())
   {
     return ASGE::Point2D();
   }
   auto value = ASGE::Point2D(
-    new_data[controller_index].axis[axis_bindings[controller_index][stick * 2]],
-    new_data[controller_index].axis[axis_bindings[controller_index][stick * 2 + 1]]);
+    controllers[controller_index]
+      .new_data.axis[controllers[controller_index].axis_bindings[stick * 2]],
+    controllers[controller_index]
+      .new_data.axis[controllers[controller_index].axis_bindings[stick * 2 + 1]]);
   if (std::hypotf(value.x, value.y) < CONTROLLER::AXIS_DEADZONE)
   {
     return ASGE::Point2D();
@@ -137,17 +142,17 @@ void ControllerTracker::setBinding(
   size_t controller_index, std::unordered_map<size_t, size_t> _button_bindings,
   std::unordered_map<size_t, size_t> _axis_bindings)
 {
-  button_bindings[controller_index] = std::move(_button_bindings);
-  axis_bindings[controller_index]   = std::move(_axis_bindings);
+  controllers[controller_index].button_bindings = std::move(_button_bindings);
+  controllers[controller_index].axis_bindings   = std::move(_axis_bindings);
 }
 int ControllerTracker::getLastButton(size_t controller_index)
 {
-  const auto& controller = input->getGamePad(static_cast<int>(controller_index));
+  const auto& controller = input->getGamePad((controllers[controller_index].index));
   for (int i = 0; i < controller.no_of_buttons; i++)
   {
     if (
       static_cast<bool>(controller.buttons[i]) &&
-      !old_data[controller_index].buttons[static_cast<size_t>(i)])
+      !controllers[controller_index].old_data.buttons[static_cast<size_t>(i)])
     {
       return i;
     }
@@ -156,16 +161,27 @@ int ControllerTracker::getLastButton(size_t controller_index)
 }
 int ControllerTracker::getLastAxis(size_t controller_index)
 {
-  const auto& controller = input->getGamePad(static_cast<int>(controller_index));
+  const auto& controller = input->getGamePad(controllers[controller_index].index);
   for (int i = 0; i < controller.no_of_axis; i++)
   {
     if (
       std::fabs(controller.axis[i]) >= CONTROLLER::AXIS_DEADZONE &&
-      std::fabs(old_data[controller_index].axis[static_cast<size_t>(i)]) <
+      std::fabs(controllers[controller_index].old_data.axis[static_cast<size_t>(i)]) <
         CONTROLLER::AXIS_DEADZONE)
     {
       return i;
     }
   }
   return -1;
+}
+CONTROLLER::TrackedController::TrackedController(int _index) : index(_index)
+{
+  for (size_t i = 0; i < 14; i++)
+  {
+    button_bindings.insert(std::make_pair(i, i));
+  }
+  for (size_t i = 0; i < 6; i++)
+  {
+    axis_bindings.insert(std::make_pair(i, i));
+  }
 }

@@ -6,7 +6,6 @@
 
 #include "ASGEGameLib/Utilities/LineTrace.h"
 #include <cmath>
-#include <string>
 
 Player::Player(
   ASGE::Renderer* renderer, ASGE::Point2D _position, size_t control_id,
@@ -30,9 +29,11 @@ void Player::input(InputTracker& input, float dt)
   /// Movement
   auto left_stick = input.getControllerStick(controller_id, CONTROLLER::STICKS::LEFT);
   translate(ASGE::Point2D(left_stick.x * move_speed * dt, left_stick.y * move_speed * dt));
-  if (std::hypotf(left_stick.x, left_stick.y) >= CONTROLLER::AXIS_DEADZONE)
+  auto left_stick_hypot = std::hypotf(left_stick.x, left_stick.y);
+  if (left_stick_hypot >= CONTROLLER::AXIS_DEADZONE)
   {
-    rotation(std::atan2f(left_stick.y, left_stick.x));
+    rotation(atan2f(left_stick.y, left_stick.x));
+    setPlaybackSpeed(15 * left_stick_hypot);
   }
   else
   {

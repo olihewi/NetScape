@@ -28,3 +28,7 @@ void AnimatedSprite::setFrame(size_t frame)
   size_t frame_proportion = frame / frames;
   timer                   = static_cast<float>(frame_proportion) * speed;
 }
+void AnimatedSprite::setPlaybackSpeed(float _playback_speed)
+{
+  speed = _playback_speed;
+}

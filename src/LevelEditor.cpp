@@ -10,7 +10,7 @@
 #include <utility>
 LevelEditor::LevelEditor(ASGE::Renderer* _renderer, std::function<void(Scenes)> _scene_callback) :
   Scene(std::move(_scene_callback)), renderer(_renderer),
-  tile_map(renderer, "data/images/tilesets/japanese_city.png", 2),
+  tile_map(renderer, "data/images/tilesets/japanese_city.png", 3),
   tile_set(renderer, "data/images/tilesets/japanese_city.png"),
   scene_change_buttons(std::array<UIButton, 1>{ UIButton(
     renderer, "data/images/ui/buttons/neon/yellow.png", "Exit", FONTS::ROBOTO,
@@ -42,6 +42,10 @@ void LevelEditor::update(InputTracker& input, float dt)
   else if (input.getKeyDown(ASGE::KEYS::KEY_2))
   {
     current_layer = 1;
+  }
+  else if (input.getKeyDown(ASGE::KEYS::KEY_3))
+  {
+    current_layer = 2;
   }
   if (input.getMouseButton(MOUSE::LEFT_CLICK))
   {
@@ -112,7 +116,7 @@ void LevelEditor::saveLevel(const std::string& file_name)
   if (file.open("levels/" + file_name, ASGE::FILEIO::File::IOMode::WRITE))
   {
     ASGE::FILEIO::IOBuffer buffer = ASGE::FILEIO::IOBuffer();
-    std::string j                 = tile_map.saveTileMap().dump();
+    std::string j                 = tile_map.saveTileMap().dump(2);
     const auto* as_char           = j.c_str();
     buffer.append(as_char, j.size());
     file.write(buffer);

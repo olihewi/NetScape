@@ -17,6 +17,7 @@ class AnimatedSprite : public Sprite
     ASGE::Point2D position = ASGE::Point2D());
   void update(InputTracker& input, float dt) override;
   void setFrame(size_t frame);
+  void setPlaybackSpeed(float _playback_speed);
 
  private:
   size_t frames;
