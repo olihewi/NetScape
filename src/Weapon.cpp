@@ -70,15 +70,15 @@ void Weapon::update(InputTracker& input, float dt)
   {
     fire_timer -= dt;
     setFrame(
-      1 +
-      static_cast<int>(((fire_rate - fire_timer) / fire_rate * static_cast<float>(fire_frames))));
+      1 + static_cast<size_t>(
+            ((fire_rate - fire_timer) / fire_rate * static_cast<float>(fire_frames))));
   }
   else if (reload_timer > 0)
   {
     reload_timer -= dt;
     setFrame(
       1 + fire_frames +
-      static_cast<int>(
+      static_cast<size_t>(
         ((reload_time - reload_timer) / reload_time * static_cast<float>(reload_frames))));
   }
   else

@@ -4,6 +4,7 @@
 
 #include "../include/ASGEGameLib/Utilities/LineTrace.h"
 #include <Engine/Logger.hpp>
+#include <cmath>
 #include <string>
 
 LineTrace::LineTrace(float distance, ASGE::Point2D origin, float angle)
