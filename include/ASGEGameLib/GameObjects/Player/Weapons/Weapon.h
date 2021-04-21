@@ -5,17 +5,34 @@
 #ifndef ASGEMOVIEGAME_WEAPON_H
 #define ASGEMOVIEGAME_WEAPON_H
 
-#include <ASGEGameLib/GameObjects/GameObject.h>
+#include <ASGEGameLib/GameObjects/Sprites/AnimatedSprite.h>
 #include <ASGEGameLib/Utilities/Sound.h>
-class Weapon : public GameObject
+class Weapon : public AnimatedSprite
 {
  public:
-  explicit Weapon(SoLoud::Soloud* audio_engine);
+  Weapon(ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _player_id);
+  void update(InputTracker& input, float dt) override;
   void fire();
   void reload();
 
  private:
   std::array<Sound, 3> sounds;
+  size_t player_id;
+
+  /// Weapon Stats
+  int max_ammo      = 10;
+  float fire_rate   = 0.2F;
+  float reload_time = 0.5F;
+
+  /// Current Stats
+  int current_ammo;
+  int ammo_reserve;
+  float fire_timer   = 0;
+  float reload_timer = 0;
+
+  /// Animation Data
+  size_t fire_frames   = 1;
+  size_t reload_frames = 6;
 };
 
 #endif // ASGEMOVIEGAME_WEAPON_H

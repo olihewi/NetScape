@@ -13,16 +13,18 @@ class Player : public AnimatedSprite
 {
  public:
   Player(
-    ASGE::Renderer* renderer, const std::string& file_path, ASGE::Point2D _position,
-    size_t control_id, SoLoud::Soloud* audio_engine);
+    ASGE::Renderer* renderer, ASGE::Point2D _position, size_t control_id,
+    SoLoud::Soloud* audio_engine);
 
   void render(ASGE::Renderer* renderer) override;
 
   void input(InputTracker& input, float dt);
+  void position(ASGE::Point2D _position) override;
+  void translate(ASGE::Point2D _translation) override;
 
   void fire();
 
-  float move_speed = 50.0F;
+  float move_speed = 100.0F;
   float health     = 100.0F;
 
  private:

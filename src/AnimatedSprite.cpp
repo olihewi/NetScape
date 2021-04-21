@@ -22,3 +22,9 @@ void AnimatedSprite::update(InputTracker& /*input*/, float dt)
   float this_frame = std::floor(timer * speed);
   Sprite::srcRect(this_frame * sprite_size, 0, sprite_size, sprite_size);
 }
+void AnimatedSprite::setFrame(size_t frame)
+{
+  Sprite::srcRect(static_cast<float>(frame) * sprite_size, 0, sprite_size, sprite_size);
+  size_t frame_proportion = frame / frames;
+  timer                   = static_cast<float>(frame_proportion) * speed;
+}
