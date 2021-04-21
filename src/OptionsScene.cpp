@@ -42,7 +42,7 @@ void OptionsScene::update(InputTracker& input, float dt)
       auto this_axis = input.getLastControllerAxis(static_cast<size_t>(this_controller));
       if (this_axis != -1)
       {
-        axis_rebind[static_cast<size_t>(current_input_rebind - 14)] = this_axis;
+        axis_rebind[current_input_rebind - 14] = static_cast<size_t>(this_axis);
         current_input_rebind++;
         if (current_input_rebind == 20)
         {
