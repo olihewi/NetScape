@@ -18,6 +18,24 @@ LevelEditor::LevelEditor(ASGE::Renderer* _renderer, std::function<void(Scenes)> 
     ASGE::Point2D(1920 - 375, 0), ASGE::Point2D(375, 125)) }),
   cursor(renderer, true)
 {
+  addObject(std::make_unique<UIButton>(
+    renderer,
+    "data/images/ui/buttons/neon/green.png",
+    "Save",
+    FONTS::ROBOTO,
+    [this]() { saveLevel("dotonbori.json"); },
+    std::array<float, 6>{ 11, 11, 114, 50, 11, 11 },
+    ASGE::Point2D(1920 - 750),
+    ASGE::Point2D(375, 125)));
+  addObject(std::make_unique<UIButton>(
+    renderer,
+    "data/images/ui/buttons/neon/blue.png",
+    "Load",
+    FONTS::ROBOTO,
+    [this]() { loadLevel("userlevels/dotonbori.json"); },
+    std::array<float, 6>{ 11, 11, 114, 50, 11, 11 },
+    ASGE::Point2D(1920 - 1125),
+    ASGE::Point2D(375, 125)));
 }
 void LevelEditor::render(ASGE::Renderer* /*renderer*/)
 {
@@ -111,16 +129,16 @@ void LevelEditor::placeTiles(ASGE::Point2D _position)
 }
 void LevelEditor::saveLevel(const std::string& file_name)
 {
-  ASGE::FILEIO::createDir("levels");
+  ASGE::FILEIO::createDir("userlevels");
   ASGE::FILEIO::File file;
-  if (file.open("levels/" + file_name, ASGE::FILEIO::File::IOMode::WRITE))
+  if (file.open("userlevels/" + file_name, ASGE::FILEIO::File::IOMode::WRITE))
   {
     ASGE::FILEIO::IOBuffer buffer = ASGE::FILEIO::IOBuffer();
     std::string j                 = tile_map.saveTileMap().dump(2);
     const auto* as_char           = j.c_str();
     buffer.append(as_char, j.size());
     file.write(buffer);
-    std::cout << "Saved Level to %appdata%/ASGE/NetScape/" << file_name << std::endl;
+    std::cout << "Saved Level to %appdata%/ASGE/NetScape/userlevels/" << file_name << std::endl;
   }
   file.close();
 }

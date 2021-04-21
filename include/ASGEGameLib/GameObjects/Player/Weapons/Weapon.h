@@ -22,7 +22,7 @@ class Weapon : public AnimatedSprite
   /// Weapon Stats
   int max_ammo      = 10;
   float fire_rate   = 0.2F;
-  float reload_time = 0.5F;
+  float reload_time = 0.75F;
 
   /// Current Stats
   int current_ammo;

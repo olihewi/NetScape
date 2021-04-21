@@ -31,4 +31,8 @@ void GameScene::update(InputTracker& input, float dt)
   {
     player.input(input, dt);
   }
+  if (input.getKeyDown(ASGE::KEYS::KEY_ESCAPE))
+  {
+    setScene(Scenes::TITLE);
+  }
 }

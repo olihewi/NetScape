@@ -3,6 +3,7 @@
 //
 
 #include "ASGEGameLib/GameObjects/Player/Weapons/Weapon.h"
+#include <cmath>
 Weapon::Weapon(ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _player_id) :
   AnimatedSprite(renderer, "data/images/player/pistol.png", 0),
   sounds(std::array<Sound, 3>{ Sound(audio_engine, "data/audio/guns/pistol/fire.wav"),
@@ -46,7 +47,7 @@ void Weapon::update(InputTracker& input, float dt)
   auto right_stick = input.getControllerStick(player_id, CONTROLLER::STICKS::RIGHT);
   if (std::hypotf(right_stick.x, right_stick.y) >= CONTROLLER::AXIS_DEADZONE)
   {
-    rotation(std::atan2f(right_stick.y, right_stick.x));
+    rotation(atan2f(right_stick.y, right_stick.x));
   }
   /// Firing
   if (
