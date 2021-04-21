@@ -7,30 +7,29 @@
 ControllerDisplay::ControllerDisplay(
   ASGE::Renderer* renderer, size_t _controller_id, ASGE::Point2D position,
   ASGE::Point2D dimensions) :
-  sprites(std::array<Sprite, 16>{
-    Sprite(renderer, "data/images/ui/controller/outline_filled.png", position),
-    Sprite(renderer, "data/images/ui/controller/buttons.png", position),
-    Sprite(renderer, "data/images/ui/controller/buttons.png", position),
-    Sprite(renderer, "data/images/ui/controller/buttons.png", position),
-    Sprite(renderer, "data/images/ui/controller/buttons.png", position),
-    Sprite(renderer, "data/images/ui/controller/buttons.png", position),
-    Sprite(renderer, "data/images/ui/controller/buttons.png", position),
-    Sprite(renderer, "data/images/ui/controller/buttons.png", position),
-    Sprite(renderer, "data/images/ui/controller/buttons.png", position),
-    Sprite(renderer, "data/images/ui/controller/buttons.png", position),
-    Sprite(renderer, "data/images/ui/controller/buttons.png", position),
-    Sprite(renderer, "data/images/ui/controller/buttons.png", position),
-    Sprite(renderer, "data/images/ui/controller/buttons.png", position),
-    Sprite(renderer, "data/images/ui/controller/buttons.png", position),
-    Sprite(renderer, "data/images/ui/controller/buttons.png", position),
-    Sprite(renderer, "data/images/ui/controller/buttons.png", position) }),
+  sprites(
+    std::array<Sprite, 16>{ Sprite(renderer, "data/images/ui/controller/outline.png", position),
+                            Sprite(renderer, "data/images/ui/controller/buttons.png", position),
+                            Sprite(renderer, "data/images/ui/controller/buttons.png", position),
+                            Sprite(renderer, "data/images/ui/controller/buttons.png", position),
+                            Sprite(renderer, "data/images/ui/controller/buttons.png", position),
+                            Sprite(renderer, "data/images/ui/controller/buttons.png", position),
+                            Sprite(renderer, "data/images/ui/controller/buttons.png", position),
+                            Sprite(renderer, "data/images/ui/controller/buttons.png", position),
+                            Sprite(renderer, "data/images/ui/controller/buttons.png", position),
+                            Sprite(renderer, "data/images/ui/controller/buttons.png", position),
+                            Sprite(renderer, "data/images/ui/controller/buttons.png", position),
+                            Sprite(renderer, "data/images/ui/controller/buttons.png", position),
+                            Sprite(renderer, "data/images/ui/controller/buttons.png", position),
+                            Sprite(renderer, "data/images/ui/controller/buttons.png", position),
+                            Sprite(renderer, "data/images/ui/controller/buttons.png", position),
+                            Sprite(renderer, "data/images/ui/controller/buttons.png", position) }),
   player_no(
-    renderer, std::to_string(_controller_id + 1),
-    ASGE::Point2D(position.x + dimensions.x / 2 - 8, position.y + dimensions.y / 3.25F),
-    FONTS::ROBOTO, ASGE::COLOURS::WHITE, 0.75F),
+    renderer, "Press Any Button", ASGE::Point2D(), FONTS::ROBOTO, ASGE::COLOURS::WHITE, 0.75F),
   controller_id(_controller_id), scale(ASGE::Point2D(dimensions.x / 811, dimensions.y / 567))
 {
   sprites[0].dimensions(dimensions);
+  sprites[0].srcRect(0, 0, 811, 567);
   sprites[1].srcRect(0, 0, 64, 64); /// A
   sprites[1].dimensions(ASGE::Point2D(64 * scale.x, 64 * scale.y));
   sprites[1].translate(ASGE::Point2D(585 * scale.x, 180 * scale.y));
@@ -79,9 +78,21 @@ ControllerDisplay::ControllerDisplay(
 
   left_stick_pos  = sprites[9].position();
   right_stick_pos = sprites[10].position();
+  player_no.centrePos(ASGE::Point2D(
+    sprites[0].position().x + sprites[0].dimensions().x / 2,
+    sprites[0].position().y + sprites[0].dimensions().y / 3.25F));
 }
 void ControllerDisplay::update(InputTracker& input, float /*dt*/)
 {
+  if (input.isControllerConnected(controller_id) != is_connected)
+  {
+    is_connected = !is_connected;
+    sprites[0].srcRect((is_connected ? 811.0F : 0.0F), 0, 811, 567);
+    player_no.contents(is_connected ? std::to_string(controller_id + 1) : "Press Any Button");
+    player_no.centrePos(ASGE::Point2D(
+      sprites[0].position().x + sprites[0].dimensions().x / 2,
+      sprites[0].position().y + sprites[0].dimensions().y / 3.25F));
+  }
   for (size_t i = 0; i < 14; i++)
   {
     if (
@@ -107,9 +118,16 @@ void ControllerDisplay::update(InputTracker& input, float /*dt*/)
 }
 void ControllerDisplay::render(ASGE::Renderer* renderer)
 {
-  for (auto& sprite : sprites)
+  if (is_connected)
   {
-    sprite.render(renderer);
+    for (auto& sprite : sprites)
+    {
+      sprite.render(renderer);
+    }
+  }
+  else
+  {
+    sprites[0].render(renderer);
   }
   player_no.render(renderer);
 }

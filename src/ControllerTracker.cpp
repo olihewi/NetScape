@@ -174,6 +174,14 @@ int ControllerTracker::getLastAxis(size_t controller_index)
   }
   return -1;
 }
+bool ControllerTracker::isConnected(size_t controller_index)
+{
+  if (controller_index >= controllers.size())
+  {
+    return false;
+  }
+  return input->getGamePad(controllers[controller_index].index).is_connected;
+}
 CONTROLLER::TrackedController::TrackedController(int _index) : index(_index)
 {
   for (size_t i = 0; i < 14; i++)

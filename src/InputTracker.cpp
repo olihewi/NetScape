@@ -112,3 +112,7 @@ int InputTracker::getLastControllerAxis(size_t _controller_index)
 {
   return controller.getLastAxis(_controller_index);
 }
+bool InputTracker::isControllerConnected(size_t _controller_index)
+{
+  return controller.isConnected(_controller_index);
+}

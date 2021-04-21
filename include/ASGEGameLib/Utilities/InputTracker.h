@@ -41,6 +41,7 @@ class InputTracker
   [[nodiscard]] int getLastController();
   [[nodiscard]] int getLastControllerButton(size_t _controller_index);
   [[nodiscard]] int getLastControllerAxis(size_t _controller_index);
+  [[nodiscard]] bool isControllerConnected(size_t _controller_index);
 
  private:
   KeyboardTracker keyboard;

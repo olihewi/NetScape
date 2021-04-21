@@ -65,20 +65,22 @@ class ControllerTracker
   explicit ControllerTracker(ASGE::Input* _input);
   void updateInput();
 
-  bool getButton(size_t controller_index, size_t button);
-  bool getButtonUp(size_t controller_index, size_t button);
-  bool getButtonDown(size_t controller_index, size_t button);
+  [[nodiscard]] bool getButton(size_t controller_index, size_t button);
+  [[nodiscard]] bool getButtonUp(size_t controller_index, size_t button);
+  [[nodiscard]] bool getButtonDown(size_t controller_index, size_t button);
 
-  float getAxis(size_t controller_index, size_t axis);
-  bool getAxisUp(size_t controller_index, size_t axis);
-  bool getAxisDown(size_t controller_index, size_t axis);
-  ASGE::Point2D getStick(size_t controller_index, size_t stick);
+  [[nodiscard]] float getAxis(size_t controller_index, size_t axis);
+  [[nodiscard]] bool getAxisUp(size_t controller_index, size_t axis);
+  [[nodiscard]] bool getAxisDown(size_t controller_index, size_t axis);
+  [[nodiscard]] ASGE::Point2D getStick(size_t controller_index, size_t stick);
 
   void setBinding(
     size_t controller_index, std::unordered_map<size_t, size_t> _button_bindings,
     std::unordered_map<size_t, size_t> _axis_bindings);
-  int getLastButton(size_t controller_index);
-  int getLastAxis(size_t controller_index);
+  [[nodiscard]] int getLastButton(size_t controller_index);
+  [[nodiscard]] int getLastAxis(size_t controller_index);
+
+  [[nodiscard]] bool isConnected(size_t controller_index);
 
  private:
   ASGE::Input* input;

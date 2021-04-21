@@ -23,6 +23,7 @@ class ControllerDisplay : public GameObject
   ASGE::Point2D left_stick_pos;
   ASGE::Point2D right_stick_pos;
   ASGE::Point2D scale;
+  bool is_connected = false;
 };
 
 #endif // ASGEMOVIEGAME_CONTROLLERDISPLAY_H
