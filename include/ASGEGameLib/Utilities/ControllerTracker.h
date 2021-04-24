@@ -4,9 +4,9 @@
 
 #ifndef ASGEMOVIEGAME_CONTROLLERTRACKER_H
 #define ASGEMOVIEGAME_CONTROLLERTRACKER_H
-#include <Engine/Gamepad.h>
-#include <Engine/Input.h>
-#include <Engine/Point2D.h>
+#include <Engine/Gamepad.hpp>
+#include <Engine/Input.hpp>
+#include <Engine/Point2D.hpp>
 #include <array>
 namespace CONTROLLER
 {

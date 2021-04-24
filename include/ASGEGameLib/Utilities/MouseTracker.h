@@ -4,8 +4,8 @@
 
 #ifndef ASGEMOVIEGAME_MOUSETRACKER_H
 #define ASGEMOVIEGAME_MOUSETRACKER_H
-#include <Engine/Input.h>
-#include <Engine/Point2D.h>
+#include <Engine/Input.hpp>
+#include <Engine/Point2D.hpp>
 namespace MOUSE
 {
   constexpr int LEFT_CLICK   = 0;

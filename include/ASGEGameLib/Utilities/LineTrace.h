@@ -5,7 +5,7 @@
 #ifndef ASGEMOVIEGAME_LINETRACE_H
 #define ASGEMOVIEGAME_LINETRACE_H
 
-#include <Engine/Point2D.h>
+#include <Engine/Point2D.hpp>
 
 class LineTrace
 {

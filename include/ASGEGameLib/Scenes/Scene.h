@@ -7,8 +7,8 @@
 
 #include <ASGEGameLib/GameObjects/GameObject.h>
 #include <ASGEGameLib/Utilities/InputTracker.h>
-#include <Engine/InputEvents.h>
-#include <Engine/Renderer.h>
+#include <Engine/InputEvents.hpp>
+#include <Engine/Renderer.hpp>
 #include <functional>
 #include <soloud.h>
 #include <soloud_wav.h>

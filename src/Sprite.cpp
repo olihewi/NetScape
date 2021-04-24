@@ -100,7 +100,7 @@ short Sprite::zOrder()
 }
 void Sprite::zOrder(short z_order)
 {
-  sprite->setGlobalZOrder(z_order);
+  sprite->setGlobalZOrder(static_cast<int8_t>(z_order));
 }
 void Sprite::srcRect(float x, float y, float w, float h)
 {

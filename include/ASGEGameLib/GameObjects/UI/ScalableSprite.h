@@ -6,8 +6,8 @@
 #define ASGEMOVIEGAME_SCALABLESPRITE_H
 
 #include <ASGEGameLib/GameObjects/GameObject.h>
-#include <Engine/Renderer.h>
-#include <Engine/Sprite.h>
+#include <Engine/Renderer.hpp>
+#include <Engine/Sprite.hpp>
 class ScalableSprite : public GameObject
 {
  public:

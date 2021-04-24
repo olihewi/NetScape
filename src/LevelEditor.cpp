@@ -5,7 +5,8 @@
 #include "Scenes/LevelEditor.h"
 
 #include "Utilities/FontManager.h"
-#include <Engine/FileIO.h>
+#include <Engine/FileIO.hpp>
+#include <GameObjects/UI/LevelSelector.h>
 #include <iostream>
 #include <utility>
 LevelEditor::LevelEditor(ASGE::Renderer* _renderer, std::function<void(Scenes)> _scene_callback) :
@@ -36,6 +37,8 @@ LevelEditor::LevelEditor(ASGE::Renderer* _renderer, std::function<void(Scenes)> 
     std::array<float, 6>{ 11, 11, 114, 50, 11, 11 },
     ASGE::Point2D(1920 - 1125),
     ASGE::Point2D(375, 125)));
+
+  addObject(std::make_unique<LevelSelector>(renderer));
 }
 void LevelEditor::render(ASGE::Renderer* /*renderer*/)
 {

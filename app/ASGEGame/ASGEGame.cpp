@@ -10,32 +10,26 @@ ASGEGame::ASGEGame(const ASGE::GameSettings& settings) :
   OGLGame(settings), input_tracker(inputs.get())
 {
   inputs->use_threads = true;
-  toggleFPS();
   FontManager::loadFonts(renderer.get());
-  setScene(Scene::GAME);
-  setScene(Scene::LEVEL_EDITOR);
   setScene(Scene::TITLE);
   inputs->setCursorMode(ASGE::MOUSE::CursorMode::HIDDEN);
 }
 
-/// Updates the current scene every frame
-void ASGEGame::update(const ASGE::GameTime& us)
+/// Fixed Update
+void ASGEGame::update(const ASGE::GameTime& /*us*/)
+{
+  // auto dt = static_cast<float>(us.deltaInSecs());
+  // scene->update(input_tracker, dt);
+}
+
+/// Render and Standard Update
+void ASGEGame::render(const ASGE::GameTime& us)
 {
   auto dt = static_cast<float>(us.deltaInSecs());
   scene->update(input_tracker, dt);
-}
-
-/// Renders the current scene
-void ASGEGame::render()
-{
   scene->render(renderer.get());
 }
 
-/// Fixed Update can be used for physics stuff
-void ASGEGame::fixedUpdate(const ASGE::GameTime& us)
-{
-  Game::fixedUpdate(us);
-}
 void ASGEGame::setScene(Scene::Scenes _scene)
 {
   scene = nullptr;

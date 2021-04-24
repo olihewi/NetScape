@@ -5,20 +5,20 @@
 #pragma once
 
 #include <ASGEGameLib/Scenes/Scene.h>
-#include <Engine/OGLGame.h>
+#include <Engine/OGLGame.hpp>
 #include <vector>
 
 class ASGEGame : public ASGE::OGLGame
 {
  public:
   explicit ASGEGame(const ASGE::GameSettings& settings);
+  ~ASGEGame() override = default;
 
   ASGEGame(const ASGEGame&) = delete;
   ASGEGame& operator=(const ASGEGame&) = delete;
 
-  void update(const ASGE::GameTime& us) override;
-  void render() override;
-  void fixedUpdate(const ASGE::GameTime& us) override;
+  void update(const ASGE::GameTime& us) override; // fixed update
+  void render(const ASGE::GameTime& us) override; // render and regular update
 
   void setScene(Scene::Scenes _scene);
 

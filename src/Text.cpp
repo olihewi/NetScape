@@ -19,7 +19,7 @@ std::string Text::contents()
 {
   return text.getString();
 }
-void Text::contents(std::string _contents)
+void Text::contents(const std::string& _contents)
 {
   text.setString(_contents);
 }
@@ -58,7 +58,7 @@ short Text::zOrder()
 }
 void Text::zOrder(short _z_order)
 {
-  text.setZOrder(_z_order);
+  text.setZOrder(static_cast<int8_t>(_z_order));
 }
 void Text::setFont(ASGE::Renderer* renderer, int _font_index)
 {

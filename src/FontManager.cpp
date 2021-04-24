@@ -3,7 +3,7 @@
 //
 
 #include "Utilities/FontManager.h"
-#include <Engine/FileIO.h>
+#include <Engine/FileIO.hpp>
 int FontManager::loadFont(ASGE::Renderer* renderer, const std::string& file_path, int font_size)
 {
   ASGE::FILEIO::File font_file = ASGE::FILEIO::File();

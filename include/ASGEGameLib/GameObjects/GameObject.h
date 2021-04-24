@@ -6,8 +6,7 @@
 #define ASGEMOVIEGAME_GAMEOBJECT_H
 
 #include <ASGEGameLib/Utilities/InputTracker.h>
-#include <Engine/InputEvents.h>
-#include <Engine/Renderer.h>
+#include <Engine/Renderer.hpp>
 
 class GameObject
 {

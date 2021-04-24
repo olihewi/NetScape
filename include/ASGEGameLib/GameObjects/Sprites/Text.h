@@ -15,7 +15,7 @@ class Text : public GameObject
     ASGE::Colour colour = ASGE::COLOURS::WHITE, float scale = 1, short z_order = 1);
 
   [[nodiscard]] std::string contents();
-  void contents(std::string _contents);
+  void contents(const std::string& _contents);
 
   [[nodiscard]] bool visibility() const;
   void visibility(bool _visibility);

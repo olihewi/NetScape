@@ -6,7 +6,7 @@
 #define ASGEMOVIEGAME_SPRITE_H
 
 #include <ASGEGameLib/GameObjects/GameObject.h>
-#include <Engine/Sprite.h>
+#include <Engine/Sprite.hpp>
 class Sprite : public GameObject
 {
  public:

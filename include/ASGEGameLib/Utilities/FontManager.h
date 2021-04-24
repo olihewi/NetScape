@@ -5,7 +5,7 @@
 #ifndef ASGEMOVIEGAME_FONTMANAGER_H
 #define ASGEMOVIEGAME_FONTMANAGER_H
 
-#include <Engine/Renderer.h>
+#include <Engine/Renderer.hpp>
 
 class FontManager
 {

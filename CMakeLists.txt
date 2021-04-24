@@ -29,6 +29,7 @@ message(STATUS "")
 # General settings
 #------------------------------------------------------------------------------
 set(CMAKE_CXX_STANDARD 20)
+set(ASGE_VERSION "2.0.0-alpha.2")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/extern/cmake-scripts" ${CMAKE_MODULE_PATH})

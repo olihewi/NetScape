@@ -10,7 +10,7 @@ int main(int /*argc*/, char* /*argv*/[])
   game_settings.window_height = 1080;
 
   game_settings.mode     = ASGE::GameSettings::WindowMode::WINDOWED;
-  game_settings.fixed_ts = 30;
+  game_settings.fixed_ts = 1; // We're not using fixed ts so this is to avoid debug messages...
 
   game_settings.fps_limit  = 120;
   game_settings.msaa_level = 1;
