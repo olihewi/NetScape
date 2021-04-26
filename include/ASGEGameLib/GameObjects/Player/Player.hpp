@@ -8,6 +8,8 @@
 #include "ASGEGameLib/GameObjects/Player/Weapons/Weapon.h"
 #include "ASGEGameLib/GameObjects/Sprites/AnimatedSprite.h"
 #include "ASGEGameLib/Utilities/InputTracker.h"
+#include "ASGEGameLib/Utilities/LineTrace.h"
+#include "ASGEGameLib/Utilities/Sound.h"
 
 class Player : public AnimatedSprite
 {
@@ -24,12 +26,17 @@ class Player : public AnimatedSprite
 
   void fire();
 
+  void takeDamage(size_t damage);
+
   float move_speed = 100.0F;
   float health     = 100.0F;
+
+  LineTrace bullet;
 
  private:
   size_t controller_id;
   Weapon weapon;
+  Sound player_walk;
 };
 
 #endif // ASGEMOVIEGAME_PLAYER_HPP

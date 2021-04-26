@@ -7,6 +7,7 @@
 
 #include <ASGEGameLib/GameObjects/Sprites/AnimatedSprite.h>
 #include <ASGEGameLib/Utilities/Sound.h>
+#include <ASGEGameLib/Utilities/LineTrace.h>
 class Weapon : public AnimatedSprite
 {
  public:
@@ -18,6 +19,7 @@ class Weapon : public AnimatedSprite
  private:
   std::array<Sound, 3> sounds;
   size_t player_id;
+  LineTrace bullet;
 
   /// Weapon Stats
   int max_ammo      = 10;

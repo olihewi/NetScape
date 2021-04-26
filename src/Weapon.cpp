@@ -9,7 +9,7 @@ Weapon::Weapon(ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _p
   sounds(std::array<Sound, 3>{ Sound(audio_engine, "data/audio/guns/pistol/fire.wav"),
                                Sound(audio_engine, "data/audio/guns/pistol/empty.wav"),
                                Sound(audio_engine, "data/audio/guns/pistol/reload.wav") }),
-  player_id(_player_id)
+  player_id(_player_id), bullet(renderer)
 {
   current_ammo = max_ammo;
   ammo_reserve = max_ammo * 4;
@@ -21,6 +21,7 @@ void Weapon::fire()
     current_ammo--;
     fire_timer = fire_rate;
     sounds[0].play();
+
   }
   else
   {

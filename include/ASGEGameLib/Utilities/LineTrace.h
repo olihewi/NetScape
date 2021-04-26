@@ -6,13 +6,19 @@
 #define ASGEMOVIEGAME_LINETRACE_H
 
 #include <Engine/Point2D.hpp>
+#include <ASGEGameLib/GameObjects/Sprites/Sprite.h>
 
-class LineTrace
+class LineTrace : public Sprite
 {
  public:
-  LineTrace(float distance, ASGE::Point2D origin, float angle);
+  LineTrace(ASGE::Renderer* renderer);
 
   ASGE::Point2D hitCheck(float distance, ASGE::Point2D origin, float angle);
+
+  void render(ASGE::Renderer* renderer);
+
+  size_t damage = 25;
+
 };
 
 #endif // ASGEMOVIEGAME_LINETRACE_H
