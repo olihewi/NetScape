@@ -10,7 +10,12 @@ OptionsScene::OptionsScene(ASGE::Renderer* renderer, std::function<void(Scenes)>
   Scene(std::move(_scene_callback)),
   instruction_text(
     renderer, "Press Any Button on the controller you would like to re-map.",
-    ASGE::Point2D(400, 400), FONTS::ROBOTO)
+    ASGE::Point2D(400, 400), FONTS::ROBOTO),
+  cursor(renderer, true),
+  scene_change_buttons(std::array<UIButton, 1>{ UIButton(
+    renderer, "data/images/ui/buttons/neon/pink.png", "Return to menu", FONTS::ROBOTO,
+    [this]() { setScene(Scenes::TITLE); }, std::array<float, 6>{ 11, 11, 114, 50, 11, 11 },
+    ASGE::Point2D(1920 / 2.F - 375, 300), ASGE::Point2D(750, 125)) })
 {
   instruction_text.centrePos(ASGE::Point2D(1920 / 2.F, 1080 / 2.F));
 }
@@ -56,9 +61,19 @@ void OptionsScene::update(InputTracker& input, float dt)
     instruction_text.contents(instructions[current_input_rebind]);
     instruction_text.centrePos(ASGE::Point2D(1920 / 2.F, 1080 / 2.F));
   }
+  cursor.update(input, dt);
+  for (auto& button : scene_change_buttons)
+  {
+    button.update(input, dt);
+  }
 }
 void OptionsScene::render(ASGE::Renderer* renderer)
 {
   Scene::render(renderer);
   instruction_text.render(renderer);
+  cursor.render(renderer);
+  for (auto& button : scene_change_buttons)
+  {
+    button.render(renderer);
+  }
 }

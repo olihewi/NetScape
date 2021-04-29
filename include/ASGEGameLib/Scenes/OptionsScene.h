@@ -6,6 +6,7 @@
 #define ASGEMOVIEGAME_OPTIONSSCENE_H
 
 #include "Scene.h"
+#include <ASGEGameLib/GameObjects/UI/Cursor.h>
 #include <ASGEGameLib/GameObjects/UI/UIButton.h>
 class OptionsScene : public Scene
 {
@@ -38,6 +39,8 @@ class OptionsScene : public Scene
   size_t current_input_rebind = 0;
   int this_controller         = -1;
   Text instruction_text;
+  Cursor cursor;
+  std::array<UIButton, 1> scene_change_buttons;
   std::unordered_map<size_t, size_t> button_rebind;
   std::unordered_map<size_t, size_t> axis_rebind;
 };

@@ -5,13 +5,14 @@
 #include "../include/ASGEGameLib/GameObjects/Player/Player.hpp"
 #include <cmath>
 #include "Engine/Logger.hpp"
+#include <cmath>
 
 Player::Player(
   ASGE::Renderer* renderer, ASGE::Point2D _position, size_t control_id,
   SoLoud::Soloud* audio_engine) :
   AnimatedSprite(renderer, "data/images/player/legs.png", 15, _position),
-  controller_id(control_id), weapon(renderer, audio_engine, controller_id),
-  bullet(renderer), player_walk(audio_engine, "data/audio/player_walk.wav")
+  bullet(renderer), controller_id(control_id), weapon(renderer, audio_engine, controller_id),
+  player_walk(audio_engine, "data/audio/player_walk.wav")
 {
   // zOrder(1);
   weapon.position(_position);
@@ -56,7 +57,7 @@ void Player::translate(ASGE::Point2D _translation)
   Sprite::translate(_translation);
   weapon.translate(_translation);
 }
-void Player::takeDamage(size_t damage)
+void Player::takeDamage(float damage)
 {
   health -= damage;
   Logging::DEBUG("HIT");
