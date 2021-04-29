@@ -96,6 +96,5 @@ void Weapon::update(InputTracker& input, float dt)
   {
     setFrame(0);
   }
-
- // bullet.update(dt);
+  bullet.update(dt);
 }

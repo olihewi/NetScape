@@ -31,9 +31,6 @@ class Player : public AnimatedSprite
   float move_speed = 100.0F;
   float health     = 100.0F;
 
-  LineTrace bullet;
-
-
  private:
   size_t controller_id;
   Sound player_walk;

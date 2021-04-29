@@ -34,7 +34,7 @@ void GameScene::update(InputTracker& input, float dt)
   {
     player.input(input, dt);
 
-/*    if(players[0].weapon.bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
+    if(players[0].weapon.bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
     {
       player.takeDamage(players[0].bullet.damage);
     }
@@ -55,7 +55,7 @@ void GameScene::update(InputTracker& input, float dt)
     {
       Logging::DEBUG("Shot by player 4");
       player.takeDamage(players[3].bullet.damage);
-    }*/
+    }
   }
   if (input.getKeyDown(ASGE::KEYS::KEY_ESCAPE))
   {
