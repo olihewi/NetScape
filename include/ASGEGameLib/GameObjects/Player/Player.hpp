@@ -33,10 +33,12 @@ class Player : public AnimatedSprite
 
   LineTrace bullet;
 
+
  private:
   size_t controller_id;
-  Weapon weapon;
   Sound player_walk;
+  Weapon weapon;
+
 };
 
 #endif // ASGEMOVIEGAME_PLAYER_HPP

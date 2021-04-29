@@ -19,9 +19,11 @@ class GameScene : public Scene
   void render(ASGE::Renderer* renderer) override;
   void update(InputTracker& input, float dt) override;
 
+  std::array<Player, 4> players;
+
  private:
   TileMap tile_map;
-  std::array<Player, 4> players;
+
 };
 
 #endif // ASGEMOVIEGAME_GAMESCENE_H

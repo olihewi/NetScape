@@ -3,7 +3,6 @@
 //
 
 #include "../include/ASGEGameLib/GameObjects/Player/Player.hpp"
-#include "ASGEGameLib/Utilities/LineTrace.h"
 #include <cmath>
 #include "Engine/Logger.hpp"
 
@@ -22,11 +21,12 @@ void Player::render(ASGE::Renderer* renderer)
 {
   AnimatedSprite::render(renderer);
   weapon.render(renderer);
-  bullet.render(renderer);
 }
 
 void Player::input(InputTracker& input, float dt)
 {
+
+  weapon.update(input, dt);
   AnimatedSprite::update(input, dt);
   /// Movement
   auto left_stick = input.getControllerStick(controller_id, CONTROLLER::STICKS::LEFT);
@@ -45,16 +45,6 @@ void Player::input(InputTracker& input, float dt)
     setFrame(3);
     player_walk.stop();
   }
-  weapon.update(input, dt);
-
-  if(input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::RIGHT_SHOULDER))
-  {
-    fire();
-  }
-}
-void Player::fire()
-{
-  bullet.hitCheck(1000, weapon.position(), weapon.rotation());
 }
 void Player::position(ASGE::Point2D _position)
 {
@@ -69,7 +59,7 @@ void Player::translate(ASGE::Point2D _translation)
 void Player::takeDamage(size_t damage)
 {
   health -= damage;
-
+  Logging::DEBUG("HIT");
   if(health <= 0)
   {
     visibility(false);

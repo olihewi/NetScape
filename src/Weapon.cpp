@@ -14,14 +14,23 @@ Weapon::Weapon(ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _p
   current_ammo = max_ammo;
   ammo_reserve = max_ammo * 4;
 }
+
+void Weapon::render(ASGE::Renderer* renderer)
+{
+  AnimatedSprite::render(renderer);
+  bullet.render(renderer);
+}
 void Weapon::fire()
 {
   if (current_ammo > 0)
   {
+    ASGE::Point2D muzzle = {0,0};
+    muzzle.x = AnimatedSprite::position().x + 10 * cos(AnimatedSprite::rotation()) - 500;
+    muzzle.y = AnimatedSprite::position().y + 10 * sin(AnimatedSprite::rotation());
     current_ammo--;
     fire_timer = fire_rate;
     sounds[0].play();
-
+    bullet.hitCheck(500, muzzle, AnimatedSprite::rotation());
   }
   else
   {
@@ -87,4 +96,6 @@ void Weapon::update(InputTracker& input, float dt)
   {
     setFrame(0);
   }
+
+ // bullet.update(dt);
 }

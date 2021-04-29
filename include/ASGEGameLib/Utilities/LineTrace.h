@@ -8,7 +8,7 @@
 #include <Engine/Point2D.hpp>
 #include <ASGEGameLib/GameObjects/Sprites/Sprite.h>
 
-class LineTrace : public Sprite
+class LineTrace
 {
  public:
   LineTrace(ASGE::Renderer* renderer);
@@ -17,8 +17,15 @@ class LineTrace : public Sprite
 
   void render(ASGE::Renderer* renderer);
 
-  size_t damage = 25;
+  void update(float dt);
 
+  size_t damage = 25;
+  Sprite bullet_sprite;
+
+ private:
+  float tracer_timer = 0;
+
+  int bullet_count = 0;
 };
 
 #endif // ASGEMOVIEGAME_LINETRACE_H
