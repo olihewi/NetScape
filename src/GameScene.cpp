@@ -34,28 +34,28 @@ void GameScene::update(InputTracker& input, float dt)
   {
     player.input(input, dt);
 
-    if(players[0].weapon.bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
+/*    if(players[0].getWeapon().bullet.bul)
     {
-      player.takeDamage(players[0].bullet.damage);
+      player.takeDamage(players[0].weapon.bullet.damage);
     }
 
-    if(players[1].bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
+    if(players[1].weapon.bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
     {
       Logging::DEBUG("Shot by player 2");
-      player.takeDamage(players[1].bullet.damage);
+      player.takeDamage(players[1].weapon.bullet.damage);
     }
 
-    if(players[2].bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
+    if(players[2].weapon.bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
     {
       Logging::DEBUG("Shot by player 3");
-      player.takeDamage(players[2].bullet.damage);
+      player.takeDamage(players[2].weapon.bullet.damage);
     }
 
-    if(players[3].bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
+    if(players[3].weapon.bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
     {
       Logging::DEBUG("Shot by player 4");
-      player.takeDamage(players[3].bullet.damage);
-    }
+      player.takeDamage(players[3].weapon.bullet.damage);
+    }*/
   }
   if (input.getKeyDown(ASGE::KEYS::KEY_ESCAPE))
   {

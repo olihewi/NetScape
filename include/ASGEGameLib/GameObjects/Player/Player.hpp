@@ -28,6 +28,8 @@ class Player : public AnimatedSprite
 
   void takeDamage(float damage);
 
+
+
   float move_speed = 100.0F;
   float health     = 100.0F;
 
@@ -36,6 +38,8 @@ class Player : public AnimatedSprite
   Sound player_walk;
   Weapon weapon;
 
+ public:
+  const Weapon& getWeapon() const;
 };
 
 #endif // ASGEMOVIEGAME_PLAYER_HPP
