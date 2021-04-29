@@ -26,7 +26,7 @@ class Player : public AnimatedSprite
 
   void fire();
 
-  void takeDamage(size_t damage);
+  void takeDamage(float damage);
 
   float move_speed = 100.0F;
   float health     = 100.0F;

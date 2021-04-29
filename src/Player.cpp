@@ -4,15 +4,15 @@
 
 #include "../include/ASGEGameLib/GameObjects/Player/Player.hpp"
 #include "ASGEGameLib/Utilities/LineTrace.h"
-#include <cmath>
 #include "Engine/Logger.hpp"
+#include <cmath>
 
 Player::Player(
   ASGE::Renderer* renderer, ASGE::Point2D _position, size_t control_id,
   SoLoud::Soloud* audio_engine) :
   AnimatedSprite(renderer, "data/images/player/legs.png", 15, _position),
-  controller_id(control_id), weapon(renderer, audio_engine, controller_id),
-  bullet(renderer), player_walk(audio_engine, "data/audio/player_walk.wav")
+  bullet(renderer), controller_id(control_id), weapon(renderer, audio_engine, controller_id),
+  player_walk(audio_engine, "data/audio/player_walk.wav")
 {
   // zOrder(1);
   weapon.position(_position);
@@ -47,7 +47,7 @@ void Player::input(InputTracker& input, float dt)
   }
   weapon.update(input, dt);
 
-  if(input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::RIGHT_SHOULDER))
+  if (input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::RIGHT_SHOULDER))
   {
     fire();
   }
@@ -66,11 +66,11 @@ void Player::translate(ASGE::Point2D _translation)
   Sprite::translate(_translation);
   weapon.translate(_translation);
 }
-void Player::takeDamage(size_t damage)
+void Player::takeDamage(float damage)
 {
   health -= damage;
 
-  if(health <= 0)
+  if (health <= 0)
   {
     visibility(false);
     Logging::DEBUG("DEAD");
