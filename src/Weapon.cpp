@@ -13,6 +13,7 @@ Weapon::Weapon(ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _p
 {
   current_ammo = max_ammo;
   ammo_reserve = max_ammo * 4;
+  zOrder(2);
 }
 
 void Weapon::render(ASGE::Renderer* renderer)

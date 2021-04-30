@@ -18,7 +18,7 @@ ASGE::Point2D LineTrace::hitCheck(float distance, ASGE::Point2D origin, float an
 
   bullet_sprite.position(end_point);
   bullet_sprite.rotation(angle);
-  bullet_sprite.dimensions(ASGE::Point2D(distance * 2, 40));
+  bullet_sprite.dimensions(ASGE::Point2D(distance * 2, 50));
   bullet_sprite.zOrder(1);
   bullet_sprite.visibility(true);
   tracer_timer = 0;

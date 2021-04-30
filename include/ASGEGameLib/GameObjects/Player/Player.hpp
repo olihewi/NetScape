@@ -39,7 +39,7 @@ class Player : public AnimatedSprite
   Weapon weapon;
 
  public:
-  const Weapon& getWeapon() const;
+  Weapon& getWeapon();
 };
 
 #endif // ASGEMOVIEGAME_PLAYER_HPP

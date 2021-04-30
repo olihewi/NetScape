@@ -6,6 +6,7 @@
 #include <utility>
 #include <array>
 #include "Engine/Logger.hpp"
+#include <string>
 
 GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
   Scene(std::move(_scene_callback)), tile_map(renderer, "levels/dotonbori.json"),
@@ -34,28 +35,30 @@ void GameScene::update(InputTracker& input, float dt)
   {
     player.input(input, dt);
 
-/*    if(players[0].getWeapon().bullet.bul)
+    Logging::DEBUG(std::to_string(player.AnimatedSprite::position().x) + " , " + std::to_string(player.AnimatedSprite::position().x));
+    if(players[0].getWeapon().bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
     {
-      player.takeDamage(players[0].weapon.bullet.damage);
+      Logging::DEBUG("Shot by player 1");
+      player.takeDamage(players[0].getWeapon().bullet.damage);
     }
 
-    if(players[1].weapon.bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
+    if(players[1].getWeapon().bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
     {
       Logging::DEBUG("Shot by player 2");
-      player.takeDamage(players[1].weapon.bullet.damage);
+      player.takeDamage(players[1].getWeapon().bullet.damage);
     }
 
-    if(players[2].weapon.bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
+    if(players[2].getWeapon().bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
     {
       Logging::DEBUG("Shot by player 3");
-      player.takeDamage(players[2].weapon.bullet.damage);
+      player.takeDamage(players[2].getWeapon().bullet.damage);
     }
 
-    if(players[3].weapon.bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
+    if(players[3].getWeapon().bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
     {
       Logging::DEBUG("Shot by player 4");
-      player.takeDamage(players[3].weapon.bullet.damage);
-    }*/
+      player.takeDamage(players[3].getWeapon().bullet.damage);
+    }
   }
   if (input.getKeyDown(ASGE::KEYS::KEY_ESCAPE))
   {

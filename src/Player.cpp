@@ -14,7 +14,7 @@ Player::Player(
   controller_id(control_id), weapon(renderer, audio_engine, controller_id),
   player_walk(audio_engine, "data/audio/player_walk.wav")
 {
-  // zOrder(1);
+  zOrder(1);
   weapon.position(_position);
 }
 
@@ -63,11 +63,12 @@ void Player::takeDamage(float damage)
   Logging::DEBUG("HIT");
   if(health <= 0)
   {
-    visibility(false);
+    Sprite::visibility(false);
+    weapon.visibility(false);
     Logging::DEBUG("DEAD");
   }
 }
-const Weapon& Player::getWeapon() const
+ Weapon& Player::getWeapon()
 {
   return weapon;
 }
