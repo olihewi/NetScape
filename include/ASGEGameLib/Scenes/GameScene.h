@@ -10,6 +10,7 @@
 #include <ASGEGameLib/GameObjects/Tilemap/TileMap.h>
 #include <ASGEGameLib/GameObjects/UI/Cursor.h>
 #include <ASGEGameLib/GameObjects/UI/UIButton.h>
+#include <Engine/Camera.hpp>
 
 class GameScene : public Scene
 {
@@ -22,6 +23,7 @@ class GameScene : public Scene
  private:
   TileMap tile_map;
   std::array<Player, 4> players;
+  std::array<ASGE::Camera, 4> player_cameras;
 };
 
 #endif // ASGEMOVIEGAME_GAMESCENE_H
