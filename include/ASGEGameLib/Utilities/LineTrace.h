@@ -19,7 +19,7 @@ class LineTrace
 
   void update(float dt);
 
-  size_t damage = 25;
+  float damage = 25;
   Sprite bullet_sprite;
 
  private:

@@ -17,10 +17,11 @@ class Weapon : public AnimatedSprite
   void reload();
   void render(ASGE::Renderer* renderer) override;
 
+  LineTrace bullet;
+
  private:
   std::array<Sound, 3> sounds;
   size_t player_id;
-  LineTrace bullet;
 
   /// Weapon Stats
   int max_ammo      = 10;
