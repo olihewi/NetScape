@@ -11,7 +11,7 @@
 class LineTrace
 {
  public:
-  LineTrace(ASGE::Renderer* renderer);
+  explicit LineTrace(ASGE::Renderer* renderer);
 
   ASGE::Point2D hitCheck(float distance, ASGE::Point2D origin, float angle);
 
@@ -25,7 +25,7 @@ class LineTrace
  private:
   float tracer_timer = 0;
 
-  int bullet_count = 0;
+  // int bullet_count = 0;
 };
 
 #endif // ASGEMOVIEGAME_LINETRACE_H

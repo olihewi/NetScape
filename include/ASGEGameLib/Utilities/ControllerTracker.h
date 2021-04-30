@@ -47,7 +47,7 @@ namespace CONTROLLER
    public:
     std::unordered_map<size_t, bool> buttons;
     std::unordered_map<size_t, float> axis;
-  };
+  } __attribute__((aligned(128)));
   struct TrackedController
   {
    public:
@@ -57,7 +57,7 @@ namespace CONTROLLER
     LocalController new_data;
     std::unordered_map<size_t, size_t> button_bindings;
     std::unordered_map<size_t, size_t> axis_bindings;
-  };
+  } __attribute__((packed));
 } // namespace CONTROLLER
 class ControllerTracker
 {

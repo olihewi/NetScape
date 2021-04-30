@@ -6,8 +6,8 @@
 #define ASGEMOVIEGAME_WEAPON_H
 
 #include <ASGEGameLib/GameObjects/Sprites/AnimatedSprite.h>
-#include <ASGEGameLib/Utilities/Sound.h>
 #include <ASGEGameLib/Utilities/LineTrace.h>
+#include <ASGEGameLib/Utilities/Sound.h>
 class Weapon : public AnimatedSprite
 {
  public:
@@ -15,14 +15,12 @@ class Weapon : public AnimatedSprite
   void update(InputTracker& input, float dt) override;
   void fire();
   void reload();
-  void render(ASGE::Renderer* renderer);
-
-  LineTrace bullet;
+  void render(ASGE::Renderer* renderer) override;
 
  private:
   std::array<Sound, 3> sounds;
   size_t player_id;
-
+  LineTrace bullet;
 
   /// Weapon Stats
   int max_ammo      = 10;

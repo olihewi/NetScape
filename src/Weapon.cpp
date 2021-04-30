@@ -25,7 +25,7 @@ void Weapon::fire()
 {
   if (current_ammo > 0)
   {
-    ASGE::Point2D muzzle = {0,0};
+    ASGE::Point2D muzzle = { 0, 0 };
     muzzle.x = AnimatedSprite::position().x + 10 * cos(AnimatedSprite::rotation()) - 500;
     muzzle.y = AnimatedSprite::position().y + 10 * sin(AnimatedSprite::rotation());
     current_ammo--;

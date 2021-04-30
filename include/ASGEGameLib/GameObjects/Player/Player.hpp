@@ -24,19 +24,17 @@ class Player : public AnimatedSprite
   void position(ASGE::Point2D _position) override;
   void translate(ASGE::Point2D _translation) override;
 
-  void fire();
+  // void fire();
 
   void takeDamage(float damage);
-
-
 
   float move_speed = 100.0F;
   float health     = 100.0F;
 
  private:
   size_t controller_id;
-  Sound player_walk;
   Weapon weapon;
+  Sound player_walk;
 
  public:
   Weapon& getWeapon();

@@ -3,7 +3,6 @@
 //
 
 #include "../include/ASGEGameLib/GameObjects/Player/Player.hpp"
-#include <cmath>
 #include "Engine/Logger.hpp"
 #include <cmath>
 
@@ -26,7 +25,6 @@ void Player::render(ASGE::Renderer* renderer)
 
 void Player::input(InputTracker& input, float dt)
 {
-
   weapon.update(input, dt);
   AnimatedSprite::update(input, dt);
   /// Movement
@@ -61,7 +59,7 @@ void Player::takeDamage(float damage)
 {
   health -= damage;
   Logging::DEBUG("HIT");
-  if(health <= 0)
+  if (health <= 0)
   {
     Sprite::visibility(false);
     weapon.visibility(false);
