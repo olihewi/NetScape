@@ -3,7 +3,6 @@
 //
 
 #include "../include/ASGEGameLib/GameObjects/Player/Player.hpp"
-#include "ASGEGameLib/Utilities/LineTrace.h"
 #include "Engine/Logger.hpp"
 #include <cmath>
 
@@ -11,7 +10,7 @@ Player::Player(
   ASGE::Renderer* renderer, ASGE::Point2D _position, size_t control_id,
   SoLoud::Soloud* audio_engine) :
   AnimatedSprite(renderer, "data/images/player/legs.png", 15, _position),
-  bullet(renderer), controller_id(control_id), weapon(renderer, audio_engine, controller_id),
+  controller_id(control_id), weapon(renderer, audio_engine, controller_id),
   player_walk(audio_engine, "data/audio/player_walk.wav")
 {
   // zOrder(1);
@@ -22,11 +21,11 @@ void Player::render(ASGE::Renderer* renderer)
 {
   AnimatedSprite::render(renderer);
   weapon.render(renderer);
-  bullet.render(renderer);
 }
 
 void Player::input(InputTracker& input, float dt)
 {
+  weapon.update(input, dt);
   AnimatedSprite::update(input, dt);
   /// Movement
   auto left_stick = input.getControllerStick(controller_id, CONTROLLER::STICKS::LEFT);
@@ -45,16 +44,6 @@ void Player::input(InputTracker& input, float dt)
     setFrame(3);
     player_walk.stop();
   }
-  weapon.update(input, dt);
-
-  if (input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::RIGHT_SHOULDER))
-  {
-    fire();
-  }
-}
-void Player::fire()
-{
-  bullet.hitCheck(1000, weapon.position(), weapon.rotation());
 }
 void Player::position(ASGE::Point2D _position)
 {
@@ -69,10 +58,14 @@ void Player::translate(ASGE::Point2D _translation)
 void Player::takeDamage(float damage)
 {
   health -= damage;
-
+  Logging::DEBUG("HIT");
   if (health <= 0)
   {
     visibility(false);
     Logging::DEBUG("DEAD");
   }
+}
+const Weapon& Player::getWeapon() const
+{
+  return weapon;
 }

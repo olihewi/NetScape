@@ -34,17 +34,36 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
 void GameScene::update(InputTracker& input, float dt)
 {
   Scene::update(input, dt);
-
   for (auto& player : players)
   {
     player.input(input, dt);
 
-    if (player.isInside(player.bullet.position()))
+    /*if (player.isInside(player.bullet.position()))
     {
-      player.takeDamage(player.bullet.damage);
-    }
-  }
+      if(players[0].getWeapon().bullet.bul)
+      {
+        player.takeDamage(players[0].weapon.bullet.damage);
+      }
 
+      if(players[1].weapon.bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
+      {
+        Logging::DEBUG("Shot by player 2");
+        player.takeDamage(players[1].weapon.bullet.damage);
+      }
+
+      if(players[2].weapon.bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
+      {
+        Logging::DEBUG("Shot by player 3");
+        player.takeDamage(players[2].weapon.bullet.damage);
+      }
+
+      if(players[3].weapon.bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
+      {
+        Logging::DEBUG("Shot by player 4");
+        player.takeDamage(players[3].weapon.bullet.damage);
+      }
+    }*/
+  }
   if (input.getKeyDown(ASGE::KEYS::KEY_ESCAPE))
   {
     setScene(Scenes::TITLE);
