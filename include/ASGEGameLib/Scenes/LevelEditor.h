@@ -10,6 +10,7 @@
 #include <ASGEGameLib/GameObjects/Tilemap/TileMap.h>
 #include <ASGEGameLib/GameObjects/UI/Cursor.h>
 #include <ASGEGameLib/GameObjects/UI/UIButton.h>
+#include <Engine/Camera.hpp>
 class LevelEditor : public Scene
 {
  public:
@@ -27,6 +28,7 @@ class LevelEditor : public Scene
   EditorTileSet tile_set;
   std::array<UIButton, 1> scene_change_buttons;
   Cursor cursor;
+  ASGE::Camera tilemap_camera;
   size_t current_layer = 0;
 };
 

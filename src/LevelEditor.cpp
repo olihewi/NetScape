@@ -17,8 +17,14 @@ LevelEditor::LevelEditor(ASGE::Renderer* _renderer, std::function<void(Scenes)> 
     renderer, "data/images/ui/buttons/neon/yellow.png", "Exit", FONTS::ROBOTO,
     [this]() { setScene(Scenes::TITLE); }, std::array<float, 6>{ 11, 11, 114, 50, 11, 11 },
     ASGE::Point2D(1920 - 375, 0), ASGE::Point2D(375, 125)) }),
-  cursor(renderer, true)
+  cursor(renderer, true), tilemap_camera(
+                            static_cast<float>(ASGE::SETTINGS.window_width) - 256,
+                            static_cast<float>(ASGE::SETTINGS.window_height) - 128)
 {
+  cursor.zOrder(10);
+  tilemap_camera.lookAt(ASGE::Point2D(
+    (static_cast<float>(ASGE::SETTINGS.window_width) - 256) / 2,
+    (static_cast<float>(ASGE::SETTINGS.window_height) - 128) / 2));
   addObject(std::make_unique<UIButton>(
     renderer,
     "data/images/ui/buttons/neon/green.png",
@@ -44,11 +50,25 @@ void LevelEditor::render(ASGE::Renderer* /*renderer*/)
 {
   Scene::render(renderer);
   tile_set.render(renderer);
-  tile_map.render(renderer);
   for (auto& button : scene_change_buttons)
   {
     button.render(renderer);
   }
+
+  auto renderer_view = renderer->getViewport();
+  renderer->setViewport({ 256,
+                          0,
+                          static_cast<uint32_t>(ASGE::SETTINGS.window_width) - 256,
+                          static_cast<uint32_t>(ASGE::SETTINGS.window_height) - 125 });
+  renderer->setProjectionMatrix(tilemap_camera.getView());
+  tile_map.render(renderer);
+  renderer->setViewport(renderer_view);
+  renderer->setProjectionMatrix(
+    0,
+    0,
+    static_cast<float>(ASGE::SETTINGS.window_width),
+    static_cast<float>(ASGE::SETTINGS.window_height));
+
   cursor.render(renderer);
 }
 void LevelEditor::update(InputTracker& input, float dt)
@@ -68,28 +88,38 @@ void LevelEditor::update(InputTracker& input, float dt)
   {
     current_layer = 2;
   }
-  if (input.getMouseButton(MOUSE::LEFT_CLICK))
+  auto relative_mouse_pos = input.getMousePos();
+  auto camera_view        = tilemap_camera.getView();
+  relative_mouse_pos.x =
+    (relative_mouse_pos.x - 256 + camera_view.min_x) * tilemap_camera.getZoom();
+  relative_mouse_pos.y =
+    (relative_mouse_pos.y - 125 + camera_view.min_y) * tilemap_camera.getZoom();
+  if (relative_mouse_pos.x >= 0 && relative_mouse_pos.y >= 0)
   {
-    placeTiles(input.getMousePos());
-  }
-  if (input.getMouseButton(MOUSE::RIGHT_CLICK))
-  {
-    auto mouse_pos = input.getMousePos();
-    auto x_pos     = static_cast<size_t>(mouse_pos.x) / 32;
-    auto y_pos     = static_cast<size_t>(mouse_pos.y) / 32;
-    if (mouse_pos.x >= 256)
+    if (input.getMouseButton(MOUSE::LEFT_CLICK))
     {
-      tile_map.deleteTile(current_layer, x_pos + y_pos * 50);
+      placeTiles(relative_mouse_pos);
+    }
+    if (input.getMouseButton(MOUSE::RIGHT_CLICK))
+    {
+      auto mouse_pos = input.getMousePos();
+      auto x_pos     = static_cast<size_t>(mouse_pos.x) / 32;
+      auto y_pos     = static_cast<size_t>(mouse_pos.y) / 32;
+      if (mouse_pos.x >= 256)
+      {
+        tile_map.deleteTile(current_layer, x_pos + y_pos * 50);
+      }
+    }
+
+    auto camera_move = input.getWASD();
+    tilemap_camera.translate(camera_move.x * 256 * dt, -camera_move.y * 256 * dt, 0);
+    auto camera_scroll = -input.getMouseScroll().y;
+    if (std::fabs(camera_scroll) >= 0.5F)
+    {
+      tilemap_camera.setZoom(tilemap_camera.getZoom() * (camera_scroll / 4 + 1));
     }
   }
-  if (input.getKeyDown(ASGE::KEYS::KEY_S))
-  {
-    saveLevel("dotonbori.json");
-  }
-  if (input.getKeyDown(ASGE::KEYS::KEY_L))
-  {
-    loadLevel("levels/dotonbori.json");
-  }
+
   cursor.setCursor(Cursor::POINTER);
   for (auto& button : scene_change_buttons)
   {
@@ -107,26 +137,23 @@ void LevelEditor::update(InputTracker& input, float dt)
 }
 void LevelEditor::placeTiles(ASGE::Point2D _position)
 {
-  if (_position.x >= 256)
+  auto x_pos      = static_cast<size_t>(_position.x) / 32;
+  auto y_pos      = static_cast<size_t>(_position.y) / 32;
+  auto tiles      = tile_set.getSelection();
+  size_t offset_x = 0;
+  size_t offset_y = 0;
+  for (auto& tile : tiles.tiles)
   {
-    auto x_pos      = static_cast<size_t>(_position.x) / 32;
-    auto y_pos      = static_cast<size_t>(_position.y) / 32;
-    auto tiles      = tile_set.getSelection();
-    size_t offset_x = 0;
-    size_t offset_y = 0;
-    for (auto& tile : tiles.tiles)
+    if (x_pos + offset_x >= 50 || y_pos + offset_y >= 50)
     {
-      if (x_pos + offset_x >= 50 || y_pos + offset_y >= 50)
-      {
-        continue;
-      }
-      tile_map.setTile(current_layer, x_pos + y_pos * 50 + offset_x + offset_y * 50, tile);
-      offset_x++;
-      if (offset_x % tiles.selection_width == 0)
-      {
-        offset_x = 0;
-        offset_y++;
-      }
+      continue;
+    }
+    tile_map.setTile(current_layer, x_pos + y_pos * 50 + offset_x + offset_y * 50, tile);
+    offset_x++;
+    if (offset_x % tiles.selection_width == 0)
+    {
+      offset_x = 0;
+      offset_y++;
     }
   }
 }

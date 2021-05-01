@@ -116,3 +116,11 @@ bool InputTracker::isControllerConnected(size_t _controller_index)
 {
   return controller.isConnected(_controller_index);
 }
+ASGE::Point2D InputTracker::getWASD()
+{
+  return ASGE::Point2D(
+    static_cast<float>(keyboard.getKey(ASGE::KEYS::KEY_D)) -
+      static_cast<float>(keyboard.getKey(ASGE::KEYS::KEY_A)),
+    static_cast<float>(keyboard.getKey(ASGE::KEYS::KEY_W)) -
+      static_cast<float>(keyboard.getKey(ASGE::KEYS::KEY_S)));
+}

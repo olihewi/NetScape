@@ -43,6 +43,8 @@ class InputTracker
   [[nodiscard]] int getLastControllerAxis(size_t _controller_index);
   [[nodiscard]] bool isControllerConnected(size_t _controller_index);
 
+  [[nodiscard]] ASGE::Point2D getWASD();
+
  private:
   KeyboardTracker keyboard;
   MouseTracker mouse;
