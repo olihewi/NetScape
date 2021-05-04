@@ -7,40 +7,64 @@
 #include <cmath>
 
 LineTrace::LineTrace(ASGE::Renderer* renderer) :
-  bullet_sprite(renderer, "data/images/ui/buttons/neon/blue.png", 0)
+  bullet_sprite(renderer, "data/images/ui/buttons/neon/blue.png", 0),
+  test_sprites(std::array<Sprite, 5>{ Sprite(renderer, "data/images/ui/buttons/neon/blue.png", 0),
+                                      Sprite(renderer, "data/images/ui/buttons/neon/blue.png", 0),
+                                      Sprite(renderer, "data/images/ui/buttons/neon/blue.png", 0),
+                                      Sprite(renderer, "data/images/ui/buttons/neon/blue.png", 0),
+                                      Sprite(renderer, "data/images/ui/buttons/neon/blue.png", 0)
+
+  })
 {
-  bullet_sprite.visibility(false);
+
 }
 ASGE::Point2D LineTrace::hitCheck(float distance, ASGE::Point2D origin, float angle)
 {
   ASGE::Point2D end_point = { 0, 0 };
-  end_point.x             = origin.x + 10 + distance * cos(angle);
-  end_point.y             = origin.y + 10 + distance * sin(angle);
+  float segment_distance = distance / 250;
 
-  bullet_sprite.position(end_point);
-  bullet_sprite.rotation(angle);
-  bullet_sprite.dimensions(ASGE::Point2D(distance * 2, 50));
-  bullet_sprite.zOrder(1);
-  bullet_sprite.visibility(true);
-  tracer_timer = 0;
+  for(int i = 0; i < 250; i++)
+  {
+    trace_points[i].x             = origin.x + segment_distance * i * cos(angle);
+    trace_points[i].y             = origin.y + segment_distance * i * sin(angle);
+  }
+
+  for(int i = 0; i < 5; i++)
+  {
+    test_sprites[i].position(trace_points[i * 50]);
+    test_sprites[i].rotation(angle);
+    test_sprites[i].dimensions(ASGE::Point2D(100, 5));
+    test_sprites[i].visibility(true);
+    tracer_timer = 0;
+  }
 
   return end_point;
 }
 void LineTrace::render(ASGE::Renderer* renderer)
 {
-  renderer->renderText("BANG", 10, 10, ASGE::COLOURS::WHITE);
-  bullet_sprite.render(renderer);
+  for(auto& test_sprite : test_sprites)
+  {
+    test_sprite.render(renderer);
+  }
 }
 
 void LineTrace::update(float dt)
 {
   tracer_timer += dt;
-  if (bullet_sprite.visibility())
+  for(auto& test_sprite : test_sprites)
   {
-    if (tracer_timer >= 0.1)
+    if (test_sprite.visibility())
     {
-      bullet_sprite.visibility(false);
-      bullet_sprite.dimensions(ASGE::Point2D(0, 0));
+      if (tracer_timer >= 0.1)
+      {
+        trace_points.fill(0);
+        test_sprite.visibility(false);
+      }
     }
+  }
+  if(has_hit)
+  {
+    trace_points.fill(0);
+    has_hit = false;
   }
 }

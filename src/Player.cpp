@@ -4,6 +4,7 @@
 
 #include "../include/ASGEGameLib/GameObjects/Player/Player.hpp"
 #include "Engine/Logger.hpp"
+#include <Utilities/FontManager.h>
 #include <cmath>
 
 Player::Player(
@@ -19,6 +20,7 @@ Player::Player(
 
 void Player::render(ASGE::Renderer* renderer)
 {
+  renderer->render(health_text);
   AnimatedSprite::render(renderer);
   weapon.render(renderer);
 }
@@ -35,7 +37,7 @@ void Player::input(InputTracker& input, float dt)
   {
     rotation(atan2f(left_stick.y, left_stick.x));
     setPlaybackSpeed(15 * left_stick_hypot);
-    player_walk.getSound().setLooping(true);
+    player_walk.getSound().NO_ATTENUATION;
     player_walk.getSound().setSingleInstance(true);
     player_walk.play();
   }
@@ -61,6 +63,7 @@ void Player::takeDamage(float damage)
   Logging::DEBUG("HIT");
   if (health <= 0)
   {
+    is_dead = true;
     Sprite::visibility(false);
     weapon.visibility(false);
     Logging::DEBUG("DEAD");

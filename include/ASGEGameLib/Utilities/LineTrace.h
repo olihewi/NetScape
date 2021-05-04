@@ -21,9 +21,13 @@ class LineTrace
 
   float damage = 25;
   Sprite bullet_sprite;
+  std::array<ASGE::Point2D, 250> trace_points;
+  ASGE::Point2D hit_point;
+  bool has_hit = false;
 
  private:
   float tracer_timer = 0;
+  std::array<Sprite, 5> test_sprites;
 
   // int bullet_count = 0;
 };

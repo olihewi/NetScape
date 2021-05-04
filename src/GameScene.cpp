@@ -36,35 +36,64 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
 void GameScene::update(InputTracker& input, float dt)
 {
   Scene::update(input, dt);
-  for (auto& player : players)
+  for (int i = 0; i < 4; i++)
   {
-    player.input(input, dt);
-
-    Logging::DEBUG(
-      std::to_string(player.AnimatedSprite::position().x) + " , " +
-      std::to_string(player.AnimatedSprite::position().x));
-    if (players[0].getWeapon().bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
+    if(players[i].is_dead != true)
     {
-      Logging::DEBUG("Shot by player 1");
-      player.takeDamage(players[0].getWeapon().bullet.damage);
-    }
+      players[i].input(input, dt);
 
-    if (players[1].getWeapon().bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
-    {
-      Logging::DEBUG("Shot by player 2");
-      player.takeDamage(players[1].getWeapon().bullet.damage);
-    }
-
-    if (players[2].getWeapon().bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
-    {
-      Logging::DEBUG("Shot by player 3");
-      player.takeDamage(players[2].getWeapon().bullet.damage);
-    }
-
-    if (players[3].getWeapon().bullet.bullet_sprite.isInside(player.AnimatedSprite::position()))
-    {
-      Logging::DEBUG("Shot by player 4");
-      player.takeDamage(players[3].getWeapon().bullet.damage);
+      for (auto& trace_point : players[0].getWeapon().bullet.trace_points)
+      {
+        if (players[i].isInside(trace_point))
+        {
+          if(i != 0)
+          {
+            players[0].getWeapon().bullet.has_hit = true;
+            Logging::DEBUG("HIT by player 1");
+            players[i].takeDamage(players[0].getWeapon().bullet.damage);
+            break;
+          }
+        }
+      }
+      for (auto& trace_point : players[1].getWeapon().bullet.trace_points)
+      {
+        if (players[i].isInside(trace_point))
+        {
+          if(i != 1)
+          {
+            players[1].getWeapon().bullet.has_hit = true;
+            Logging::DEBUG("HIT by player 2");
+            players[i].takeDamage(players[1].getWeapon().bullet.damage);
+            break;
+          }
+        }
+      }
+      for (auto& trace_point : players[2].getWeapon().bullet.trace_points)
+      {
+        if (players[i].isInside(trace_point))
+        {
+          if (i != 2)
+          {
+            players[2].getWeapon().bullet.has_hit = true;
+            Logging::DEBUG("HIT by player 3");
+            players[i].takeDamage(players[2].getWeapon().bullet.damage);
+            break;
+          }
+        }
+      }
+      for (auto& trace_point : players[3].getWeapon().bullet.trace_points)
+      {
+        if (players[i].isInside(trace_point))
+        {
+          if(i != 3)
+          {
+            players[3].getWeapon().bullet.has_hit = true;
+            Logging::DEBUG("HIT by player 4");
+            players[i].takeDamage(players[3].getWeapon().bullet.damage);
+            break;
+          }
+        }
+      }
     }
   }
   if (input.getKeyDown(ASGE::KEYS::KEY_ESCAPE))
