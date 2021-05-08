@@ -22,7 +22,7 @@ class LineTrace
   float damage = 25;
   std::array<Sprite, 5> bullet_sprites;
   std::array<ASGE::Point2D, 250> trace_points;
-  ASGE::Point2D hit_point;
+  int hit_point;
   bool has_hit = false;
   float hit_dist = 0;
 
