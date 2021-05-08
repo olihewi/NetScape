@@ -3,6 +3,7 @@
 #include <ASGEGameLib/Scenes/GameScene.h>
 #include <ASGEGameLib/Scenes/LevelEditor.h>
 #include <ASGEGameLib/Scenes/OptionsScene.h>
+#include <ASGEGameLib/Scenes/TestScene.h>
 #include <ASGEGameLib/Scenes/TitleScene.h>
 #include <ASGEGameLib/Utilities/FontManager.h>
 

@@ -24,6 +24,7 @@ class Weapon : public AnimatedSprite
   size_t player_id;
 
   /// Weapon Stats
+  bool is_automatic = true;
   int max_ammo      = 10;
   float fire_rate   = 0.2F;
   float reload_time = 0.75F;

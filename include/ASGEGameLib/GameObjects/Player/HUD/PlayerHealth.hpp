@@ -1,0 +1,26 @@
+//
+// Created by Work on 07/05/2021.
+//
+
+#ifndef ASGEMOVIEGAME_PLAYERHEALTH_HPP
+#define ASGEMOVIEGAME_PLAYERHEALTH_HPP
+
+#include <ASGEGameLib/GameObjects/Player/Player.hpp>
+#include <ASGEGameLib/GameObjects/Sprites/Sprite.h>
+
+class PlayerHealth : public Sprite
+{
+ public:
+  PlayerHealth (ASGE::Renderer* renderer, Player& _player);
+
+  /*void position(ASGE::Point2D _position) override;*/
+
+  /*void adjustPlayerHealth(float health);*/
+  void update(InputTracker& input, float dt) override;
+
+ private:
+
+  Player& player;
+};
+
+#endif // ASGEMOVIEGAME_PLAYERHEALTH_HPP

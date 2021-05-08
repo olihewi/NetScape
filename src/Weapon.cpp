@@ -61,15 +61,30 @@ void Weapon::update(InputTracker& input, float dt)
     rotation(atan2f(right_stick.y, right_stick.x));
   }
   /// Firing
-  if (
-    input.getControllerButtonDown(player_id, CONTROLLER::BUTTONS::RIGHT_SHOULDER) ||
-    input.getControllerAxisUp(player_id, CONTROLLER::AXIS::RIGHT_TRIGGER))
+  if(is_automatic)
   {
-    if (fire_timer <= 0 && reload_timer <= 0)
+    if (input.getControllerButton(player_id, CONTROLLER::BUTTONS::RIGHT_SHOULDER))
     {
-      fire();
+      if (fire_timer <= 0 && reload_timer <= 0)
+      {
+        fire();
+      }
     }
   }
+  else
+  {
+    if (
+      input.getControllerButtonDown(player_id, CONTROLLER::BUTTONS::RIGHT_SHOULDER) ||
+      input.getControllerAxisUp(player_id, CONTROLLER::AXIS::RIGHT_TRIGGER))
+    {
+      if (fire_timer <= 0 && reload_timer <= 0)
+      {
+        fire();
+      }
+    }
+  }
+
+
   /// Reloading
   if (input.getControllerButtonDown(player_id, CONTROLLER::BUTTONS::X))
   {
