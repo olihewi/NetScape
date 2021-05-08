@@ -5,6 +5,7 @@
 #include "ASGEGameLib/Scenes/GameScene.h"
 #include "Engine/Logger.hpp"
 #include <ASGEGameLib/GameObjects/Player/HUD/PlayerHealth.hpp>
+#include <GameObjects/Player/HUD/PlayerAmmo.hpp>
 #include <array>
 #include <utility>
 
@@ -27,6 +28,7 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
 
     camera.second.addObject(std::make_unique<Text>(
       renderer, "Player " + std::to_string(player.getID()), ASGE::Point2D(100, 100)));
+    camera.second.addObject((std::make_unique<PlayerAmmo>(renderer, player.getWeapon())));
   }
 }
 void GameScene::update(InputTracker& input, float dt)
