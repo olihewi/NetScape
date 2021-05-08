@@ -19,6 +19,7 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
   for (auto& player : players)
   {
     addObject(std::make_unique<PlayerHealth>(renderer, player));
+<<<<<<< Updated upstream
     auto& camera = player_cameras.emplace_back(std::make_pair(
       ASGE::Camera(
         static_cast<float>(ASGE::SETTINGS.window_width) / 2,
