@@ -54,11 +54,8 @@ TitleScene::TitleScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _sc
   addObject(std::make_unique<ControllerDisplay>(
     renderer, 3, ASGE::Point2D(1420, 700), ASGE::Point2D(400, 280)));
 }
-void TitleScene::update(InputTracker& input, float dt)
+void TitleScene::controllerInputs(InputTracker& input)
 {
-  Scene::update(input, dt);
-  cursor.setCursor(Cursor::POINTER);
-  cursor.update(input, dt);
   if (
     (input.getControllerAxisUp(0, CONTROLLER::AXIS::LEFT_STICK_Y) ||
      input.getControllerButtonDown(0, CONTROLLER::BUTTONS::DPAD_DOWN) ||
@@ -99,6 +96,13 @@ void TitleScene::update(InputTracker& input, float dt)
     selectButton(button_selection);
     cursor.visibility(false);
   }
+}
+void TitleScene::update(InputTracker& input, float dt)
+{
+  Scene::update(input, dt);
+  cursor.setCursor(Cursor::POINTER);
+  cursor.update(input, dt);
+  controllerInputs(input);
   size_t index = 0;
   for (auto& button : scene_change_buttons)
   {
@@ -121,6 +125,7 @@ void TitleScene::update(InputTracker& input, float dt)
     index++;
   }
 }
+
 void TitleScene::render(ASGE::Renderer* renderer)
 {
   Scene::render(renderer);
