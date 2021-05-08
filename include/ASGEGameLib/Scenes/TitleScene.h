@@ -23,6 +23,7 @@ class TitleScene : public Scene
   Cursor cursor;
   size_t button_selection = 0;
   Sound test_clip;
+  void controllerInputs(InputTracker& input);
 };
 
 #endif // ASGEMOVIEGAME_TITLESCENE_H

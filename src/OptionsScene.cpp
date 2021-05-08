@@ -5,6 +5,7 @@
 #include "ASGEGameLib/Scenes/OptionsScene.h"
 
 #include "ASGEGameLib/Utilities/FontManager.h"
+#include <ASGEGameLib/GameObjects/Sprites/AnimatedSprite.h>
 #include <utility>
 OptionsScene::OptionsScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
   Scene(std::move(_scene_callback)),
@@ -18,6 +19,11 @@ OptionsScene::OptionsScene(ASGE::Renderer* renderer, std::function<void(Scenes)>
     ASGE::Point2D(1920 / 2.F - 375, 300), ASGE::Point2D(750, 125)) })
 {
   instruction_text.centrePos(ASGE::Point2D(1920 / 2.F, 1080 / 2.F));
+  std::unique_ptr<AnimatedSprite> background = std::make_unique<AnimatedSprite>(
+    renderer, "data/images/animations/background.png", 20, ASGE::Point2D(0, -500));
+  background->dimensions(ASGE::Point2D(1920, 1920));
+  background->zOrder(-1);
+  addObject(std::move(background));
 }
 void OptionsScene::update(InputTracker& input, float dt)
 {
