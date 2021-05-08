@@ -11,7 +11,11 @@ file(GLOB_RECURSE HEADER_LIST
 ## source files get listed here ##
 set(GAME_SOURCES
         ASGEGame/main.cpp
+<<<<<<< Updated upstream
         ASGEGame/ASGEGame.cpp)
+=======
+        ASGEGame/ASGEGame.cpp ../src/PlayerHealth.cpp ../include/ASGEGameLib/GameObjects/Player/HUD/PlayerHealth.hpp ../src/PlayerAmmo.cpp ../include/ASGEGameLib/GameObjects/Player/HUD/PlayerAmmo.hpp)
+>>>>>>> Stashed changes
 
 ## the ASGE Game, which spawns the Game window ##
 add_executable(${GAME} ${HEADER_LIST} ${GAME_SOURCES})

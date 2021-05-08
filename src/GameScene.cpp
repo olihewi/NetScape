@@ -5,6 +5,7 @@
 #include "ASGEGameLib/Scenes/GameScene.h"
 #include "Engine/Logger.hpp"
 #include <ASGEGameLib/GameObjects/Player/HUD/PlayerHealth.hpp>
+#include <ASGEGameLib/GameObjects/Player/HUD/PlayerAmmo.hpp>
 #include <array>
 #include <utility>
 
@@ -18,6 +19,7 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
   for (auto& player : players)
   {
     addObject(std::make_unique<PlayerHealth>(renderer, player));
+<<<<<<< Updated upstream
     auto& camera = player_cameras.emplace_back(std::make_pair(
       ASGE::Camera(
         static_cast<float>(ASGE::SETTINGS.window_width) / 2,
@@ -27,6 +29,9 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
 
     camera.second.addObject(std::make_unique<Text>(
       renderer, "Player " + std::to_string(player.getID()), ASGE::Point2D(100, 100)));
+=======
+    addObject(std::make_unique<PlayerAmmo>(renderer, player.getWeapon(), player));
+>>>>>>> Stashed changes
   }
 }
 void GameScene::update(InputTracker& input, float dt)

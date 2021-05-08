@@ -19,18 +19,20 @@ class Weapon : public AnimatedSprite
 
   LineTrace bullet;
 
+  int current_ammo;
+  int max_ammo      = 10;
  private:
   std::array<Sound, 3> sounds;
   size_t player_id;
 
   /// Weapon Stats
   bool is_automatic = true;
-  int max_ammo      = 10;
+
   float fire_rate   = 0.2F;
   float reload_time = 0.75F;
 
   /// Current Stats
-  int current_ammo;
+
   int ammo_reserve;
   float fire_timer   = 0;
   float reload_timer = 0;

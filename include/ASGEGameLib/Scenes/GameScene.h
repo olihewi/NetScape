@@ -24,7 +24,12 @@ class GameScene : public Scene
  private:
   TileMap tile_map;
   std::array<Player, 4> players;
+<<<<<<< Updated upstream
   std::vector<std::pair<ASGE::Camera, PlayerHUD>> player_cameras;
+=======
+  std::array<ASGE::Camera, 4> player_cameras;
+
+>>>>>>> Stashed changes
 };
 
 #endif // ASGEMOVIEGAME_GAMESCENE_H

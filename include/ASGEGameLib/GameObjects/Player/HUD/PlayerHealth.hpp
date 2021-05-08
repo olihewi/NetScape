@@ -13,9 +13,6 @@ class PlayerHealth : public Sprite
  public:
   PlayerHealth(ASGE::Renderer* renderer, Player& _player);
 
-  /*void position(ASGE::Point2D _position) override;*/
-
-  /*void adjustPlayerHealth(float health);*/
   void update(InputTracker& input, float dt) override;
 
   void render(ASGE::Renderer* renderer) override;
