@@ -16,6 +16,9 @@ Player::Player(
 {
   zOrder(1);
   weapon.position(_position);
+  player_walk.setLoop(true);
+  player_walk.volume(0);
+  player_walk.play();
 }
 
 void Player::render(ASGE::Renderer* renderer)
@@ -36,15 +39,14 @@ void Player::input(InputTracker& input, float dt)
   {
     rotation(atan2f(left_stick.y, left_stick.x));
     setPlaybackSpeed(15 * left_stick_hypot);
-    // player_walk.getSound().NO_ATTENUATION;
-    player_walk.getSound().setSingleInstance(true);
-    player_walk.play();
+    player_walk.volume(1);
   }
   else
   {
+    player_walk.volume(0);
     setFrame(3);
-    player_walk.stop();
   }
+  player_walk.setSpeed(left_stick_hypot);
 }
 void Player::position(ASGE::Point2D _position)
 {
