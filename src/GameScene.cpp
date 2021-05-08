@@ -40,7 +40,6 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
 }
 void GameScene::update(InputTracker& input, float dt)
 {
-  Scene::update(input, dt);
   for (auto& player : players)
   {
     if (player.is_dead)
@@ -74,6 +73,7 @@ void GameScene::update(InputTracker& input, float dt)
   {
     setScene(Scenes::TITLE);
   }
+  Scene::update(input, dt);
 }
 void GameScene::render(ASGE::Renderer* renderer)
 {

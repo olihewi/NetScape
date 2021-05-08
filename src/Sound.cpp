@@ -20,10 +20,24 @@ SoLoud::Wav& Sound::getSound()
 }
 void Sound::play()
 {
-  engine->play(clip);
+  handle = engine->play(clip);
 }
 
 void Sound::stop()
 {
   engine->stopAudioSource(clip);
+}
+void Sound::volume(float _volume)
+{
+  clip.setVolume(_volume);
+  engine->setVolume(handle, _volume);
+}
+void Sound::setLoop(bool _loop)
+{
+  clip.setLooping(_loop);
+  engine->setLooping(handle, _loop);
+}
+void Sound::setSpeed(float _speed)
+{
+  engine->setRelativePlaySpeed(handle, _speed);
 }

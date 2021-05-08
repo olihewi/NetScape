@@ -14,10 +14,14 @@ class Sound
   SoLoud::Wav& getSound();
   void play();
   void stop();
+  void volume(float _volume);
+  void setLoop(bool _loop);
+  void setSpeed(float _speed);
 
  private:
   SoLoud::Soloud* engine;
   SoLoud::Wav clip;
+  SoLoud::handle handle = UINT16_MAX;
 };
 
 #endif // ASGEMOVIEGAME_SOUND_H
