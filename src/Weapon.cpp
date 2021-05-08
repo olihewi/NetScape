@@ -61,7 +61,7 @@ void Weapon::update(InputTracker& input, float dt)
     rotation(atan2f(right_stick.y, right_stick.x));
   }
   /// Firing
-  if(is_automatic)
+  if (is_automatic)
   {
     if (input.getControllerButton(player_id, CONTROLLER::BUTTONS::RIGHT_SHOULDER))
     {
@@ -83,7 +83,6 @@ void Weapon::update(InputTracker& input, float dt)
       }
     }
   }
-
 
   /// Reloading
   if (input.getControllerButtonDown(player_id, CONTROLLER::BUTTONS::X))

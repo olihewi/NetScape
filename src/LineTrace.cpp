@@ -21,8 +21,8 @@ void LineTrace::hitCheck(float distance, ASGE::Point2D origin, float angle)
 
   for (size_t i = 0; i < 250; i++)
   {
-    trace_points[i].x = origin.x + segment_distance * static_cast<float>(i) * cos(angle);
-    trace_points[i].y = origin.y + segment_distance * static_cast<float>(i) * sin(angle);
+    trace_points[i].x = origin.x + segment_distance * static_cast<float>(i) * std::cos(angle);
+    trace_points[i].y = origin.y + segment_distance * static_cast<float>(i) * std::sin(angle);
   }
 
   hit_dist = origin.distance(hit_point);
