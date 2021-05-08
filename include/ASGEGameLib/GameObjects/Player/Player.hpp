@@ -8,8 +8,10 @@
 #include "ASGEGameLib/GameObjects/Player/Weapons/Weapon.h"
 #include "ASGEGameLib/GameObjects/Sprites/AnimatedSprite.h"
 #include "ASGEGameLib/Utilities/InputTracker.h"
-#include "ASGEGameLib/Utilities/LineTrace.h"
 #include "ASGEGameLib/Utilities/Sound.h"
+#include "ASGEGameLib/GameObjects/Sprites/Text.h"
+#include "ASGEGameLib/GameObjects/GameObject.h"
+
 
 class Player : public AnimatedSprite
 {
@@ -36,8 +38,6 @@ class Player : public AnimatedSprite
   size_t controller_id;
   Weapon weapon;
   Sound player_walk;
-  ASGE::Text health_text;
-
 };
 
 #endif // ASGEMOVIEGAME_PLAYER_HPP

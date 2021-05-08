@@ -25,13 +25,13 @@ void Weapon::fire()
 {
   if (current_ammo > 0)
   {
-    ASGE::Point2D muzzle = { 0, 0 };
-    muzzle.x = (AnimatedSprite::position().x + 10) + 20 * cos(AnimatedSprite::rotation());
-    muzzle.y = (AnimatedSprite::position().y + 10) + 30 * sin(AnimatedSprite::rotation());
+    ASGE::Point2D muzzle;
+    muzzle.x = AnimatedSprite::position().x - 10;
+    muzzle.y = AnimatedSprite::position().y + 10;
     current_ammo--;
     fire_timer = fire_rate;
     sounds[0].play();
-    bullet.hitCheck(500, muzzle, AnimatedSprite::rotation());
+    bullet.hitCheck(250, muzzle, AnimatedSprite::rotation());
   }
   else
   {

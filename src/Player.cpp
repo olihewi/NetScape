@@ -20,7 +20,6 @@ Player::Player(
 
 void Player::render(ASGE::Renderer* renderer)
 {
-  renderer->render(health_text);
   AnimatedSprite::render(renderer);
   weapon.render(renderer);
 }
@@ -37,7 +36,6 @@ void Player::input(InputTracker& input, float dt)
   {
     rotation(atan2f(left_stick.y, left_stick.x));
     setPlaybackSpeed(15 * left_stick_hypot);
-    player_walk.getSound().NO_ATTENUATION;
     player_walk.getSound().setSingleInstance(true);
     player_walk.play();
   }
