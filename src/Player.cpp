@@ -36,7 +36,7 @@ void Player::input(InputTracker& input, float dt)
   {
     rotation(atan2f(left_stick.y, left_stick.x));
     setPlaybackSpeed(15 * left_stick_hypot);
-    //player_walk.getSound().NO_ATTENUATION;
+    // player_walk.getSound().NO_ATTENUATION;
     player_walk.getSound().setSingleInstance(true);
     player_walk.play();
   }
@@ -45,8 +45,6 @@ void Player::input(InputTracker& input, float dt)
     setFrame(3);
     player_walk.stop();
   }
-
-
 }
 void Player::position(ASGE::Point2D _position)
 {
@@ -71,9 +69,13 @@ void Player::takeDamage(float damage)
   }
 
   /// Health
-  //playerHealth.adjustPlayerHealth(health);
+  // playerHealth.adjustPlayerHealth(health);
 }
- Weapon& Player::getWeapon()
+Weapon& Player::getWeapon()
 {
   return weapon;
+}
+size_t Player::getID()
+{
+  return controller_id;
 }

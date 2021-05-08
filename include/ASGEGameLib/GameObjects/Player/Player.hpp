@@ -5,13 +5,12 @@
 #ifndef ASGEMOVIEGAME_PLAYER_HPP
 #define ASGEMOVIEGAME_PLAYER_HPP
 
+#include "ASGEGameLib/GameObjects/GameObject.h"
 #include "ASGEGameLib/GameObjects/Player/Weapons/Weapon.h"
 #include "ASGEGameLib/GameObjects/Sprites/AnimatedSprite.h"
+#include "ASGEGameLib/GameObjects/Sprites/Text.h"
 #include "ASGEGameLib/Utilities/InputTracker.h"
 #include "ASGEGameLib/Utilities/Sound.h"
-#include "ASGEGameLib/GameObjects/Sprites/Text.h"
-#include "ASGEGameLib/GameObjects/GameObject.h"
-
 
 class Player : public AnimatedSprite
 {
@@ -26,13 +25,14 @@ class Player : public AnimatedSprite
   void position(ASGE::Point2D _position) override;
   void translate(ASGE::Point2D _translation) override;
 
-
   void takeDamage(float damage);
   Weapon& getWeapon();
 
+  [[nodiscard]] size_t getID();
+
   float move_speed = 100.0F;
   float health     = 100.0F;
-  bool is_dead = false;
+  bool is_dead     = false;
 
  private:
   size_t controller_id;

@@ -4,18 +4,17 @@
 
 #include "ASGEGameLib/Scenes/GameScene.h"
 #include "Engine/Logger.hpp"
+#include <ASGEGameLib/GameObjects/Player/HUD/PlayerHealth.hpp>
 #include <array>
 #include <utility>
-#include <ASGEGameLib/GameObjects/Player/HUD/PlayerHealth.hpp>
 
 GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
   Scene(std::move(_scene_callback)), tile_map(renderer, "levels/dotonbori.json"),
   players(
-    std::array<Player, 4>{
-    Player(renderer, ASGE::Point2D(400, 400), 0, audio_engine.get()),
-    Player(renderer, ASGE::Point2D(500, 500), 1, audio_engine.get()),
-    Player(renderer, ASGE::Point2D(600, 600), 2, audio_engine.get()),
-    Player(renderer, ASGE::Point2D(700, 700), 3, audio_engine.get()) }),
+    std::array<Player, 4>{ Player(renderer, ASGE::Point2D(400, 400), 0, audio_engine.get()),
+                           Player(renderer, ASGE::Point2D(500, 500), 1, audio_engine.get()),
+                           Player(renderer, ASGE::Point2D(600, 600), 2, audio_engine.get()),
+                           Player(renderer, ASGE::Point2D(700, 700), 3, audio_engine.get()) }),
   player_cameras(
     std::array<ASGE::Camera, 4>{ ASGE::Camera(
                                    static_cast<float>(ASGE::SETTINGS.window_width) / 2,
@@ -28,7 +27,7 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
                                    static_cast<float>(ASGE::SETTINGS.window_height) / 2),
                                  ASGE::Camera(
                                    static_cast<float>(ASGE::SETTINGS.window_width) / 2,
-                                   static_cast<float>(ASGE::SETTINGS.window_height) / 2)})
+                                   static_cast<float>(ASGE::SETTINGS.window_height) / 2) })
 {
   for (auto& camera : player_cameras)
   {
@@ -42,65 +41,31 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
 void GameScene::update(InputTracker& input, float dt)
 {
   Scene::update(input, dt);
-  for (int i = 0; i < 4; i++)
+  for (auto& player : players)
   {
-    if(!players[i].is_dead)
+    if (player.is_dead)
     {
-      players[i].input(input, dt);
-      for (auto& trace_point : players[0].getWeapon().bullet.trace_points)
+      continue;
+    }
+    player.input(input, dt);
+    for (auto& other_player : players)
+    {
+      if (other_player.getID() == player.getID())
       {
-        if (players[i].isInside(trace_point))
-        {
-          if(i != 0)
-          {
-            players[0].getWeapon().bullet.hit_point = trace_point;
-            players[0].getWeapon().bullet.has_hit = true;
-            Logging::DEBUG("HIT by player 1");
-            players[i].takeDamage(players[0].getWeapon().bullet.damage);
-            break;
-          }
-        }
+        continue;
       }
-      for (auto& trace_point : players[1].getWeapon().bullet.trace_points)
+      for (auto& trace_point : other_player.getWeapon().bullet.trace_points)
       {
-        if (players[i].isInside(trace_point))
+        if (player.isInside(trace_point))
         {
-          if(i != 1)
-          {
-            players[1].getWeapon().bullet.hit_point = trace_point;
-            players[1].getWeapon().bullet.has_hit = true;
-            Logging::DEBUG("HIT by player 2");
-            players[i].takeDamage(players[1].getWeapon().bullet.damage);
-            break;
-          }
-        }
-      }
-      for (auto& trace_point : players[2].getWeapon().bullet.trace_points)
-      {
-        if (players[i].isInside(trace_point))
-        {
-          if (i != 2)
-          {
-            players[2].getWeapon().bullet.hit_point = trace_point;
-            players[2].getWeapon().bullet.has_hit = true;
-            Logging::DEBUG("HIT by player 3");
-            players[i].takeDamage(players[2].getWeapon().bullet.damage);
-            break;
-          }
-        }
-      }
-      for (auto& trace_point : players[3].getWeapon().bullet.trace_points)
-      {
-        if (players[i].isInside(trace_point))
-        {
-          if(i != 3)
-          {
-            players[3].getWeapon().bullet.hit_point = trace_point;
-            players[3].getWeapon().bullet.has_hit = true;
-            Logging::DEBUG("HIT by player 4");
-            players[i].takeDamage(players[3].getWeapon().bullet.damage);
-            break;
-          }
+          other_player.getWeapon().bullet.hit_point = trace_point;
+          other_player.getWeapon().bullet.has_hit   = true;
+          Logging::DEBUG(
+            "Player " + std::to_string(other_player.getID()) + " hit Player " +
+            std::to_string(player.getID()) + " - " +
+            std::to_string(other_player.getWeapon().bullet.damage) + " damage");
+          player.takeDamage(other_player.getWeapon().bullet.damage);
+          break;
         }
       }
     }
@@ -125,7 +90,6 @@ void GameScene::render(ASGE::Renderer* renderer)
                             static_cast<uint32_t>(ASGE::SETTINGS.window_width / 2),
                             static_cast<uint32_t>(ASGE::SETTINGS.window_height / 2) });
     renderer->setProjectionMatrix(camera.getView());
-
 
     Scene::render(renderer);
 
