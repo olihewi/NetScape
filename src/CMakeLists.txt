@@ -14,7 +14,8 @@ set(GAMELIB_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR} Scene.cpp Sprite.cpp AnimatedSprite.cpp Text.cpp ScalableSprite.cpp UIButton.cpp
         TestScene.cpp FontManager.cpp LevelEditor.cpp Tile.cpp TileMap.cpp EditorTileSet.cpp TitleScene.cpp GameScene.cpp
         Cursor.cpp ControllerTracker.cpp Sound.cpp Player.cpp KeyboardTracker.cpp MouseTracker.cpp InputTracker.cpp
-        OptionsScene.cpp Weapon.cpp LineTrace.cpp ControllerDisplay.cpp LevelSelector.cpp CreditsScene.cpp)
+        OptionsScene.cpp Weapon.cpp LineTrace.cpp ControllerDisplay.cpp LevelSelector.cpp CreditsScene.cpp PlayerHealth.cpp
+        PlayerHUD.cpp PlayerAmmo.cpp)
 
 ## create the game library
 add_library(${GAMELIB} STATIC ${GAMELIB_SOURCES} "${HEADER_LIST}")

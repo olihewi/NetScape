@@ -5,10 +5,9 @@
 #include "GameObjects/Tilemap/TileMap.h"
 
 #include <Engine/FileIO.hpp>
-#include <iostream>
 #include <utility>
 TileMap::TileMap(ASGE::Renderer* _renderer, std::string _tileset_path, size_t num_layers) :
-  renderer(_renderer), tileset_path(std::move(_tileset_path))
+  collisions(), renderer(_renderer), tileset_path(std::move(_tileset_path))
 {
   for (size_t i = 0; i < num_layers; i++)
   {
@@ -66,9 +65,16 @@ nlohmann::json TileMap::saveTileMap()
     layer_strings.emplace_back(this_string);
   }
   j["tile_layers"] = layer_strings;
+  std::string collision_string;
+  for (auto& collision : collisions)
+  {
+    collision_string += std::to_string(collision) + ',';
+  }
+  j["collisions"] = collision_string;
   return j;
 }
-TileMap::TileMap(ASGE::Renderer* _renderer, const std::string& file_path) : renderer(_renderer)
+TileMap::TileMap(ASGE::Renderer* _renderer, const std::string& file_path) :
+  collisions(), renderer(_renderer)
 {
   ASGE::FILEIO::File file;
   if (file.open(file_path, ASGE::FILEIO::File::IOMode::READ))
@@ -119,4 +125,35 @@ void TileMap::loadFromJson(nlohmann::json j)
     }
     layer_index++;
   }
+  auto j_collisions = j["collisions"].get<std::string>();
+  size_t index      = 0;
+  std::string coll_string;
+  for (auto& c : j_collisions)
+  {
+    if (c >= '0' && c <= '9')
+    {
+      coll_string += c;
+    }
+    else if (c == ',')
+    {
+      collisions[index] = std::stoi(coll_string);
+      coll_string       = std::string();
+      index++;
+    }
+  }
+}
+void TileMap::setCollision(size_t index, int _collision)
+{
+  collisions[index] = _collision;
+}
+int TileMap::getCollision(size_t index)
+{
+  return collisions[index];
+}
+int TileMap::getCollisionPos(ASGE::Point2D position)
+{
+  auto x     = static_cast<size_t>(position.x / 32);
+  auto y     = static_cast<size_t>(position.y / 32);
+  auto index = x + y * 50;
+  return getCollision(index);
 }

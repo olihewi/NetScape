@@ -8,25 +8,18 @@
 #include <ASGEGameLib/GameObjects/Player/Player.hpp>
 #include <ASGEGameLib/GameObjects/Sprites/Sprite.h>
 
-
 class PlayerHealth : public Sprite
 {
  public:
-  PlayerHealth (ASGE::Renderer* renderer, Player& _player);
+  PlayerHealth(ASGE::Renderer* renderer, Player& _player);
 
-  /*void position(ASGE::Point2D _position) override;*/
-
-  /*void adjustPlayerHealth(float health);*/
   void update(InputTracker& input, float dt) override;
 
   void render(ASGE::Renderer* renderer) override;
 
  private:
-
-
   Player& player;
   Sprite background;
-
 };
 
 #endif // ASGEMOVIEGAME_PLAYERHEALTH_HPP

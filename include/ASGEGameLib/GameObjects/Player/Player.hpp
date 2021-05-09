@@ -28,7 +28,7 @@ class Player : public AnimatedSprite
   void takeDamage(float damage);
   Weapon& getWeapon();
 
-  [[nodiscard]] size_t getID();
+  [[nodiscard]] size_t getID() const;
 
   float move_speed = 100.0F;
   float health     = 100.0F;

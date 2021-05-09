@@ -22,7 +22,7 @@ class LevelEditor : public Scene
   void loadLevel(const std::string& file_name);
 
  private:
-  void placeTiles(ASGE::Point2D _position);
+  void placeTiles(ASGE::Point2D _position, int _mouse_button);
   ASGE::Renderer* renderer;
   TileMap tile_map;
   EditorTileSet tile_set;

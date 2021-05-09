@@ -5,7 +5,8 @@
 #include "ASGEGameLib/GameObjects/Player/Weapons/Weapon.h"
 #include <cmath>
 Weapon::Weapon(ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _player_id) :
-  AnimatedSprite(renderer, "data/images/player/pistol.png", 0), bullet(renderer),
+  AnimatedSprite(renderer, "data/images/player/pistol.png", 0),
+  bullet(renderer),
   sounds(std::array<Sound, 3>{ Sound(audio_engine, "data/audio/guns/pistol/fire.wav"),
                                Sound(audio_engine, "data/audio/guns/pistol/empty.wav"),
                                Sound(audio_engine, "data/audio/guns/pistol/reload.wav") }),
@@ -61,7 +62,7 @@ void Weapon::update(InputTracker& input, float dt)
     rotation(atan2f(right_stick.y, right_stick.x));
   }
   /// Firing
-  if(is_automatic)
+  if (is_automatic)
   {
     if (input.getControllerButton(player_id, CONTROLLER::BUTTONS::RIGHT_SHOULDER))
     {
@@ -83,7 +84,6 @@ void Weapon::update(InputTracker& input, float dt)
       }
     }
   }
-
 
   /// Reloading
   if (input.getControllerButtonDown(player_id, CONTROLLER::BUTTONS::X))

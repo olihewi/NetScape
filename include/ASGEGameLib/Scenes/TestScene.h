@@ -12,14 +12,12 @@ class TestScene : public Scene
  public:
   TestScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback);
 
-  void update(InputTracker &input, float dt) override;
+  void update(InputTracker& input, float dt) override;
 
-  void render(ASGE::Renderer *renderer) override;
+  void render(ASGE::Renderer* renderer) override;
 
  private:
   AnimatedSprite crow_sprite;
-
-
 };
 
 #endif // ASGEMOVIEGAME_TESTSCENE_H
