@@ -33,6 +33,8 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
 }
 void GameScene::update(InputTracker& input, float dt)
 {
+  Scene::update(input, dt);
+
   for (auto& player : players)
   {
     if (player.is_dead)
@@ -70,11 +72,13 @@ void GameScene::update(InputTracker& input, float dt)
       {
         continue;
       }
+      size_t index = 0;
       for (auto& trace_point : other_player.getWeapon().bullet.trace_points)
       {
+        index++;
         if (player.isInside(trace_point))
         {
-          other_player.getWeapon().bullet.hit_point = trace_point;
+          other_player.getWeapon().bullet.hit_point = index;
           other_player.getWeapon().bullet.has_hit   = true;
           Logging::DEBUG(
             "Player " + std::to_string(other_player.getID() + 1) + " hit Player " +
@@ -83,6 +87,8 @@ void GameScene::update(InputTracker& input, float dt)
           player.takeDamage(other_player.getWeapon().bullet.damage);
           break;
         }
+        other_player.getWeapon().bullet.hit_point = 250;
+        index                                     = 0;
       }
     }
   }

@@ -2,21 +2,21 @@
 // Created by Bread on 19/04/2021.
 //
 
-#include "../include/ASGEGameLib/Utilities/LineTrace.h"
+#include "ASGEGameLib/Utilities/LineTrace.h"
 #include <Engine/Logger.hpp>
 #include <cmath>
 
 LineTrace::LineTrace(ASGE::Renderer* renderer) :
   bullet_sprites(
     std::array<Sprite, 5>{ Sprite(renderer, "data/images/ui/buttons/neon/blue.png", 0),
-                           Sprite(renderer, "data/images/ui/buttons/neon/blue.png", 0),
-                           Sprite(renderer, "data/images/ui/buttons/neon/blue.png", 0),
-                           Sprite(renderer, "data/images/ui/buttons/neon/blue.png", 0),
-                           Sprite(renderer, "data/images/ui/buttons/neon/blue.png", 0) })
+                           Sprite(renderer, "data/images/ui/buttons/neon/green.png", 0),
+                           Sprite(renderer, "data/images/ui/buttons/neon/pink.png", 0),
+                           Sprite(renderer, "data/images/ui/buttons/neon/purple.png", 0),
+                           Sprite(renderer, "data/images/ui/buttons/neon/yellow.png", 0) })
 {
-  for (auto& sprite : bullet_sprites)
+  for (auto& bullet_sprite : bullet_sprites)
   {
-    sprite.zOrder(10);
+    bullet_sprite.zOrder(1);
   }
 }
 void LineTrace::hitCheck(float distance, ASGE::Point2D origin, float angle)
@@ -29,18 +29,31 @@ void LineTrace::hitCheck(float distance, ASGE::Point2D origin, float angle)
     trace_points[i].y = origin.y + segment_distance * static_cast<float>(i) * std::sin(angle);
   }
 
-  hit_dist = origin.distance(hit_point);
+  hit_dist = origin.distance(trace_points[hit_point - 1]);
   Logging::DEBUG(std::to_string(hit_dist));
 
-  size_t tracers_needed = 5;
-
-  for (size_t i = 0; i < tracers_needed; i++)
+  if (has_hit)
   {
-    bullet_sprites[i].position(trace_points[(i * 50) + 25]);
-    bullet_sprites[i].dimensions(ASGE::Point2D(50, 5));
-    bullet_sprites[i].rotation(angle);
-    bullet_sprites[i].visibility(true);
-    tracer_timer = 0;
+    for (size_t i = 0; i < 4; i++)
+    {
+      bullet_sprites[i].position(trace_points[hit_point / 5 * i]);
+      bullet_sprites[i].dimensions(ASGE::Point2D(hit_dist / 5, 3));
+      bullet_sprites[i].rotation(angle);
+      bullet_sprites[i].visibility(true);
+      tracer_timer = 0;
+    }
+    has_hit = false;
+  }
+  else
+  {
+    for (size_t i = 0; i < 5; i++)
+    {
+      bullet_sprites[i].position(trace_points[(i * 50) + 25]);
+      bullet_sprites[i].dimensions(ASGE::Point2D(50, 3));
+      bullet_sprites[i].rotation(angle);
+      bullet_sprites[i].visibility(true);
+      tracer_timer = 0;
+    }
   }
 }
 void LineTrace::render(ASGE::Renderer* renderer)
@@ -68,6 +81,5 @@ void LineTrace::update(float dt)
   if (has_hit)
   {
     trace_points.fill(0);
-    has_hit = false;
   }
 }
