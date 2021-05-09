@@ -22,6 +22,7 @@ class GameScene : public Scene
   void update(InputTracker& input, float dt) override;
   void playerMovement(InputTracker& input, float dt);
   void checkBullets();
+  [[nodiscard]] bool playerCollidesWithTile(ASGE::Point2D player, ASGE::Point2D tile);
 
  private:
   TileMap tile_map;

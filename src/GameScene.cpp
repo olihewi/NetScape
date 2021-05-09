@@ -104,27 +104,33 @@ void GameScene::playerMovement(InputTracker& input, float dt)
     {
       continue;
     }
-    auto last_pos = player.AnimatedSprite::position();
+    auto last_pos = player.centre();
     player.input(input, dt);
-    /// Collisions
-    std::array<ASGE::Point2D, 4> player_rect{ ASGE::Point2D(),
-                                              ASGE::Point2D(player.dimensions().x, 0),
-                                              ASGE::Point2D(0, player.dimensions().y),
-                                              ASGE::Point2D(
-                                                player.dimensions().x, player.dimensions().y) };
-    for (auto& point : player_rect)
+    std::vector<ASGE::Point2D> collision_tiles;
+    for (int x = -32; x <= 32; x++)
     {
-      auto pos_last = ASGE::Point2D(last_pos.x + point.x, last_pos.y + point.y);
-      auto pos      = ASGE::Point2D(
-        player.AnimatedSprite::position().x + point.x,
-        player.AnimatedSprite::position().y + point.y);
-      if (tile_map.getCollisionPos(ASGE::Point2D(pos.x, pos_last.y)) > 0)
+      for (int y = -32; y <= 32; y++)
       {
-        player.position(ASGE::Point2D(last_pos.x, player.AnimatedSprite::position().y));
+        ASGE::Point2D this_pos = ASGE::Point2D(
+          player.centre().x + static_cast<float>(x), player.centre().y + static_cast<float>(y));
+        if (tile_map.getCollisionPos(this_pos) > 0)
+        {
+          collision_tiles.emplace_back(
+            ASGE::Point2D(std::floor(this_pos.x / 32) * 32, std::floor(this_pos.y / 32) * 32));
+        }
       }
-      if (tile_map.getCollisionPos(ASGE::Point2D(pos_last.x, pos.y)) > 0)
+    }
+    for (auto& tile : collision_tiles)
+    {
+      if (playerCollidesWithTile(ASGE::Point2D(player.centre().x, last_pos.y), tile))
       {
-        player.position(ASGE::Point2D(player.AnimatedSprite::position().x, last_pos.y));
+        player.position(ASGE::Point2D(
+          last_pos.x - player.dimensions().x / 2, player.centre().y - player.dimensions().y / 2));
+      }
+      if (playerCollidesWithTile(ASGE::Point2D(last_pos.x, player.centre().y), tile))
+      {
+        player.position(ASGE::Point2D(
+          player.centre().x - player.dimensions().x / 2, last_pos.y - player.dimensions().y / 2));
       }
     }
   }
@@ -164,4 +170,31 @@ void GameScene::checkBullets()
       }
     }
   }
+}
+bool GameScene::playerCollidesWithTile(ASGE::Point2D player, ASGE::Point2D tile)
+{
+  float p_radius     = 12;
+  ASGE::Point2D temp = player;
+  /// Which edge is closest?
+  if (player.x < tile.x)
+  {
+    temp.x = tile.x;
+  }
+  else if (player.x > tile.x + 32)
+  {
+    temp.x = tile.x + 32;
+  }
+  if (player.y < tile.y)
+  {
+    temp.y = tile.y;
+  }
+  else if (player.y > tile.y + 32)
+  {
+    temp.y = tile.y + 32;
+  }
+  /// Get distance from closest edges
+  ASGE::Point2D dist = ASGE::Point2D(player.x - temp.x, player.y - temp.y);
+  float mag          = std::hypot(dist.x, dist.y);
+  /// If the distance is less than the radius, collision!
+  return mag <= p_radius;
 }

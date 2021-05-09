@@ -1,5 +1,6 @@
 #include "ASGEGame.hpp"
 #include <Engine/Logger.hpp>
+#include <wtypes.h>
 
 int main(int /*argc*/, char* /*argv*/[])
 {
