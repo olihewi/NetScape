@@ -24,11 +24,10 @@ class GameScene : public Scene
  private:
   TileMap tile_map;
   std::array<Player, 4> players;
-
+  Sprite window_divider;
   std::vector<std::pair<ASGE::Camera, PlayerHUD>> player_cameras;
 
-  //std::array<ASGE::Camera, 4> player_cameras;
-
+  // std::array<ASGE::Camera, 4> player_cameras;
 };
 
 #endif // ASGEMOVIEGAME_GAMESCENE_H
