@@ -29,7 +29,11 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
     camera.first.setZoom(0.5F);
     camera.second.addObject(std::make_unique<Text>(
       renderer, "Player " + std::to_string(player.getID()), ASGE::Point2D(100, 100)));
-    camera.second.addObject((std::make_unique<PlayerAmmo>(renderer, player.getWeapon())));
+    camera.second.addObject((std::make_unique<PlayerAmmo>(renderer,
+                                                          player.getWeapon(),
+                                                          player,
+                                                          static_cast<float>(ASGE::SETTINGS.window_width) / 4,
+                                                          static_cast<float>(ASGE::SETTINGS.window_height) /3)));
   }
 }
 

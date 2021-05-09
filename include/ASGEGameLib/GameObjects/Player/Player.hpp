@@ -30,9 +30,13 @@ class Player : public AnimatedSprite
 
   [[nodiscard]] size_t getID() const;
 
+  float max_health = 100.0F;
+  float health     = max_health;
+  float health_display_timer;
+
   float move_speed = 100.0F;
-  float health     = 100.0F;
   bool is_dead     = false;
+
 
  private:
   size_t controller_id;

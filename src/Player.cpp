@@ -63,6 +63,7 @@ void Player::takeDamage(float damage)
 {
   health -= damage;
   Logging::DEBUG("HIT");
+
   if (health <= 0)
   {
     is_dead = true;
@@ -82,3 +83,4 @@ size_t Player::getID() const
 {
   return controller_id;
 }
+

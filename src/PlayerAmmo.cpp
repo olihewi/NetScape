@@ -4,8 +4,9 @@
 
 #include "ASGEGameLib/GameObjects/Player/HUD/PlayerAmmo.hpp"
 #include <Engine/Logger.hpp>
-PlayerAmmo::PlayerAmmo(ASGE::Renderer* renderer, Weapon& _weapon) :
+PlayerAmmo::PlayerAmmo(ASGE::Renderer* renderer, Weapon& _weapon, Player& _player, float x, float y) :
   weapon(_weapon),
+  player(_player),
   bullet(std::array<Sprite, 10>{
     Sprite(renderer, "data/images/player/pistol_bullet.png", ASGE::Point2D(0, 0)),
     Sprite(renderer, "data/images/player/pistol_bullet.png", ASGE::Point2D(0, 0)),
@@ -18,23 +19,31 @@ PlayerAmmo::PlayerAmmo(ASGE::Renderer* renderer, Weapon& _weapon) :
     Sprite(renderer, "data/images/player/pistol_bullet.png", ASGE::Point2D(0, 0)),
     Sprite(renderer, "data/images/player/pistol_bullet.png", ASGE::Point2D(0, 0)) })
 {
+  posX = x;
+  posX -= bullet[0].dimensions().x * (static_cast<float>(weapon.max_ammo)/2);
+  posY = y;
 }
 
-void PlayerAmmo::update(InputTracker& input, float dt)
+void PlayerAmmo::update(InputTracker& input, float dt )
 {
   GameObject::update(input, dt);
 
   for (size_t i = 0; i < static_cast<size_t>(weapon.max_ammo); ++i)
   {
-    bullet[i].position(ASGE::Point2D(static_cast<float>(i) * bullet[i].dimensions().x, 0));
+    bullet[i].position(ASGE::Point2D(
+      (posX + static_cast<float>(i) * bullet[i].dimensions().x),
+      posY));
     bullet[i].zOrder(0);
   }
 }
 
 void PlayerAmmo::render(ASGE::Renderer* renderer)
 {
-  for (size_t i = 0; i < static_cast<size_t>(weapon.max_ammo); ++i)
+  if (player.health > 0)
   {
-    bullet[i].Sprite::render(renderer);
+    for (size_t i = 0; i < static_cast<size_t>(weapon.current_ammo); ++i)
+    {
+      bullet[i].Sprite::render(renderer);
+    }
   }
 }

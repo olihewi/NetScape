@@ -15,7 +15,7 @@ void PlayerHealth::update(InputTracker& input, float dt)
 {
   GameObject::update(input, dt);
   // position(player.AnimatedSprite::position());
-  dimensions(ASGE::Point2D((player.health / 100) * 32, 5));
+  dimensions(ASGE::Point2D((player.health / player.max_health) * 32, 5));
   position(
     ASGE::Point2D(player.AnimatedSprite::position().x, player.AnimatedSprite::position().y - 5));
   colour(ASGE::COLOURS::GREEN);
@@ -30,7 +30,7 @@ void PlayerHealth::update(InputTracker& input, float dt)
 }
 void PlayerHealth::render(ASGE::Renderer* renderer)
 {
-  if (player.health > 0)
+  if (player.health > 0 && player.health < player.max_health)
   {
     Sprite::render(renderer);
     background.render(renderer);
