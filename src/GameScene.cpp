@@ -106,6 +106,7 @@ void GameScene::playerMovement(InputTracker& input, float dt)
     }
     auto last_pos = player.centre();
     player.input(input, dt);
+    player.update(input, dt);
     std::vector<ASGE::Point2D> collision_tiles;
     for (int x = -32; x <= 32; x++)
     {
