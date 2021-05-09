@@ -22,10 +22,15 @@ class TileMap : public GameObject
   void update(InputTracker& input, float dt) override;
   void render(ASGE::Renderer* _renderer) override;
   void setTile(size_t layer, size_t index, std::array<float, 4> rect);
+  void setCollision(size_t index, int _collision);
   void deleteTile(size_t layer, size_t index);
+
+  [[nodiscard]] int getCollision(size_t index);
+  [[nodiscard]] int getCollisionPos(ASGE::Point2D position);
 
  private:
   std::vector<std::array<Tile, 2500>> tiles;
+  std::array<int, 2500> collisions;
   ASGE::Renderer* renderer;
   std::string tileset_path;
 };

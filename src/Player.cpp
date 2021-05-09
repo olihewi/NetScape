@@ -77,7 +77,7 @@ Weapon& Player::getWeapon()
 {
   return weapon;
 }
-size_t Player::getID()
+size_t Player::getID() const
 {
   return controller_id;
 }

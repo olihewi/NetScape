@@ -37,7 +37,31 @@ void GameScene::update(InputTracker& input, float dt)
     {
       continue;
     }
+
+    auto last_pos = player.AnimatedSprite::position();
     player.input(input, dt);
+    /// Collisions
+    std::array<ASGE::Point2D, 4> player_rect{ ASGE::Point2D(),
+                                              ASGE::Point2D(player.dimensions().x, 0),
+                                              ASGE::Point2D(0, player.dimensions().y),
+                                              ASGE::Point2D(
+                                                player.dimensions().x, player.dimensions().y) };
+    for (auto& point : player_rect)
+    {
+      auto pos_last = ASGE::Point2D(last_pos.x + point.x, last_pos.y + point.y);
+      auto pos      = ASGE::Point2D(
+        player.AnimatedSprite::position().x + point.x,
+        player.AnimatedSprite::position().y + point.y);
+      if (tile_map.getCollisionPos(ASGE::Point2D(pos.x, pos_last.y)) > 0)
+      {
+        player.position(ASGE::Point2D(last_pos.x, player.AnimatedSprite::position().y));
+      }
+      if (tile_map.getCollisionPos(ASGE::Point2D(pos_last.x, pos.y)) > 0)
+      {
+        player.position(ASGE::Point2D(player.AnimatedSprite::position().x, last_pos.y));
+      }
+    }
+
     for (auto& other_player : players)
     {
       if (other_player.getID() == player.getID())

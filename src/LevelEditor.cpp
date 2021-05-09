@@ -98,17 +98,15 @@ void LevelEditor::update(InputTracker& input, float dt)
   {
     if (input.getMouseButton(MOUSE::LEFT_CLICK))
     {
-      placeTiles(relative_mouse_pos);
+      placeTiles(relative_mouse_pos, 0);
     }
     if (input.getMouseButton(MOUSE::RIGHT_CLICK))
     {
-      auto mouse_pos = input.getMousePos();
-      auto x_pos     = static_cast<size_t>(mouse_pos.x) / 32;
-      auto y_pos     = static_cast<size_t>(mouse_pos.y) / 32;
-      if (mouse_pos.x >= 256)
-      {
-        tile_map.deleteTile(current_layer, x_pos + y_pos * 50);
-      }
+      placeTiles(relative_mouse_pos, 1);
+    }
+    if (input.getMouseButton(MOUSE::MIDDLE_CLICK))
+    {
+      placeTiles(relative_mouse_pos, 2);
     }
 
     auto camera_move = input.getWASD();
@@ -135,7 +133,7 @@ void LevelEditor::update(InputTracker& input, float dt)
     }
   }
 }
-void LevelEditor::placeTiles(ASGE::Point2D _position)
+void LevelEditor::placeTiles(ASGE::Point2D _position, int _mouse_button)
 {
   auto x_pos      = static_cast<size_t>(_position.x) / 32;
   auto y_pos      = static_cast<size_t>(_position.y) / 32;
@@ -148,7 +146,18 @@ void LevelEditor::placeTiles(ASGE::Point2D _position)
     {
       continue;
     }
-    tile_map.setTile(current_layer, x_pos + y_pos * 50 + offset_x + offset_y * 50, tile);
+    if (_mouse_button == 0) /// Place
+    {
+      tile_map.setTile(current_layer, x_pos + y_pos * 50 + offset_x + offset_y * 50, tile);
+    }
+    else if (_mouse_button == 1) /// Remove
+    {
+      tile_map.deleteTile(current_layer, x_pos + y_pos * 50 + offset_x + offset_y * 50);
+    }
+    else /// Collision
+    {
+      tile_map.setCollision(x_pos + y_pos * 50, 1);
+    }
     offset_x++;
     if (offset_x % tiles.selection_width == 0)
     {
