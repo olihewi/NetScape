@@ -7,11 +7,11 @@
 #include <utility>
 EditorTileSet::EditorTileSet(
   ASGE::Renderer* renderer, const std::string& file_path, int _sprite_size) :
-  sprite_sheet(renderer, file_path, ASGE::Point2D(0, 64)),
+  sprite_sheet(renderer, file_path, ASGE::Point2D(0, 0)),
   cursor(
     renderer, "data/images/tilesets/cursor.png", std::array<float, 6>{ 3, 3, 28, 28, 3, 3 },
-    ASGE::Point2D(0, 64), ASGE::Point2D(32, 32)),
-  sprite_size(_sprite_size)
+    ASGE::Point2D(0, 0), ASGE::Point2D(32, 32)),
+  sprite_size(_sprite_size), m_renderer(renderer)
 {
 }
 void EditorTileSet::update(InputTracker& input, float /*dt*/)
@@ -38,6 +38,19 @@ void EditorTileSet::update(InputTracker& input, float /*dt*/)
   if (mouse_held)
   {
     updateSelection(mouse_pos);
+  }
+  if (sprite_sheet.isInside(mouse_pos))
+  {
+    auto mouse_scroll = input.getMouseScroll();
+
+    if (
+      sprite_sheet.position().y + mouse_scroll.y * 32 <= 0 &&
+      sprite_sheet.position().y + sprite_sheet.dimensions().y + mouse_scroll.y * 32 >=
+        static_cast<float>(ASGE::SETTINGS.window_height))
+    {
+      sprite_sheet.translate(ASGE::Point2D(0, mouse_scroll.y * 32));
+      cursor.translate(ASGE::Point2D(0, mouse_scroll.y * 32));
+    }
   }
 }
 void EditorTileSet::render(ASGE::Renderer* renderer)
@@ -109,6 +122,10 @@ TileSetSelection EditorTileSet::getSelection() const
     }
   }
   return TileSetSelection(vector, static_cast<size_t>(end_x - start_x + 1));
+}
+void EditorTileSet::setTileset(const std::string& _tileset)
+{
+  sprite_sheet.loadSprite(m_renderer, _tileset);
 }
 TileSetSelection::TileSetSelection(std::vector<std::array<float, 4>> _tiles, size_t _width) :
   tiles(std::move(_tiles)), selection_width(_width)

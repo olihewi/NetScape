@@ -74,3 +74,11 @@ ASGE::Point2D ScalableSprite::dimensions()
   auto dim3 = ASGE::Point2D(sprites[8]->width(), sprites[8]->height());
   return ASGE::Point2D(dim1.x + dim2.x + dim3.x, dim1.y + dim2.y + dim3.y);
 }
+void ScalableSprite::translate(ASGE::Point2D _translation)
+{
+  for (auto& sprite : sprites)
+  {
+    sprite->xPos(sprite->xPos() + _translation.x);
+    sprite->yPos(sprite->yPos() + _translation.y);
+  }
+}

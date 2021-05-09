@@ -15,6 +15,7 @@ class ScalableSprite : public GameObject
     ASGE::Renderer* renderer, const std::string& file_path, std::array<float, 6> part_sizes,
     ASGE::Point2D _position, ASGE::Point2D _dimensions);
   void position(ASGE::Point2D _position);
+  void translate(ASGE::Point2D _translation);
   [[nodiscard]] ASGE::Point2D dimensions();
   void dimensions(ASGE::Point2D _dimensions);
   void render(ASGE::Renderer* renderer) override;

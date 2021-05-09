@@ -14,6 +14,10 @@ LineTrace::LineTrace(ASGE::Renderer* renderer) :
                            Sprite(renderer, "data/images/ui/buttons/neon/blue.png", 0),
                            Sprite(renderer, "data/images/ui/buttons/neon/blue.png", 0) })
 {
+  for (auto& sprite : bullet_sprites)
+  {
+    sprite.zOrder(10);
+  }
 }
 void LineTrace::hitCheck(float distance, ASGE::Point2D origin, float angle)
 {

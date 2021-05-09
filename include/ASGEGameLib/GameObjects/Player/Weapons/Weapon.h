@@ -19,8 +19,8 @@ class Weapon : public AnimatedSprite
 
   LineTrace bullet;
 
+  int max_ammo = 10;
   int current_ammo;
-  int max_ammo      = 10;
 
  private:
   std::array<Sound, 3> sounds;

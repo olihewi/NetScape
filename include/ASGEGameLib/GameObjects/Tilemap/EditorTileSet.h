@@ -24,6 +24,7 @@ class EditorTileSet : public GameObject
   void updateSelection(ASGE::Point2D mouse_pos);
   [[nodiscard]] std::array<float, 4> getCurrentRect();
   [[nodiscard]] TileSetSelection getSelection() const;
+  void setTileset(const std::string& _tileset);
 
  private:
   Sprite sprite_sheet;
@@ -32,6 +33,7 @@ class EditorTileSet : public GameObject
   int selection_start = 0;
   int selection_end   = 0;
   bool mouse_held     = false;
+  ASGE::Renderer* m_renderer;
 };
 
 #endif // ASGEMOVIEGAME_EDITORTILESET_H

@@ -11,8 +11,8 @@
 #include <utility>
 LevelEditor::LevelEditor(ASGE::Renderer* _renderer, std::function<void(Scenes)> _scene_callback) :
   Scene(std::move(_scene_callback)), renderer(_renderer),
-  tile_map(renderer, "data/images/tilesets/japanese_city.png", 3),
-  tile_set(renderer, "data/images/tilesets/japanese_city.png"),
+  tile_map(renderer, "data/images/tilesets/dotonbori.png", 3),
+  tile_set(renderer, "data/images/tilesets/dotonbori.png"),
   scene_change_buttons(std::array<UIButton, 1>{ UIButton(
     renderer, "data/images/ui/buttons/neon/yellow.png", "Exit", FONTS::ROBOTO,
     [this]() { setScene(Scenes::TITLE); }, std::array<float, 6>{ 11, 11, 114, 50, 11, 11 },
@@ -184,4 +184,12 @@ void LevelEditor::saveLevel(const std::string& file_name)
 void LevelEditor::loadLevel(const std::string& file_name)
 {
   tile_map = TileMap(renderer, file_name);
+  ASGE::FILEIO::File file;
+  if (file.open(file_name, ASGE::FILEIO::File::IOMode::READ))
+  {
+    ASGE::FILEIO::IOBuffer buffer = file.read();
+    auto json_file = nlohmann::json::parse(buffer.as_char(), buffer.as_char() + buffer.length);
+    file.close();
+    tile_set.setTileset(json_file["tileset"].get<std::string>());
+  }
 }
