@@ -27,8 +27,7 @@ class GameScene : public Scene
 
   std::vector<std::pair<ASGE::Camera, PlayerHUD>> player_cameras;
 
-  //std::array<ASGE::Camera, 4> player_cameras;
-
+  // std::array<ASGE::Camera, 4> player_cameras;
 };
 
 #endif // ASGEMOVIEGAME_GAMESCENE_H

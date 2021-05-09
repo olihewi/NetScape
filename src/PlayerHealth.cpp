@@ -26,7 +26,6 @@ void PlayerHealth::update(InputTracker& input, float dt)
   background.dimensions(ASGE::Point2D(32, 5));
   background.colour(ASGE::COLOURS::RED);
   background.zOrder(3);
-
 }
 void PlayerHealth::render(ASGE::Renderer* renderer)
 {

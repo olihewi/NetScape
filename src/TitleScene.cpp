@@ -14,45 +14,72 @@ TitleScene::TitleScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _sc
     UIButton(
       renderer, "data/images/ui/buttons/neon/pink.png", "Play", FONTS::ROBOTO,
       [this]() { setScene(Scenes::GAME); }, std::array<float, 6>{ 11, 11, 114, 50, 11, 11 },
-      ASGE::Point2D(1920 / 2.F - 375, 400), ASGE::Point2D(750, 125)),
+      ASGE::Point2D(
+        static_cast<float>(ASGE::SETTINGS.window_width) / 2 - 375,
+        static_cast<float>(ASGE::SETTINGS.window_height) / 2 - 125),
+      ASGE::Point2D(750, 125)),
     UIButton(
       renderer, "data/images/ui/buttons/neon/purple.png", "Level Editor", FONTS::ROBOTO,
       [this]() { setScene(Scenes::LEVEL_EDITOR); }, std::array<float, 6>{ 11, 11, 114, 50, 11, 11 },
-      ASGE::Point2D(1920 / 2.F - 375, 525), ASGE::Point2D(750, 125)),
+      ASGE::Point2D(
+        static_cast<float>(ASGE::SETTINGS.window_width) / 2 - 375,
+        static_cast<float>(ASGE::SETTINGS.window_height) / 2),
+      ASGE::Point2D(750, 125)),
     UIButton(
       renderer, "data/images/ui/buttons/neon/blue.png", "Options", FONTS::ROBOTO,
       [this]() { setScene(Scenes::OPTIONS); }, std::array<float, 6>{ 11, 11, 114, 50, 11, 11 },
-      ASGE::Point2D(1920 / 2.F - 375, 650), ASGE::Point2D(375, 125)),
+      ASGE::Point2D(
+        static_cast<float>(ASGE::SETTINGS.window_width) / 2 - 375,
+        static_cast<float>(ASGE::SETTINGS.window_height) / 2 + 125),
+      ASGE::Point2D(375, 125)),
     UIButton(
       renderer, "data/images/ui/buttons/neon/green.png", "Credits", FONTS::ROBOTO,
       [this]() { setScene(Scenes::CREDITS); }, std::array<float, 6>{ 11, 11, 114, 50, 11, 11 },
-      ASGE::Point2D(1920 / 2.F, 650), ASGE::Point2D(375, 125)),
+      ASGE::Point2D(
+        static_cast<float>(ASGE::SETTINGS.window_width) / 2,
+        static_cast<float>(ASGE::SETTINGS.window_height) / 2 + 125),
+      ASGE::Point2D(375, 125)),
     UIButton(
       renderer, "data/images/ui/buttons/neon/yellow.png", "Quit Game", FONTS::ROBOTO,
       [this]() { setScene(Scenes::QUIT_GAME); }, std::array<float, 6>{ 11, 11, 114, 50, 11, 11 },
-      ASGE::Point2D(1920 / 2.F - 375, 775), ASGE::Point2D(750, 125)) }),
+      ASGE::Point2D(
+        static_cast<float>(ASGE::SETTINGS.window_width) / 2 - 375,
+        static_cast<float>(ASGE::SETTINGS.window_height) / 2 + 250),
+      ASGE::Point2D(750, 125)) }),
   cursor(renderer), test_clip(audio_engine.get(), "data/audio/8ball.wav")
 {
+  auto window = ASGE::Point2D(
+    static_cast<float>(ASGE::SETTINGS.window_width),
+    static_cast<float>(ASGE::SETTINGS.window_height));
   std::unique_ptr<Text> game_title =
     std::make_unique<Text>(renderer, "NetScape", ASGE::Point2D(), FONTS::ROBOTO);
-  game_title->centrePos(ASGE::Point2D(1920 / 2.F, 350));
+  game_title->centrePos(ASGE::Point2D(window.x / 2, window.y / 2 - 250));
   addObject(std::move(game_title));
   selectButton(button_selection);
   test_clip.getSound().setLooping(true);
   test_clip.play();
   std::unique_ptr<AnimatedSprite> background = std::make_unique<AnimatedSprite>(
-    renderer, "data/images/animations/background.png", 20, ASGE::Point2D(0, -500));
-  background->dimensions(ASGE::Point2D(1920, 1920));
+    renderer, "data/images/animations/background.png", 20, ASGE::Point2D(0, -window.x / 4));
+  background->dimensions(ASGE::Point2D(window.x, window.x));
   background->zOrder(-1);
   addObject(std::move(background));
   addObject(std::make_unique<ControllerDisplay>(
-    renderer, 0, ASGE::Point2D(100, 100), ASGE::Point2D(400, 280)));
+    renderer, 0, ASGE::Point2D(100, 100), ASGE::Point2D(window.x / 5, window.x / 7.5F)));
   addObject(std::make_unique<ControllerDisplay>(
-    renderer, 1, ASGE::Point2D(1420, 100), ASGE::Point2D(400, 280)));
+    renderer,
+    1,
+    ASGE::Point2D(window.x - window.x / 5 - 100, 100),
+    ASGE::Point2D(window.x / 5, window.x / 7.5F)));
   addObject(std::make_unique<ControllerDisplay>(
-    renderer, 2, ASGE::Point2D(100, 700), ASGE::Point2D(400, 280)));
+    renderer,
+    2,
+    ASGE::Point2D(100, window.y - window.x / 7.5F - 100),
+    ASGE::Point2D(window.x / 5, window.x / 7.5F)));
   addObject(std::make_unique<ControllerDisplay>(
-    renderer, 3, ASGE::Point2D(1420, 700), ASGE::Point2D(400, 280)));
+    renderer,
+    3,
+    ASGE::Point2D(window.x - window.x / 5 - 100, window.y - window.x / 7.5F - 100),
+    ASGE::Point2D(window.x / 5, window.x / 7.5F)));
 }
 void TitleScene::controllerInputs(InputTracker& input)
 {
