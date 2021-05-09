@@ -19,6 +19,7 @@ class Player : public AnimatedSprite
     ASGE::Renderer* renderer, ASGE::Point2D _position, size_t control_id,
     SoLoud::Soloud* audio_engine);
 
+  void update(InputTracker& input, float dt) override;
   void render(ASGE::Renderer* renderer) override;
 
   void input(InputTracker& input, float dt);
@@ -26,21 +27,29 @@ class Player : public AnimatedSprite
   void translate(ASGE::Point2D _translation) override;
 
   void takeDamage(float damage);
+
+
   Weapon& getWeapon();
 
   [[nodiscard]] size_t getID() const;
 
-  float max_health           = 100.0F;
-  float health               = max_health;
-  float health_display_timer = 0;
+  float max_health = 100.0F;
+  float health     = max_health;
 
   float move_speed = 100.0F;
   bool is_dead     = false;
+
+  bool has_been_hit = false;
+  float has_been_hit_timer = 0;
 
  private:
   size_t controller_id;
   Weapon weapon;
   Sound player_walk;
+
+  float playerR = 1,
+        playerG = 1,
+        playerB = 1;
 };
 
 #endif // ASGEMOVIEGAME_PLAYER_HPP

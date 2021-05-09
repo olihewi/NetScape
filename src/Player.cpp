@@ -61,6 +61,8 @@ void Player::translate(ASGE::Point2D _translation)
 void Player::takeDamage(float damage)
 {
   health -= damage;
+  has_been_hit = true;
+  has_been_hit_timer = 0;
   Logging::DEBUG("HIT");
 
   if (health <= 0)
@@ -70,9 +72,6 @@ void Player::takeDamage(float damage)
     weapon.visibility(false);
     Logging::DEBUG("DEAD");
   }
-
-  /// Health
-  // playerHealth.adjustPlayerHealth(health);
 }
 Weapon& Player::getWeapon()
 {
@@ -81,4 +80,27 @@ Weapon& Player::getWeapon()
 size_t Player::getID() const
 {
   return controller_id;
+}
+void Player::update(InputTracker& input, float dt)
+{
+  //Logging::DEBUG("HAS BEEN HIT: " +std::to_string(static_cast<int>(has_been_hit)));
+
+  weapon.colour(ASGE::Colour(playerR,playerG,playerB));
+  if (has_been_hit)
+  {
+    playerG = 0;
+    playerB = 0;
+    has_been_hit = false;
+  }
+  else
+  {
+    if (playerB < 1)
+    {
+      float colour_gain = 1;
+      playerG += colour_gain * (dt * 1.25F);
+      playerB += colour_gain * (dt * 1.25F);
+    }
+  }
+  
+  AnimatedSprite::update(input, dt);
 }
