@@ -32,9 +32,14 @@ void Player::input(InputTracker& input, float dt)
   weapon.update(input, dt);
   AnimatedSprite::update(input, dt);
   /// Movement
-  auto left_stick = input.getControllerStick(controller_id, CONTROLLER::STICKS::LEFT);
+  auto left_stick        = input.getControllerStick(controller_id, CONTROLLER::STICKS::LEFT);
+  float left_stick_hypot = std::hypot(left_stick.x, left_stick.y);
+  if (left_stick_hypot > 1)
+  {
+    left_stick = ASGE::Point2D(left_stick.x / left_stick_hypot, left_stick.y / left_stick_hypot);
+    left_stick_hypot = 1;
+  }
   translate(ASGE::Point2D(left_stick.x * move_speed * dt, left_stick.y * move_speed * dt));
-  auto left_stick_hypot = std::hypotf(left_stick.x, left_stick.y);
   if (left_stick_hypot >= CONTROLLER::AXIS_DEADZONE)
   {
     rotation(atan2f(left_stick.y, left_stick.x));
