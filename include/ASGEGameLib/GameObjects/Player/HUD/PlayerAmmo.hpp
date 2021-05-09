@@ -23,8 +23,7 @@ class PlayerAmmo : public GameObject
   Player& player;
   std::array<Sprite, 10> bullet;
   // Sprite background;
-  float posX,
-        posY;
+  float posX, posY;
 };
 
 #endif // ASGEMOVIEGAME_PLAYERAMMO_HPP

@@ -42,72 +42,19 @@ void GameScene::update(InputTracker& input, float dt)
 {
   Scene::update(input, dt);
 
-  for (auto& player : players)
-  {
-    if (player.is_dead)
-    {
-      continue;
-    }
+  playerMovement(input, dt);
+  checkBullets();
 
-    auto last_pos = player.AnimatedSprite::position();
-    player.input(input, dt);
-    /// Collisions
-    std::array<ASGE::Point2D, 4> player_rect{ ASGE::Point2D(),
-                                              ASGE::Point2D(player.dimensions().x, 0),
-                                              ASGE::Point2D(0, player.dimensions().y),
-                                              ASGE::Point2D(
-                                                player.dimensions().x, player.dimensions().y) };
-    for (auto& point : player_rect)
-    {
-      auto pos_last = ASGE::Point2D(last_pos.x + point.x, last_pos.y + point.y);
-      auto pos      = ASGE::Point2D(
-        player.AnimatedSprite::position().x + point.x,
-        player.AnimatedSprite::position().y + point.y);
-      if (tile_map.getCollisionPos(ASGE::Point2D(pos.x, pos_last.y)) > 0)
-      {
-        player.position(ASGE::Point2D(last_pos.x, player.AnimatedSprite::position().y));
-      }
-      if (tile_map.getCollisionPos(ASGE::Point2D(pos_last.x, pos.y)) > 0)
-      {
-        player.position(ASGE::Point2D(player.AnimatedSprite::position().x, last_pos.y));
-      }
-    }
-
-    for (auto& other_player : players)
-    {
-      if (other_player.getID() == player.getID())
-      {
-        continue;
-      }
-      size_t index = 0;
-      for (auto& trace_point : other_player.getWeapon().bullet.trace_points)
-      {
-        index++;
-        if (player.isInside(trace_point))
-        {
-          other_player.getWeapon().bullet.hit_point = index;
-          other_player.getWeapon().bullet.has_hit   = true;
-          Logging::DEBUG(
-            "Player " + std::to_string(other_player.getID() + 1) + " hit Player " +
-            std::to_string(player.getID()) + " - " +
-            std::to_string(other_player.getWeapon().bullet.damage) + " damage");
-          player.takeDamage(other_player.getWeapon().bullet.damage);
-          break;
-        }
-        other_player.getWeapon().bullet.hit_point = 250;
-        index                                     = 0;
-      }
-    }
-  }
-  if (input.getKeyDown(ASGE::KEYS::KEY_ESCAPE))
-  {
-    setScene(Scenes::TITLE);
-  }
   for (auto& camera : player_cameras)
   {
     camera.second.update(input, dt);
   }
   Scene::update(input, dt);
+
+  if (input.getKeyDown(ASGE::KEYS::KEY_ESCAPE))
+  {
+    setScene(Scenes::TITLE);
+  }
 }
 void GameScene::render(ASGE::Renderer* renderer)
 {
@@ -148,4 +95,73 @@ void GameScene::render(ASGE::Renderer* renderer)
     static_cast<float>(ASGE::SETTINGS.window_width),
     static_cast<float>(ASGE::SETTINGS.window_height));
   window_divider.render(renderer);
+}
+void GameScene::playerMovement(InputTracker& input, float dt)
+{
+  for (auto& player : players)
+  {
+    if (player.is_dead)
+    {
+      continue;
+    }
+    auto last_pos = player.AnimatedSprite::position();
+    player.input(input, dt);
+    /// Collisions
+    std::array<ASGE::Point2D, 4> player_rect{ ASGE::Point2D(),
+                                              ASGE::Point2D(player.dimensions().x, 0),
+                                              ASGE::Point2D(0, player.dimensions().y),
+                                              ASGE::Point2D(
+                                                player.dimensions().x, player.dimensions().y) };
+    for (auto& point : player_rect)
+    {
+      auto pos_last = ASGE::Point2D(last_pos.x + point.x, last_pos.y + point.y);
+      auto pos      = ASGE::Point2D(
+        player.AnimatedSprite::position().x + point.x,
+        player.AnimatedSprite::position().y + point.y);
+      if (tile_map.getCollisionPos(ASGE::Point2D(pos.x, pos_last.y)) > 0)
+      {
+        player.position(ASGE::Point2D(last_pos.x, player.AnimatedSprite::position().y));
+      }
+      if (tile_map.getCollisionPos(ASGE::Point2D(pos_last.x, pos.y)) > 0)
+      {
+        player.position(ASGE::Point2D(player.AnimatedSprite::position().x, last_pos.y));
+      }
+    }
+  }
+}
+void GameScene::checkBullets()
+{
+  for (auto& player : players)
+  {
+    if (player.is_dead)
+    {
+      continue;
+    }
+
+    for (auto& other_player : players)
+    {
+      if (other_player.getID() == player.getID())
+      {
+        continue;
+      }
+      size_t index = 0;
+      for (auto& trace_point : other_player.getWeapon().bullet.trace_points)
+      {
+        index++;
+        if (player.isInside(trace_point))
+        {
+          other_player.getWeapon().bullet.hit_point = index;
+          other_player.getWeapon().bullet.has_hit   = true;
+          Logging::DEBUG(
+            "Player " + std::to_string(other_player.getID() + 1) + " hit Player " +
+            std::to_string(player.getID()) + " - " +
+            std::to_string(other_player.getWeapon().bullet.damage) + " damage");
+          player.takeDamage(other_player.getWeapon().bullet.damage);
+          break;
+        }
+        other_player.getWeapon().bullet.hit_point = 250;
+        index                                     = 0;
+      }
+    }
+  }
 }

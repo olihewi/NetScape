@@ -20,6 +20,8 @@ class GameScene : public Scene
 
   void render(ASGE::Renderer* renderer) override;
   void update(InputTracker& input, float dt) override;
+  void playerMovement(InputTracker& input, float dt);
+  void checkBullets();
 
  private:
   TileMap tile_map;

@@ -3,6 +3,7 @@
 //
 
 #include "ASGEGameLib/GameObjects/Player/Weapons/Weapon.h"
+#include <climits>
 #include <cmath>
 Weapon::Weapon(ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _player_id) :
   AnimatedSprite(renderer, "data/images/player/pistol.png", 0), bullet(renderer),

@@ -82,4 +82,3 @@ size_t Player::getID() const
 {
   return controller_id;
 }
-
