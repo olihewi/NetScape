@@ -11,10 +11,12 @@
 
 GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
   Scene(std::move(_scene_callback)), tile_map(renderer, "levels/dotonbori.json"),
-  players(std::array<Player, 4>{ Player(renderer, ASGE::Point2D(400, 400), 0, audio_engine.get()),
-                                 Player(renderer, ASGE::Point2D(500, 500), 1, audio_engine.get()),
-                                 Player(renderer, ASGE::Point2D(600, 600), 2, audio_engine.get()),
-                                 Player(renderer, ASGE::Point2D(700, 700), 3, audio_engine.get()) })
+  players(
+    std::array<Player, 4>{ Player(renderer, ASGE::Point2D(400, 400), 0, audio_engine.get()),
+                           Player(renderer, ASGE::Point2D(500, 500), 1, audio_engine.get()),
+                           Player(renderer, ASGE::Point2D(600, 600), 2, audio_engine.get()),
+                           Player(renderer, ASGE::Point2D(700, 700), 3, audio_engine.get()) }),
+  window_divider(renderer, "images/ui/ingame_windowdivider.png")
 {
   for (auto& player : players)
   {
@@ -25,12 +27,16 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
         static_cast<float>(ASGE::SETTINGS.window_height) / 2),
       PlayerHUD()));
     camera.first.setZoom(0.5F);
-
     camera.second.addObject(std::make_unique<Text>(
       renderer, "Player " + std::to_string(player.getID()), ASGE::Point2D(100, 100)));
-    camera.second.addObject((std::make_unique<PlayerAmmo>(renderer, player.getWeapon())));
+    camera.second.addObject((std::make_unique<PlayerAmmo>(renderer,
+                                                          player.getWeapon(),
+                                                          player,
+                                                          static_cast<float>(ASGE::SETTINGS.window_width) / 4,
+                                                          static_cast<float>(ASGE::SETTINGS.window_height) /3)));
   }
 }
+
 void GameScene::update(InputTracker& input, float dt)
 {
   Scene::update(input, dt);
@@ -140,4 +146,5 @@ void GameScene::render(ASGE::Renderer* renderer)
     0,
     static_cast<float>(ASGE::SETTINGS.window_width),
     static_cast<float>(ASGE::SETTINGS.window_height));
+  window_divider.render(renderer);
 }
