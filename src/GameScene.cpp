@@ -90,6 +90,10 @@ void GameScene::update(InputTracker& input, float dt)
   {
     setScene(Scenes::TITLE);
   }
+  for (auto& camera : player_cameras)
+  {
+    camera.second.update(input, dt);
+  }
   Scene::update(input, dt);
 }
 void GameScene::render(ASGE::Renderer* renderer)
