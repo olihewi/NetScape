@@ -28,11 +28,14 @@ class TileMap : public GameObject
   [[nodiscard]] int getCollision(size_t index);
   [[nodiscard]] int getCollisionPos(ASGE::Point2D position);
 
+  [[nodiscard]] ASGE::Point2D getSpawn(size_t index);
+
  private:
   std::vector<std::array<Tile, 2500>> tiles;
   std::array<int, 2500> collisions;
   ASGE::Renderer* renderer;
   std::string tileset_path;
+  std::vector<ASGE::Point2D> spawn_points;
 };
 
 #endif // ASGEMOVIEGAME_TILEMAP_H

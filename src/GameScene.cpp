@@ -11,15 +11,18 @@
 
 GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
   Scene(std::move(_scene_callback)), tile_map(renderer, "levels/dotonbori.json"),
-  players(
-    std::array<Player, 4>{ Player(renderer, ASGE::Point2D(400, 400), 0, audio_engine.get()),
-                           Player(renderer, ASGE::Point2D(500, 500), 1, audio_engine.get()),
-                           Player(renderer, ASGE::Point2D(600, 600), 2, audio_engine.get()),
-                           Player(renderer, ASGE::Point2D(700, 700), 3, audio_engine.get()) }),
+  players(std::array<Player, 4>{ Player(renderer, ASGE::Point2D(), 0, audio_engine.get()),
+                                 Player(renderer, ASGE::Point2D(), 1, audio_engine.get()),
+                                 Player(renderer, ASGE::Point2D(), 2, audio_engine.get()),
+                                 Player(renderer, ASGE::Point2D(), 3, audio_engine.get()) }),
   window_divider(renderer, "images/ui/ingame_windowdivider.png")
 {
+  auto window = ASGE::Point2D(
+    static_cast<float>(ASGE::SETTINGS.window_width),
+    static_cast<float>(ASGE::SETTINGS.window_height));
   for (auto& player : players)
   {
+    player.position(tile_map.getSpawn(player.getID()));
     addObject(std::make_unique<PlayerHealth>(renderer, player));
     auto& camera = player_cameras.emplace_back(std::make_pair(
       ASGE::Camera(
@@ -29,12 +32,10 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
     camera.first.setZoom(0.5F);
     camera.second.addObject(std::make_unique<Text>(
       renderer, "Player " + std::to_string(player.getID()), ASGE::Point2D(100, 100)));
-    camera.second.addObject((std::make_unique<PlayerAmmo>(renderer,
-                                                          player.getWeapon(),
-                                                          player,
-                                                          static_cast<float>(ASGE::SETTINGS.window_width) / 4,
-                                                          static_cast<float>(ASGE::SETTINGS.window_height) /3)));
+    camera.second.addObject((std::make_unique<PlayerAmmo>(
+      renderer, player.getWeapon(), player, window.x / 2 - 128, window.y / 2 - 64)));
   }
+  window_divider.dimensions(window);
 }
 
 void GameScene::update(InputTracker& input, float dt)

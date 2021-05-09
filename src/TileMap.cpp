@@ -13,6 +13,10 @@ TileMap::TileMap(ASGE::Renderer* _renderer, std::string _tileset_path, size_t nu
   {
     tiles.emplace_back(std::array<Tile, 2500>());
   }
+  spawn_points.emplace_back(ASGE::Point2D(100, 100));
+  spawn_points.emplace_back(ASGE::Point2D(200, 200));
+  spawn_points.emplace_back(ASGE::Point2D(300, 300));
+  spawn_points.emplace_back(ASGE::Point2D(400, 400));
 }
 void TileMap::update(InputTracker& input, float dt)
 {
@@ -70,7 +74,13 @@ nlohmann::json TileMap::saveTileMap()
   {
     collision_string += std::to_string(collision) + ',';
   }
-  j["collisions"] = collision_string;
+  j["collisions"]  = collision_string;
+  auto spawn_pairs = std::vector<std::pair<float, float>>();
+  for (auto& spawn_point : spawn_points)
+  {
+    spawn_pairs.emplace_back(std::make_pair(spawn_point.x, spawn_point.y));
+  }
+  j["spawn_points"] = spawn_pairs;
   return j;
 }
 TileMap::TileMap(ASGE::Renderer* _renderer, const std::string& file_path) :
@@ -87,7 +97,13 @@ TileMap::TileMap(ASGE::Renderer* _renderer, const std::string& file_path) :
 }
 void TileMap::loadFromJson(nlohmann::json j)
 {
-  tileset_path     = j["tileset"].get<std::string>();
+  tileset_path            = j["tileset"].get<std::string>();
+  auto spawn_points_pairs = j["spawn_points"].get<std::vector<std::pair<float, float>>>();
+  for (auto& spawn_point : spawn_points_pairs)
+  {
+    spawn_points.emplace_back(ASGE::Point2D(spawn_point.first, spawn_point.second));
+  }
+
   auto tile_layers = j["tile_layers"].get<std::vector<std::string>>();
 
   int layer_index = 0;
@@ -156,4 +172,8 @@ int TileMap::getCollisionPos(ASGE::Point2D position)
   auto y     = static_cast<size_t>(position.y / 32);
   auto index = x + y * 50;
   return getCollision(index);
+}
+ASGE::Point2D TileMap::getSpawn(size_t index)
+{
+  return spawn_points[index % spawn_points.size()];
 }
