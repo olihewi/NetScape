@@ -13,13 +13,15 @@ Player::Player(
   AnimatedSprite(renderer, "data/images/player/legs.png", 15, _position),
   controller_id(control_id), weapon(renderer, audio_engine, controller_id),
   player_walk(audio_engine, "data/audio/player_walk.wav"),
-  lives(3)
+  lives(3),
+  player_damaged(audio_engine, "data/audio/damaged.mp3")
 {
   // zOrder(1);
   weapon.position(_position);
   player_walk.setLoop(true);
   player_walk.volume(0);
   player_walk.play();
+  player_damaged.volume(5);
 }
 
 void Player::render(ASGE::Renderer* renderer)
@@ -72,8 +74,8 @@ void Player::takeDamage(float damage)
   health -= damage;
   has_been_hit       = true;
   has_been_hit_timer = 0;
+  player_damaged.play();
   Logging::DEBUG("HIT");
-
   if (health <= 0)
   {
     is_dead = true;

@@ -61,6 +61,7 @@ class Player : public AnimatedSprite
   Sound player_walk;
   int max_lives = 10;
   int lives;
+  Sound player_damaged;
   float playerR = 1, playerG = 1, playerB = 1;
 
   float colour_gain = 1.5F;
