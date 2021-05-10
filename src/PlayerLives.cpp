@@ -45,18 +45,16 @@ void PlayerLives::update(InputTracker& input, float dt)
 
 void PlayerLives::playerRespawn()
 {
-  if (player.is_dead)
+  if (player.is_dead && player.getLives() > 0)
   {
-    if (player.getLives() > 0)
-    {
+      
       Logging::DEBUG("isdead: " + std::to_string(player.is_dead));
       player.visibility(true);
       player.getWeapon().visibility(true);
       player.setLives(player.getLives() - 1);
       player.setHealth(player.getMaxHealth());
       player.position(player.getSpawnPoint());
-    }
-    player.is_dead = false;
+      player.is_dead = false;
   }
 }
 
