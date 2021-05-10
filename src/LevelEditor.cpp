@@ -109,6 +109,10 @@ void LevelEditor::update(InputTracker& input, float dt)
     {
       placeTiles(relative_mouse_pos, 2);
     }
+    if (input.getMouseButton(MOUSE::MOUSE_5))
+    {
+      placeTiles(relative_mouse_pos, 3);
+    }
     if (input.getKeyDown(ASGE::KEYS::KEY_L))
     {
       auto x_pos = static_cast<size_t>(relative_mouse_pos.x) / 32;
@@ -117,7 +121,7 @@ void LevelEditor::update(InputTracker& input, float dt)
         current_layer,
         x_pos + y_pos * 50,
         "data/images/animations/japanese_city/crow_ground.png",
-        20);
+        10);
     }
 
     auto camera_move = input.getWASD();
@@ -157,17 +161,32 @@ void LevelEditor::placeTiles(ASGE::Point2D _position, int _mouse_button)
     {
       continue;
     }
-    if (_mouse_button == 0) /// Place
+    switch (_mouse_button)
     {
-      tile_map.setTile(current_layer, x_pos + y_pos * 50 + offset_x + offset_y * 50, tile);
-    }
-    else if (_mouse_button == 1) /// Remove
-    {
-      tile_map.deleteTile(current_layer, x_pos + y_pos * 50 + offset_x + offset_y * 50);
-    }
-    else /// Collision
-    {
-      tile_map.setCollision(x_pos + y_pos * 50, 1);
+      case 0: /// Add Tile
+      {
+        tile_map.setTile(current_layer, x_pos + y_pos * 50 + offset_x + offset_y * 50, tile);
+        break;
+      }
+      case 1: /// Remove Tile
+      {
+        tile_map.deleteTile(current_layer, x_pos + y_pos * 50 + offset_x + offset_y * 50);
+        break;
+      }
+      case 2: /// Add Collision
+      {
+        tile_map.setCollision(x_pos + y_pos * 50, 1);
+        break;
+      }
+      case 3: /// Remove Collision
+      {
+        tile_map.setCollision(x_pos + y_pos * 50, 0);
+        break;
+      }
+      default:
+      {
+        break;
+      }
     }
     offset_x++;
     if (offset_x % tiles.selection_width == 0)

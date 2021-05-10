@@ -117,6 +117,7 @@ TileMap::TileMap(ASGE::Renderer* _renderer, const std::string& file_path) :
 }
 void TileMap::loadFromJson(nlohmann::json j)
 {
+  collisions              = std::array<int, 2500>();
   tileset_path            = j["tileset"].get<std::string>();
   auto spawn_points_pairs = j["spawn_points"].get<std::vector<std::pair<float, float>>>();
   for (auto& spawn_point : spawn_points_pairs)

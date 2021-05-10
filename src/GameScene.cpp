@@ -29,7 +29,7 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
       ASGE::Camera(
         static_cast<float>(ASGE::SETTINGS.window_width) / 2,
         static_cast<float>(ASGE::SETTINGS.window_height) / 2),
-      PlayerHUD(player.getID())));
+      PlayerHUD(player)));
     camera.first.setZoom(0.5F);
     camera.second.addObject(std::make_unique<Text>(
       renderer, "Player " + std::to_string(player.getID()), ASGE::Point2D(100, 100)));
@@ -61,6 +61,9 @@ void GameScene::update(InputTracker& input, float dt)
     player_pos       = ASGE::Point2D(
       player_pos.x + right_stick.x * camera.second.getFocus() * 64,
       player_pos.y + right_stick.y * camera.second.getFocus() * 64);
+    player_pos = ASGE::Point2D(
+      player_pos.x + camera.second.getCameraShake().x,
+      player_pos.y + camera.second.getCameraShake().y);
     camera.first.lookAt(ASGE::Point2D(
       player_pos.x / camera.first.getZoom() + window_size.x / 4,
       player_pos.y / camera.first.getZoom() + window_size.y / 4));
@@ -180,7 +183,6 @@ void GameScene::checkBullets()
     {
       continue;
     }
-
     for (auto& other_player : players)
     {
       if (other_player.getID() == player.getID())
@@ -188,22 +190,22 @@ void GameScene::checkBullets()
         continue;
       }
       size_t index = 0;
-      for (auto& trace_point : other_player.getWeapon().bullet.trace_points)
+      for (auto& trace_point : player.getWeapon().bullet.trace_points)
       {
         index++;
-        if (player.isInside(trace_point))
+        if (other_player.isInside(trace_point))
         {
-          other_player.getWeapon().bullet.hit_point = index;
-          other_player.getWeapon().bullet.has_hit   = true;
+          player.getWeapon().bullet.hit_point = index;
+          player.getWeapon().bullet.has_hit   = true;
           Logging::DEBUG(
-            "Player " + std::to_string(other_player.getID() + 1) + " hit Player " +
-            std::to_string(player.getID()) + " - " +
-            std::to_string(other_player.getWeapon().bullet.damage) + " damage");
-          player.takeDamage(other_player.getWeapon().bullet.damage);
+            "Player " + std::to_string(player.getID() + 1) + " hit Player " +
+            std::to_string(other_player.getID()) + " - " +
+            std::to_string(player.getWeapon().bullet.damage) + " damage");
+          other_player.takeDamage(player.getWeapon().bullet.damage);
           break;
         }
-        other_player.getWeapon().bullet.hit_point = 250;
-        index                                     = 0;
+        player.getWeapon().bullet.hit_point = 250;
+        index                               = 0;
       }
     }
   }

@@ -17,7 +17,9 @@ class Weapon : public AnimatedSprite
   void fire();
   void reload();
   [[nodiscard]] int getAmmoReserves() const;
+  [[nodiscard]] float getLookDistance() const;
   void render(ASGE::Renderer* renderer) override;
+  [[nodiscard]] bool hasFired() const;
 
   LineTrace bullet;
 
@@ -37,12 +39,15 @@ class Weapon : public AnimatedSprite
   float recoil        = 0.2F;
   float recoil_regain = 0.6F;
 
+  float look_distance = 1.F;
+
   /// Current Stats
 
   int ammo_reserve;
   float fire_timer         = 0;
   float reload_timer       = 0;
   float current_inaccuracy = 0;
+  bool has_fired           = false;
 
   /// Animation Data
   size_t fire_frames   = 1;

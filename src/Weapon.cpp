@@ -24,6 +24,10 @@ void Weapon::render(ASGE::Renderer* renderer)
 }
 void Weapon::fire()
 {
+  if (fire_timer > 0 || reload_timer > 0)
+  {
+    return;
+  }
   if (current_ammo > 0)
   {
     ASGE::Point2D muzzle;
@@ -34,7 +38,9 @@ void Weapon::fire()
     sounds[0].play();
     float bullet_dir = random_num(el) * current_inaccuracy + AnimatedSprite::rotation();
     bullet.hitCheck(250, muzzle, bullet_dir);
+    rotation(bullet_dir);
     current_inaccuracy += recoil;
+    has_fired = true;
   }
   else
   {
@@ -44,23 +50,27 @@ void Weapon::fire()
 }
 void Weapon::reload()
 {
-  for (int i = current_ammo; i < max_ammo; i++)
+  if (current_ammo < max_ammo && fire_timer <= 0 && reload_timer <= 0)
   {
-    if (ammo_reserve <= 0)
+    for (int i = current_ammo; i < max_ammo; i++)
     {
-      break;
+      if (ammo_reserve <= 0)
+      {
+        break;
+      }
+      ammo_reserve--;
+      current_ammo++;
+      reload_timer = reload_time;
     }
-    ammo_reserve--;
-    current_ammo++;
-    reload_timer = reload_time;
     sounds[2].play();
   }
 }
 void Weapon::update(InputTracker& input, float dt)
 {
+  has_fired = false;
   /// Rotating
   auto right_stick = input.getControllerStick(player_id, CONTROLLER::STICKS::RIGHT);
-  if (std::hypotf(right_stick.x, right_stick.y) >= CONTROLLER::AXIS_DEADZONE)
+  if (std::hypotf(right_stick.x, right_stick.y) >= CONTROLLER::AXIS_DEADZONE && fire_timer <= 0)
   {
     rotation(atan2f(right_stick.y, right_stick.x));
   }
@@ -72,10 +82,7 @@ void Weapon::update(InputTracker& input, float dt)
       input.getControllerAxis(player_id, CONTROLLER::AXIS::RIGHT_TRIGGER) >
         CONTROLLER::AXIS_DEADZONE)
     {
-      if (fire_timer <= 0 && reload_timer <= 0)
-      {
-        fire();
-      }
+      fire();
     }
   }
   else
@@ -84,20 +91,14 @@ void Weapon::update(InputTracker& input, float dt)
       input.getControllerButtonDown(player_id, CONTROLLER::BUTTONS::RIGHT_SHOULDER) ||
       input.getControllerAxisUp(player_id, CONTROLLER::AXIS::RIGHT_TRIGGER))
     {
-      if (fire_timer <= 0 && reload_timer <= 0)
-      {
-        fire();
-      }
+      fire();
     }
   }
 
   /// Reloading
   if (input.getControllerButtonDown(player_id, CONTROLLER::BUTTONS::X))
   {
-    if (current_ammo < max_ammo && fire_timer <= 0 && reload_timer <= 0)
-    {
-      reload();
-    }
+    reload();
   }
   if (fire_timer > 0)
   {
@@ -128,4 +129,12 @@ void Weapon::update(InputTracker& input, float dt)
 int Weapon::getAmmoReserves() const
 {
   return ammo_reserve;
+}
+float Weapon::getLookDistance() const
+{
+  return look_distance;
+}
+bool Weapon::hasFired() const
+{
+  return has_fired;
 }
