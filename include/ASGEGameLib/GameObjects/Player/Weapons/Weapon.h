@@ -22,7 +22,7 @@ class Weapon : public AnimatedSprite
   [[nodiscard]] float getLookDistance() const;
   void render(ASGE::Renderer* renderer) override;
   [[nodiscard]] bool hasFired() const;
-  void setWeapon(ASGE::Renderer* renderer, SoLoud::Soloud* engine, const WeaponData& _weapon);
+  void setWeapon(ASGE::Renderer* renderer, const WeaponData& _weapon);
   [[nodiscard]] WeaponData& getWeaponData();
   [[nodiscard]] int getCurrentAmmo() const;
 

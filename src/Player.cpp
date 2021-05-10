@@ -76,7 +76,10 @@ void Player::takeDamage(float damage)
   health -= damage;
   has_been_hit       = true;
   has_been_hit_timer = 0;
-  player_damaged.play();
+  if(!is_dead)
+  {
+    player_damaged.play();
+  }
   Logging::DEBUG("HIT");
   if (health <= 0)
   {

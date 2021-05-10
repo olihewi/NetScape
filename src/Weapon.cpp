@@ -137,13 +137,13 @@ bool Weapon::hasFired() const
 {
   return has_fired;
 }
-void Weapon::setWeapon(ASGE::Renderer* renderer, SoLoud::Soloud* engine, const WeaponData& _weapon)
+void Weapon::setWeapon(ASGE::Renderer* renderer, const WeaponData& _weapon)
 {
   weapon_data = _weapon;
   AnimatedSprite::loadSprite(renderer, weapon_data.sprite_held);
-  sounds[0]          = Sound(engine, weapon_data.sfx_fire);
-  sounds[1]          = Sound(engine, weapon_data.sfx_empty);
-  sounds[2]          = Sound(engine, weapon_data.sfx_reload);
+  sounds[0].setSound(weapon_data.sfx_fire);
+  sounds[1].setSound(weapon_data.sfx_empty);
+  sounds[2].setSound(weapon_data.sfx_reload);
   current_ammo       = weapon_data.max_ammo;
   ammo_reserve       = weapon_data.ammo_reserve;
   current_inaccuracy = weapon_data.inaccuracy;
