@@ -39,10 +39,10 @@ class Text : public GameObject
   void render(ASGE::Renderer* renderer) override;
 
   float getWidth();
+
  private:
   ASGE::Text text;
   bool visible = true;
-
 };
 
 #endif // ASGEMOVIEGAME_TEXT_H

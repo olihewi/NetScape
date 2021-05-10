@@ -46,9 +46,7 @@ class Player : public AnimatedSprite
   Weapon weapon;
   Sound player_walk;
 
-  float playerR = 1,
-        playerG = 1,
-        playerB = 1;
+  float playerR = 1, playerG = 1, playerB = 1;
 
   float colour_gain = 1.5F;
 };

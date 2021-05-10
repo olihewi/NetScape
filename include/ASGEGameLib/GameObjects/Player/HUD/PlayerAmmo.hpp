@@ -12,8 +12,7 @@
 class PlayerAmmo : public GameObject
 {
  public:
-  PlayerAmmo(
-    ASGE::Renderer* renderer, Weapon& _weapon, Player& _player, float x, float y);
+  PlayerAmmo(ASGE::Renderer* renderer, Weapon& _weapon, Player& _player, float x, float y);
 
   void update(InputTracker& input, float dt) override;
 

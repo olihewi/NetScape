@@ -10,8 +10,7 @@ Weapon::Weapon(ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _p
   sounds(std::array<Sound, 3>{ Sound(audio_engine, "data/audio/guns/pistol/fire.wav"),
                                Sound(audio_engine, "data/audio/guns/pistol/empty.wav"),
                                Sound(audio_engine, "data/audio/guns/pistol/reload.wav") }),
-  player_id(_player_id),
-  ammo_reserve(40)
+  player_id(_player_id), ammo_reserve(40)
 {
   // zOrder(2);
 }
