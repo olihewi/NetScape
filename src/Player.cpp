@@ -12,7 +12,8 @@ Player::Player(
   SoLoud::Soloud* audio_engine) :
   AnimatedSprite(renderer, "data/images/player/legs.png", 15, _position),
   controller_id(control_id), weapon(renderer, audio_engine, controller_id),
-  player_walk(audio_engine, "data/audio/player_walk.wav")
+  player_walk(audio_engine, "data/audio/player_walk.wav"),
+  lives(3)
 {
   // zOrder(1);
   weapon.position(_position);
@@ -81,15 +82,12 @@ void Player::takeDamage(float damage)
     Logging::DEBUG("DEAD");
   }
 }
-Weapon& Player::getWeapon()
-{
-  return weapon;
-}
 
 size_t Player::getID() const
 {
   return controller_id;
 }
+
 void Player::update(InputTracker& input, float dt)
 {
   // Logging::DEBUG("HAS BEEN HIT: " +std::to_string(static_cast<int>(has_been_hit)));
@@ -111,4 +109,47 @@ void Player::update(InputTracker& input, float dt)
   }
 
   AnimatedSprite::update(input, dt);
+}
+
+/// GETTERS AND SETTERS LIST
+
+Weapon& Player::getWeapon()
+{
+  return weapon;
+}
+
+float Player::getMaxHealth() const
+{
+  return max_health;
+}
+
+float Player::getHealth() const
+{
+  return health;
+}
+void Player::setHealth(float _health)
+{
+  health = _health;
+}
+
+int Player::getMaxLives() const
+{
+  return max_lives;
+}
+int Player::getLives() const
+{
+  return lives;
+}
+void Player::setLives(int _lives)
+{
+  lives = _lives;
+}
+
+ASGE::Point2D Player::getSpawnPoint()
+{
+  return spawn_point;
+}
+void Player::setSpawnPoint(ASGE::Point2D _spawn_point)
+{
+  spawn_point = _spawn_point;
 }

@@ -28,12 +28,23 @@ class Player : public AnimatedSprite
 
   void takeDamage(float damage);
 
-  Weapon& getWeapon();
-
   [[nodiscard]] size_t getID() const;
 
-  float max_health = 100.0F;
-  float health     = max_health;
+  Weapon& getWeapon();
+  [[nodiscard]] float getMaxHealth() const;
+  //void setMaxHealth(float _maxhealth);
+
+  [[nodiscard]] float getHealth() const;
+  void setHealth(float _health);
+
+
+  [[nodiscard]] int getMaxLives() const;
+  [[nodiscard]] int getLives() const;
+  void setLives(int _lives);
+
+  [[nodiscard]] ASGE::Point2D getSpawnPoint();
+  void setSpawnPoint(ASGE::Point2D _spawn_point);
+
 
   float move_speed = 100.0F;
   bool is_dead     = false;
@@ -42,13 +53,20 @@ class Player : public AnimatedSprite
   float has_been_hit_timer = 0;
 
  private:
+
+  float max_health = 100.0F;
+  float health     = max_health;
   size_t controller_id;
   Weapon weapon;
   Sound player_walk;
-
+  int max_lives = 10;
+  int lives;
   float playerR = 1, playerG = 1, playerB = 1;
 
   float colour_gain = 1.5F;
+
+  ASGE::Point2D spawn_point;
+
 };
 
 #endif // ASGEMOVIEGAME_PLAYER_HPP

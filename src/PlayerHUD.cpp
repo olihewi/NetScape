@@ -3,6 +3,7 @@
 //
 
 #include "GameObjects/Player/HUD/PlayerHUD.h"
+
 void PlayerHUD::update(InputTracker& input, float dt)
 {
   for (auto& object : objects)

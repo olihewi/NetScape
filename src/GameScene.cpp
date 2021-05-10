@@ -7,6 +7,7 @@
 #include <ASGEGameLib/GameObjects/Player/HUD/Crosshair.h>
 #include <ASGEGameLib/GameObjects/Player/HUD/PlayerAmmo.hpp>
 #include <ASGEGameLib/GameObjects/Player/HUD/PlayerHealth.hpp>
+#include <GameObjects/Player/HUD/PlayerLives.hpp>
 #include <array>
 #include <utility>
 
@@ -24,6 +25,7 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
   for (auto& player : players)
   {
     player.position(tile_map.getSpawn(player.getID()));
+    player.setSpawnPoint(tile_map.getSpawn(player.getID()));
     addObject(std::make_unique<PlayerHealth>(renderer, player));
     auto& camera = player_cameras.emplace_back(std::make_pair(
       ASGE::Camera(
@@ -35,7 +37,10 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
       renderer, "Player " + std::to_string(player.getID()), ASGE::Point2D(100, 100)));
     camera.second.addObject((std::make_unique<PlayerAmmo>(
       renderer, player.getWeapon(), player, window.x / 2 - 128, window.y / 2 - 64)));
+    camera.second.addObject((std::make_unique<PlayerLives>(
+      renderer, player, window.x/2 - 128, window.y/2 - 96)));
     camera.second.addObject(std::make_unique<Crosshair>(renderer, player.getID()));
+
   }
   window_divider.dimensions(window);
 }

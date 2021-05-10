@@ -204,10 +204,12 @@ int TileMap::getCollisionPos(ASGE::Point2D position)
   auto index = x + y * 50;
   return getCollision(index);
 }
+
 ASGE::Point2D TileMap::getSpawn(size_t index)
 {
   return spawn_points[index % spawn_points.size()];
 }
+
 void TileMap::renderSection(ASGE::Point2D top_left, ASGE::Point2D bottom_right)
 {
   int min_x       = static_cast<int>(top_left.x) / 32;
