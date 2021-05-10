@@ -20,18 +20,20 @@ class GameScene : public Scene
 
   void render(ASGE::Renderer* renderer) override;
   void update(InputTracker& input, float dt) override;
-  void playerMovement(InputTracker& input, float dt);
-  void checkBullets();
-  [[nodiscard]] bool playerCollidesWithTile(ASGE::Point2D player, ASGE::Point2D tile);
 
  private:
+  void playerMovement(InputTracker& input, float dt);
+  void checkBullets();
+  ASGE::Point2D playerVsTiles(InputTracker& input, float dt, Player& player);
+  [[nodiscard]] bool playerCollidesWithTile(ASGE::Point2D player, ASGE::Point2D tile);
+  void updateDrops(InputTracker& input);
+  ASGE::Renderer* m_renderer;
   TileMap tile_map;
   std::array<Player, 4> players;
   Sprite window_divider;
   std::vector<std::pair<ASGE::Camera, PlayerHUD>> player_cameras;
 
   // std::array<ASGE::Camera, 4> player_cameras;
-  ASGE::Point2D playerVsTiles(InputTracker& input, float dt, Player& player);
 };
 
 #endif // ASGEMOVIEGAME_GAMESCENE_H

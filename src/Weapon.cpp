@@ -141,6 +141,7 @@ void Weapon::setWeapon(ASGE::Renderer* renderer, const WeaponData& _weapon)
 {
   weapon_data = _weapon;
   AnimatedSprite::loadSprite(renderer, weapon_data.sprite_held);
+  AnimatedSprite::dimensions(ASGE::Point2D(32, 32));
   sounds[0].setSound(weapon_data.sfx_fire);
   sounds[1].setSound(weapon_data.sfx_empty);
   sounds[2].setSound(weapon_data.sfx_reload);

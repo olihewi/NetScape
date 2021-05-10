@@ -12,7 +12,8 @@
 #include <utility>
 
 GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
-  Scene(std::move(_scene_callback)), tile_map(renderer, "levels/dotonbori.json"),
+  Scene(std::move(_scene_callback)), m_renderer(renderer),
+  tile_map(renderer, "levels/dotonbori.json"),
   players(std::array<Player, 4>{ Player(renderer, ASGE::Point2D(), 0, audio_engine.get()),
                                  Player(renderer, ASGE::Point2D(), 1, audio_engine.get()),
                                  Player(renderer, ASGE::Point2D(), 2, audio_engine.get()),
@@ -43,15 +44,12 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
 
 void GameScene::update(InputTracker& input, float dt)
 {
-  auto window_size = ASGE::Point2D(
-    static_cast<float>(ASGE::SETTINGS.window_width),
-    static_cast<float>(ASGE::SETTINGS.window_height));
-
   Scene::update(input, dt);
   tile_map.update(input, dt);
 
   playerMovement(input, dt);
   checkBullets();
+  updateDrops(input);
 
   size_t index = 0;
   for (auto& camera : player_cameras)
@@ -66,8 +64,8 @@ void GameScene::update(InputTracker& input, float dt)
       player_pos.x + camera.second.getCameraShake().x,
       player_pos.y + camera.second.getCameraShake().y);
     camera.first.lookAt(ASGE::Point2D(
-      player_pos.x / camera.first.getZoom() + 1920 / 4,
-      player_pos.y / camera.first.getZoom() + 1080 / 4));
+      player_pos.x / camera.first.getZoom() + 1920.F / 4,
+      player_pos.y / camera.first.getZoom() + 1080.F / 4));
     index++;
   }
 
@@ -78,9 +76,6 @@ void GameScene::update(InputTracker& input, float dt)
 }
 void GameScene::render(ASGE::Renderer* renderer)
 {
-  auto window_size = ASGE::Point2D(
-    static_cast<float>(ASGE::SETTINGS.window_width),
-    static_cast<float>(ASGE::SETTINGS.window_height));
   auto renderer_viewport = renderer->getViewport();
   int index              = 0;
   for (auto& camera : player_cameras)
@@ -192,18 +187,18 @@ void GameScene::checkBullets()
       size_t index = 0;
       for (auto& trace_point : player.getWeapon().bullet.trace_points)
       {
-        if (!other_player.getWeapon().bullet.has_hit)
+        if (!player.getWeapon().bullet.has_hit)
         {
           index++;
-          if (player.isInside(trace_point))
+          if (other_player.isInside(trace_point))
           {
-            other_player.getWeapon().bullet.hit_point = index;
-            other_player.getWeapon().bullet.has_hit   = true;
+            player.getWeapon().bullet.hit_point = index;
+            player.getWeapon().bullet.has_hit   = true;
             Logging::DEBUG(
-              "Player " + std::to_string(other_player.getID() + 1) + " hit Player " +
-              std::to_string(player.getID()) + " - " +
-              std::to_string(other_player.getWeapon().bullet.damage) + " damage");
-            player.takeDamage(other_player.getWeapon().bullet.damage);
+              "Player " + std::to_string(player.getID() + 1) + " hit Player " +
+              std::to_string(other_player.getID()) + " - " +
+              std::to_string(player.getWeapon().bullet.damage) + " damage");
+            other_player.takeDamage(player.getWeapon().bullet.damage);
             break;
           }
 
@@ -244,4 +239,27 @@ bool GameScene::playerCollidesWithTile(ASGE::Point2D player, ASGE::Point2D tile)
   float mag          = std::hypot(dist.x, dist.y);
   /// If the distance is less than the radius, collision!
   return mag <= p_radius;
+}
+void GameScene::updateDrops(InputTracker& input)
+{
+  for (auto& drop : tile_map.getDrops())
+  {
+    if (!drop.visibility())
+    {
+      continue;
+    }
+    drop.playerInRange(false);
+    for (auto& player : players)
+    {
+      if (std::hypot(player.centre().x - drop.centre().x, player.centre().y - drop.centre().y) < 48)
+      {
+        drop.playerInRange(true);
+        if (input.getControllerButtonDown(player.getID(), CONTROLLER::BUTTONS::Y))
+        {
+          player.getWeapon().setWeapon(m_renderer, drop.getWeapon());
+          drop.visibility(false);
+        }
+      }
+    }
+  }
 }

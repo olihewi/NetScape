@@ -3,6 +3,7 @@
 //
 #include <ASGEGameLib/GameObjects/Player/Weapons/WeaponData.h>
 WeaponData::WeaponData(nlohmann::json j) :
+  weapon_name(j["weapon_name"].get<std::string>()),
   sprite_held(j["sprite_held"].get<std::string>()),
   sprite_floor(j["sprite_floor"].get<std::string>()), sfx_fire(j["sfx_fire"].get<std::string>()),
   sfx_reload(j["sfx_reload"].get<std::string>()), sfx_empty(j["sfx_empty"].get<std::string>()),
@@ -17,6 +18,7 @@ WeaponData::WeaponData(nlohmann::json j) :
 nlohmann::json WeaponData::toJson()
 {
   nlohmann::json j;
+  j["weapon_name"]   = weapon_name;
   j["sprite_held"]   = sprite_held;
   j["sprite_floor"]  = sprite_floor;
   j["sfx_fire"]      = sfx_fire;

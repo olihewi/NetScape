@@ -33,6 +33,7 @@ class TileMap : public GameObject
   [[nodiscard]] int getCollisionPos(ASGE::Point2D position);
 
   [[nodiscard]] ASGE::Point2D getSpawn(size_t index);
+  [[nodiscard]] std::vector<WeaponDrop>& getDrops();
 
  private:
   std::vector<std::array<Tile, 2500>> tiles;

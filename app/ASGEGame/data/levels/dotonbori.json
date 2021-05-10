@@ -351,7 +351,8 @@
         "sfx_fire": "data/audio/guns/pistol/fire.wav",
         "sfx_reload": "data/audio/guns/pistol/reload.wav",
         "sprite_floor": "data/images/weapons/pistol.png",
-        "sprite_held": "data/images/player/pistol.png"
+        "sprite_held": "data/images/player/pistol.png",
+        "weapon_name": "Pistol"
       },
       "position": [
         600.0,
