@@ -54,8 +54,7 @@ void PlayerAmmo::render(ASGE::Renderer* renderer)
     {
       bullet[i].Sprite::render(renderer);
     }
+    AmmoReserveDisplayX.render(renderer);
+    AmmoReserveDisplay.render(renderer);
   }
-  AmmoReserveDisplayX.render(renderer);
-  AmmoReserveDisplay.render(renderer);
-
 }
