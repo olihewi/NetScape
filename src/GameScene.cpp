@@ -83,15 +83,18 @@ void GameScene::render(ASGE::Renderer* renderer)
   int index              = 0;
   for (auto& camera : player_cameras)
   {
+    auto camera_view = camera.first.getView();
     renderer->setViewport({ (index % 2) * ASGE::SETTINGS.window_width / 2,
                             (1 - index / 2) * ASGE::SETTINGS.window_height / 2,
                             static_cast<uint32_t>(ASGE::SETTINGS.window_width / 2),
                             static_cast<uint32_t>(ASGE::SETTINGS.window_height / 2) });
-    renderer->setProjectionMatrix(camera.first.getView());
+    renderer->setProjectionMatrix(camera_view);
 
     Scene::render(renderer);
 
-    tile_map.render(renderer);
+    tile_map.renderSection(
+      ASGE::Point2D(camera_view.min_x, camera_view.min_y),
+      ASGE::Point2D(camera_view.max_x, camera_view.max_y));
     for (auto& player : players)
     {
       player.render(renderer);

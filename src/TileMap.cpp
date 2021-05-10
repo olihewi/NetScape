@@ -177,3 +177,27 @@ ASGE::Point2D TileMap::getSpawn(size_t index)
 {
   return spawn_points[index % spawn_points.size()];
 }
+void TileMap::renderSection(ASGE::Point2D top_left, ASGE::Point2D bottom_right)
+{
+  int min_x       = static_cast<int>(top_left.x) / 32;
+  int min_y       = static_cast<int>(top_left.y) / 32;
+  int max_x       = static_cast<int>(bottom_right.x) / 32 + 1;
+  int max_y       = static_cast<int>(bottom_right.y) / 32 + 1;
+  size_t max_tile = tiles[0].size();
+  for (int x = min_x; x < max_x; x++)
+  {
+    for (int y = min_y; y < max_y; y++)
+    {
+      int tile_int = x + y * 50;
+      auto tile    = static_cast<size_t>(tile_int);
+      if (tile >= max_tile)
+      {
+        continue;
+      }
+      for (auto& layer : tiles)
+      {
+        layer[tile].render(renderer);
+      }
+    }
+  }
+}

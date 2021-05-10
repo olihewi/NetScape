@@ -21,6 +21,7 @@ class TileMap : public GameObject
 
   void update(InputTracker& input, float dt) override;
   void render(ASGE::Renderer* _renderer) override;
+  void renderSection(ASGE::Point2D top_left, ASGE::Point2D bottom_right);
   void setTile(size_t layer, size_t index, std::array<float, 4> rect);
   void setCollision(size_t index, int _collision);
   void deleteTile(size_t layer, size_t index);

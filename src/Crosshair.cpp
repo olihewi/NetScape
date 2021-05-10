@@ -3,6 +3,7 @@
 //
 
 #include "../include/ASGEGameLib/GameObjects/Player/HUD/Crosshair.h"
+#include <cmath>
 Crosshair::Crosshair(ASGE::Renderer* renderer, size_t _player_id) :
   Sprite(renderer, "data/images/player/crosshair.png"), player_id(_player_id)
 {
