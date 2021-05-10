@@ -4,13 +4,14 @@
 
 #include "ASGEGameLib/GameObjects/Player/Weapons/Weapon.h"
 #include <cmath>
-Weapon::Weapon(ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _player_id) :
-  AnimatedSprite(renderer, "data/images/player/pistol.png", 0), bullet(renderer),
-  current_ammo(max_ammo),
-  sounds(std::array<Sound, 3>{ Sound(audio_engine, "data/audio/guns/pistol/fire.wav"),
-                               Sound(audio_engine, "data/audio/guns/pistol/empty.wav"),
-                               Sound(audio_engine, "data/audio/guns/pistol/reload.wav") }),
-  player_id(_player_id), ammo_reserve(40)
+Weapon::Weapon(
+  ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _player_id, WeaponData _weapon) :
+  AnimatedSprite(renderer, _weapon.sprite_held, 0),
+  bullet(renderer), sounds(std::array<Sound, 3>{ Sound(audio_engine, _weapon.sfx_fire),
+                                                 Sound(audio_engine, _weapon.sfx_empty),
+                                                 Sound(audio_engine, _weapon.sfx_reload) }),
+  player_id(_player_id), weapon_data(_weapon), current_ammo(_weapon.max_ammo),
+  ammo_reserve(_weapon.ammo_reserve)
 {
   // zOrder(2);
   el         = std::default_random_engine(r());
@@ -34,34 +35,27 @@ void Weapon::fire()
     muzzle.x = AnimatedSprite::position().x - 10;
     muzzle.y = AnimatedSprite::position().y + 10;
     current_ammo--;
-    fire_timer = fire_rate;
+    fire_timer = weapon_data.fire_rate;
     sounds[0].play();
     float bullet_dir = random_num(el) * current_inaccuracy + AnimatedSprite::rotation();
     bullet.hitCheck(250, muzzle, bullet_dir);
     rotation(bullet_dir);
-    current_inaccuracy += recoil;
+    current_inaccuracy += weapon_data.recoil;
     has_fired = true;
   }
   else
   {
     sounds[1].play();
-    fire_timer = fire_rate;
+    fire_timer = weapon_data.fire_rate;
   }
 }
 void Weapon::reload()
 {
-  if (current_ammo < max_ammo && fire_timer <= 0 && reload_timer <= 0)
+  if (current_ammo < weapon_data.max_ammo && fire_timer <= 0 && reload_timer <= 0)
   {
-    for (int i = current_ammo; i < max_ammo; i++)
-    {
-      if (ammo_reserve <= 0)
-      {
-        break;
-      }
-      ammo_reserve--;
-      current_ammo++;
-      reload_timer = reload_time;
-    }
+    ammo_reserve = max(ammo_reserve - (weapon_data.max_ammo - current_ammo), 0);
+    current_ammo = min(current_ammo + ammo_reserve, weapon_data.max_ammo);
+    reload_timer = weapon_data.reload_time;
     sounds[2].play();
   }
 }
@@ -70,12 +64,14 @@ void Weapon::update(InputTracker& input, float dt)
   has_fired = false;
   /// Rotating
   auto right_stick = input.getControllerStick(player_id, CONTROLLER::STICKS::RIGHT);
-  if (std::hypotf(right_stick.x, right_stick.y) >= CONTROLLER::AXIS_DEADZONE && fire_timer <= 0)
+  if (
+    std::hypotf(right_stick.x, right_stick.y) >= CONTROLLER::AXIS_DEADZONE &&
+    fire_timer <= weapon_data.fire_rate / 2)
   {
     rotation(atan2f(right_stick.y, right_stick.x));
   }
   /// Firing
-  if (is_automatic)
+  if (weapon_data.is_automatic)
   {
     if (
       input.getControllerButton(player_id, CONTROLLER::BUTTONS::RIGHT_SHOULDER) ||
@@ -105,23 +101,26 @@ void Weapon::update(InputTracker& input, float dt)
     fire_timer -= dt;
     setFrame(
       1 + static_cast<size_t>(
-            ((fire_rate - fire_timer) / fire_rate * static_cast<float>(fire_frames))));
+            ((weapon_data.fire_rate - fire_timer) / weapon_data.fire_rate *
+             static_cast<float>(weapon_data.fire_frames))));
   }
   else if (reload_timer > 0)
   {
     reload_timer -= dt;
     setFrame(
-      1 + fire_frames +
+      1 + weapon_data.fire_frames +
       static_cast<size_t>(
-        ((reload_time - reload_timer) / reload_time * static_cast<float>(reload_frames))));
+        ((weapon_data.reload_time - reload_timer) / weapon_data.reload_time *
+         static_cast<float>(weapon_data.reload_frames))));
   }
   else
   {
     setFrame(0);
   }
-  if (current_inaccuracy > 0)
+  if (current_inaccuracy > weapon_data.inaccuracy)
   {
-    current_inaccuracy = max(current_inaccuracy - recoil_regain * dt, 0);
+    current_inaccuracy =
+      fmax(current_inaccuracy - weapon_data.recoil_regain * dt, weapon_data.inaccuracy);
   }
   bullet.update(dt);
 }
@@ -132,9 +131,28 @@ int Weapon::getAmmoReserves() const
 }
 float Weapon::getLookDistance() const
 {
-  return look_distance;
+  return weapon_data.look_distance;
 }
 bool Weapon::hasFired() const
 {
   return has_fired;
+}
+void Weapon::setWeapon(ASGE::Renderer* renderer, SoLoud::Soloud* engine, const WeaponData& _weapon)
+{
+  weapon_data = _weapon;
+  AnimatedSprite::loadSprite(renderer, weapon_data.sprite_held);
+  sounds[0]          = Sound(engine, weapon_data.sfx_fire);
+  sounds[1]          = Sound(engine, weapon_data.sfx_empty);
+  sounds[2]          = Sound(engine, weapon_data.sfx_reload);
+  current_ammo       = weapon_data.max_ammo;
+  ammo_reserve       = weapon_data.ammo_reserve;
+  current_inaccuracy = weapon_data.inaccuracy;
+}
+WeaponData& Weapon::getWeaponData()
+{
+  return weapon_data;
+}
+int Weapon::getCurrentAmmo() const
+{
+  return current_ammo;
 }

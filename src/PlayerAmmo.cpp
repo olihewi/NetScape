@@ -24,8 +24,8 @@ PlayerAmmo::PlayerAmmo(
     renderer, std::to_string(player.getWeapon().getAmmoReserves()), ASGE::Point2D(0, 0)),
   AmmoReserveDisplayX(renderer, "x", ASGE::Point2D(0, 0))
 {
-  posX -= bullet[0].dimensions().x * (static_cast<float>(weapon.max_ammo) / 2);
-  for (size_t i = 0; i < static_cast<size_t>(weapon.max_ammo); ++i)
+  posX -= bullet[0].dimensions().x * (static_cast<float>(weapon.getWeaponData().max_ammo) / 2);
+  for (size_t i = 0; i < static_cast<size_t>(weapon.getWeaponData().max_ammo); ++i)
   {
     bullet[i].position(
       ASGE::Point2D((posX + static_cast<float>(i) * bullet[i].dimensions().x), posY));
@@ -48,7 +48,7 @@ void PlayerAmmo::render(ASGE::Renderer* renderer)
 {
   if (player.health > 0)
   {
-    for (size_t i = 0; i < static_cast<size_t>(weapon.current_ammo); ++i)
+    for (size_t i = 0; i < static_cast<size_t>(weapon.getCurrentAmmo()); ++i)
     {
       bullet[i].Sprite::render(renderer);
     }

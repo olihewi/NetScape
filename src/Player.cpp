@@ -11,7 +11,7 @@ Player::Player(
   ASGE::Renderer* renderer, ASGE::Point2D _position, size_t control_id,
   SoLoud::Soloud* audio_engine) :
   AnimatedSprite(renderer, "data/images/player/legs.png", 15, _position),
-  controller_id(control_id), weapon(renderer, audio_engine, controller_id),
+  controller_id(control_id), weapon(renderer, audio_engine, controller_id, WeaponData()),
   player_walk(audio_engine, "data/audio/player_walk.wav")
 {
   // zOrder(1);

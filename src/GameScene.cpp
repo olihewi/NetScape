@@ -25,11 +25,8 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
   {
     player.position(tile_map.getSpawn(player.getID()));
     addObject(std::make_unique<PlayerHealth>(renderer, player));
-    auto& camera = player_cameras.emplace_back(std::make_pair(
-      ASGE::Camera(
-        static_cast<float>(ASGE::SETTINGS.window_width) / 2,
-        static_cast<float>(ASGE::SETTINGS.window_height) / 2),
-      PlayerHUD(player)));
+    auto& camera = player_cameras.emplace_back(
+      std::make_pair(ASGE::Camera(1920.F / 2, 1080.F / 2), PlayerHUD(player)));
     camera.first.setZoom(0.5F);
     camera.second.addObject(std::make_unique<Text>(
       renderer, "Player " + std::to_string(player.getID()), ASGE::Point2D(100, 100)));
@@ -65,8 +62,8 @@ void GameScene::update(InputTracker& input, float dt)
       player_pos.x + camera.second.getCameraShake().x,
       player_pos.y + camera.second.getCameraShake().y);
     camera.first.lookAt(ASGE::Point2D(
-      player_pos.x / camera.first.getZoom() + window_size.x / 4,
-      player_pos.y / camera.first.getZoom() + window_size.y / 4));
+      player_pos.x / camera.first.getZoom() + 1920 / 4,
+      player_pos.y / camera.first.getZoom() + 1080 / 4));
     index++;
   }
 

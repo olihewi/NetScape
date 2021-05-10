@@ -5,6 +5,7 @@
 #ifndef ASGEMOVIEGAME_WEAPON_H
 #define ASGEMOVIEGAME_WEAPON_H
 
+#include "WeaponData.h"
 #include <ASGEGameLib/GameObjects/Sprites/AnimatedSprite.h>
 #include <ASGEGameLib/Utilities/LineTrace.h>
 #include <ASGEGameLib/Utilities/Sound.h>
@@ -12,7 +13,8 @@
 class Weapon : public AnimatedSprite
 {
  public:
-  Weapon(ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _player_id);
+  Weapon(
+    ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _player_id, WeaponData _weapon);
   void update(InputTracker& input, float dt) override;
   void fire();
   void reload();
@@ -20,38 +22,26 @@ class Weapon : public AnimatedSprite
   [[nodiscard]] float getLookDistance() const;
   void render(ASGE::Renderer* renderer) override;
   [[nodiscard]] bool hasFired() const;
+  void setWeapon(ASGE::Renderer* renderer, SoLoud::Soloud* engine, const WeaponData& _weapon);
+  [[nodiscard]] WeaponData& getWeaponData();
+  [[nodiscard]] int getCurrentAmmo() const;
 
   LineTrace bullet;
-
-  int max_ammo = 10;
-  int current_ammo;
 
  private:
   std::array<Sound, 3> sounds;
   size_t player_id;
 
   /// Weapon Stats
-  bool is_automatic = true;
-
-  float fire_rate   = 0.2F;
-  float reload_time = 0.75F;
-
-  float recoil        = 0.2F;
-  float recoil_regain = 0.6F;
-
-  float look_distance = 1.F;
+  WeaponData weapon_data;
 
   /// Current Stats
-
+  int current_ammo;
   int ammo_reserve;
   float fire_timer         = 0;
   float reload_timer       = 0;
   float current_inaccuracy = 0;
   bool has_fired           = false;
-
-  /// Animation Data
-  size_t fire_frames   = 1;
-  size_t reload_frames = 6;
 
   /// Random Number Generator
   std::random_device r;
