@@ -21,7 +21,8 @@ PlayerAmmo::PlayerAmmo(
     Sprite(renderer, "data/images/player/pistol_bullet.png", ASGE::Point2D(0, 0)) }),
   posX(x), posY(y),
   AmmoReserve(_weapon.getAmmoReserves()),
-  AmmoReserveDisplay(renderer, std::to_string(player.getWeapon().getAmmoReserves()) + "x", ASGE::Point2D(0,0))
+  AmmoReserveDisplay(renderer, std::to_string(player.getWeapon().getAmmoReserves()), ASGE::Point2D(0,0)),
+  AmmoReserveDisplayX(renderer, "x", ASGE::Point2D(0,0))
 {
   posX -= bullet[0].dimensions().x * (static_cast<float>(weapon.max_ammo) / 2);
   for (size_t i = 0; i < static_cast<size_t>(weapon.max_ammo); ++i)
@@ -29,15 +30,19 @@ PlayerAmmo::PlayerAmmo(
     bullet[i].position(
       ASGE::Point2D((posX + static_cast<float>(i) * bullet[i].dimensions().x), posY));
   }
-  AmmoReserveDisplay.position(ASGE::Point2D(bullet[0].position().x - 35,
-                                                    bullet[0].position().y + bullet[0].dimensions().y));
+  AmmoReserveDisplayX.position(ASGE::Point2D(bullet[0].position().x - 15,
+                                             bullet[0].position().y + bullet[0].dimensions().y));
+
+
 }
 
 void PlayerAmmo::update(InputTracker& input, float dt)
 {
-  
+  AmmoReserveDisplay.position(ASGE::Point2D(AmmoReserveDisplayX.position().x - AmmoReserveDisplay.getWidth() -5,
+                                            bullet[0].position().y + bullet[0].dimensions().y));
+
   GameObject::update(input, dt);
-  AmmoReserveDisplay.contents(std::to_string(weapon.getAmmoReserves()) + "x");
+  AmmoReserveDisplay.contents(std::to_string(weapon.getAmmoReserves()));
 
 }
 
@@ -50,7 +55,7 @@ void PlayerAmmo::render(ASGE::Renderer* renderer)
       bullet[i].Sprite::render(renderer);
     }
   }
-
+  AmmoReserveDisplayX.render(renderer);
   AmmoReserveDisplay.render(renderer);
 
 }

@@ -80,3 +80,7 @@ void Text::centrePos(ASGE::Point2D _position)
 {
   text.setPosition(ASGE::Point2D(_position.x - text.getWidth() / 2, _position.y));
 }
+float Text::getWidth()
+{
+  return text.getWidth();
+}

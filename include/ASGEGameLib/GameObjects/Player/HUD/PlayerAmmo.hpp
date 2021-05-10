@@ -27,6 +27,7 @@ class PlayerAmmo : public GameObject
   float posX, posY;
   int AmmoReserve;
   Text AmmoReserveDisplay;
+  Text AmmoReserveDisplayX;
 };
 
 #endif // ASGEMOVIEGAME_PLAYERAMMO_HPP
