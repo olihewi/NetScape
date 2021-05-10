@@ -35,12 +35,15 @@ void Player::input(InputTracker& input, float dt)
   /// Movement
   auto left_stick        = input.getControllerStick(controller_id, CONTROLLER::STICKS::LEFT);
   float left_stick_hypot = std::hypot(left_stick.x, left_stick.y);
+  auto sprint_button     = input.getControllerButton(controller_id, CONTROLLER::BUTTONS::B);
   if (left_stick_hypot > 1)
   {
     left_stick = ASGE::Point2D(left_stick.x / left_stick_hypot, left_stick.y / left_stick_hypot);
     left_stick_hypot = 1;
   }
-  translate(ASGE::Point2D(left_stick.x * move_speed * dt, left_stick.y * move_speed * dt));
+  translate(
+    ASGE::Point2D(left_stick.x * move_speed * dt, left_stick.y * move_speed * dt) *
+    (sprint_button ? 2.F : 1.F));
   if (left_stick_hypot >= CONTROLLER::AXIS_DEADZONE)
   {
     rotation(atan2f(left_stick.y, left_stick.x));
