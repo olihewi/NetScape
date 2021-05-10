@@ -41,3 +41,13 @@ void Sound::setSpeed(float _speed)
 {
   engine->setRelativePlaySpeed(handle, _speed);
 }
+void Sound::setSound(std::string& file_path)
+{
+  ASGE::FILEIO::File file;
+  if (file.open(file_path))
+  {
+    auto io_buffer = file.read();
+    clip.loadMem(
+      io_buffer.as_unsigned_char(), static_cast<unsigned int>(io_buffer.length), false, false);
+  }
+}
