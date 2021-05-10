@@ -150,6 +150,22 @@ void GameScene::playerMovement(InputTracker& input, float dt)
           player.centre().x - player.dimensions().x / 2, last_pos.y - player.dimensions().y / 2));
       }
     }
+    for (auto& other_player : players)
+    {
+      if (other_player.getID() == player.getID())
+      {
+        continue;
+      }
+      auto dist_1 = ASGE::Point2D(
+        player.centre().x - other_player.centre().x, player.centre().y - other_player.centre().y);
+      if (std::hypot(dist_1.x, dist_1.y) < 24)
+      {
+        auto push_dist =
+          ASGE::Point2D((last_pos.x - player.centre().x) / 2, (last_pos.y - player.centre().y) / 2);
+        player.translate(push_dist);
+        other_player.translate(ASGE::Point2D(-push_dist.x, -push_dist.y));
+      }
+    }
   }
 }
 void GameScene::checkBullets()
