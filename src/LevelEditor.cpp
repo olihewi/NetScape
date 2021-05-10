@@ -75,6 +75,7 @@ void LevelEditor::update(InputTracker& input, float dt)
 {
   Scene::update(input, dt);
   tile_set.update(input, dt);
+  tile_map.update(input, dt);
   cursor.update(input, dt);
   if (input.getKeyDown(ASGE::KEYS::KEY_1))
   {
@@ -107,6 +108,16 @@ void LevelEditor::update(InputTracker& input, float dt)
     if (input.getMouseButton(MOUSE::MIDDLE_CLICK))
     {
       placeTiles(relative_mouse_pos, 2);
+    }
+    if (input.getKeyDown(ASGE::KEYS::KEY_L))
+    {
+      auto x_pos = static_cast<size_t>(relative_mouse_pos.x) / 32;
+      auto y_pos = static_cast<size_t>(relative_mouse_pos.y) / 32;
+      tile_map.setAnimatedTile(
+        current_layer,
+        x_pos + y_pos * 50,
+        "data/images/animations/japanese_city/crow_ground.png",
+        20);
     }
 
     auto camera_move = input.getWASD();

@@ -27,6 +27,10 @@ void TileMap::update(InputTracker& input, float dt)
       tile.update(input, dt);
     }
   }
+  for (auto& animation : animations)
+  {
+    animation.update(input, dt);
+  }
 }
 void TileMap::render(ASGE::Renderer* _renderer)
 {
@@ -36,6 +40,10 @@ void TileMap::render(ASGE::Renderer* _renderer)
     {
       tile.render(_renderer);
     }
+  }
+  for (auto& animation : animations)
+  {
+    animation.render(renderer);
   }
 }
 void TileMap::setTile(size_t layer, size_t index, std::array<float, 4> rect)
@@ -64,7 +72,8 @@ nlohmann::json TileMap::saveTileMap()
     std::string this_string;
     for (auto& tile : layer)
     {
-      this_string += std::to_string(tile.getIndex()) + ',';
+      auto tile_index = tile.getIndex();
+      this_string += std::to_string(tile_index) + ',';
     }
     layer_strings.emplace_back(this_string);
   }
@@ -81,6 +90,17 @@ nlohmann::json TileMap::saveTileMap()
     spawn_pairs.emplace_back(std::make_pair(spawn_point.x, spawn_point.y));
   }
   j["spawn_points"] = spawn_pairs;
+  std::vector<nlohmann::json> j_animations;
+  for (auto& animation : animations)
+  {
+    nlohmann::json this_json;
+    this_json["path"]     = animation.getFilePath();
+    this_json["position"] = std::make_pair(animation.position().x, animation.position().y);
+    this_json["layer"]    = animation.zOrder();
+    this_json["speed"]    = animation.getPlaybackSpeed();
+    j_animations.emplace_back(this_json);
+  }
+  j["animations"] = j_animations;
   return j;
 }
 TileMap::TileMap(ASGE::Renderer* _renderer, const std::string& file_path) :
@@ -157,6 +177,16 @@ void TileMap::loadFromJson(nlohmann::json j)
       index++;
     }
   }
+  for (auto& animation : j["animations"])
+  {
+    auto layer         = animation["layer"].get<int>();
+    auto path          = animation["path"].get<std::string>();
+    auto position_pair = animation["position"].get<std::pair<float, float>>();
+    auto position      = ASGE::Point2D(position_pair.first, position_pair.second);
+    auto speed         = animation["speed"].get<float>();
+    auto& this_anim    = animations.emplace_back(AnimatedSprite(renderer, path, speed, position));
+    this_anim.zOrder(static_cast<short>(layer));
+  }
 }
 void TileMap::setCollision(size_t index, int _collision)
 {
@@ -200,4 +230,24 @@ void TileMap::renderSection(ASGE::Point2D top_left, ASGE::Point2D bottom_right)
       }
     }
   }
+  for (auto& animation : animations)
+  {
+    if (
+      animation.position().x < bottom_right.x && animation.position().y < bottom_right.y &&
+      animation.position().x + animation.dimensions().x > top_left.x &&
+      animation.position().y + animation.dimensions().y > top_left.y)
+    {
+      animation.render(renderer);
+    }
+  }
+}
+void TileMap::setAnimatedTile(size_t layer, size_t index, const std::string& file_path, float speed)
+{
+  size_t row      = index / 50;
+  auto& this_anim = animations.emplace_back(AnimatedSprite(
+    renderer,
+    file_path,
+    speed,
+    ASGE::Point2D(static_cast<float>(index % 50) * 32, static_cast<float>(row) * 32)));
+  this_anim.zOrder(static_cast<short>(layer));
 }

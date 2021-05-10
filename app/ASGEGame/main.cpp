@@ -1,6 +1,6 @@
 #include "ASGEGame.hpp"
 #include <Engine/Logger.hpp>
-#if defined(_WIN32)
+#ifdef _WIN32
 #  include <wtypes.h>
 #endif
 
@@ -9,7 +9,7 @@ int main(int /*argc*/, char* /*argv*/[])
   ASGE::GameSettings game_settings;
   game_settings.window_title = "NetScape";
 
-#if defined(_WIN32)
+#ifdef _WIN32
   RECT desktop;
   HWND h_desktop = GetDesktopWindow();
   GetWindowRect(h_desktop, &desktop);

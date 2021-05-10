@@ -14,7 +14,11 @@ void Crosshair::update(InputTracker& input, float /*dt*/)
 {
   auto right_stick = input.getControllerStick(player_id, CONTROLLER::STICKS::RIGHT);
   auto mag         = std::hypot(right_stick.x, right_stick.y);
-  auto screen      = ASGE::Point2D(
+  if (mag > 1)
+  {
+    right_stick = ASGE::Point2D(right_stick.x / mag, right_stick.y / mag);
+  }
+  auto screen = ASGE::Point2D(
     static_cast<float>(ASGE::SETTINGS.window_width) / 4,
     static_cast<float>(ASGE::SETTINGS.window_height) / 4);
   opacity(mag);

@@ -47,11 +47,10 @@ void GameScene::update(InputTracker& input, float dt)
     static_cast<float>(ASGE::SETTINGS.window_height));
 
   Scene::update(input, dt);
+  tile_map.update(input, dt);
 
   playerMovement(input, dt);
   checkBullets();
-
-  Scene::update(input, dt);
 
   size_t index = 0;
   for (auto& camera : player_cameras)

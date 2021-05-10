@@ -5,6 +5,7 @@
 #ifndef ASGEMOVIEGAME_TILEMAP_H
 #define ASGEMOVIEGAME_TILEMAP_H
 
+#include <ASGEGameLib/GameObjects/Sprites/AnimatedSprite.h>
 #include <ASGEGameLib/GameObjects/Tilemap/Tile.h>
 #include <nlohmann/json.hpp>
 #include <vector>
@@ -23,6 +24,7 @@ class TileMap : public GameObject
   void render(ASGE::Renderer* _renderer) override;
   void renderSection(ASGE::Point2D top_left, ASGE::Point2D bottom_right);
   void setTile(size_t layer, size_t index, std::array<float, 4> rect);
+  void setAnimatedTile(size_t layer, size_t index, const std::string& file_path, float speed);
   void setCollision(size_t index, int _collision);
   void deleteTile(size_t layer, size_t index);
 
@@ -37,6 +39,7 @@ class TileMap : public GameObject
   ASGE::Renderer* renderer;
   std::string tileset_path;
   std::vector<ASGE::Point2D> spawn_points;
+  std::vector<AnimatedSprite> animations;
 };
 
 #endif // ASGEMOVIEGAME_TILEMAP_H

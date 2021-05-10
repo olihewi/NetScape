@@ -5,10 +5,10 @@
 #include "GameObjects/Sprites/AnimatedSprite.h"
 #include <cmath>
 AnimatedSprite::AnimatedSprite(
-  ASGE::Renderer* renderer, const std::string& file_path, float playback_speed,
+  ASGE::Renderer* renderer, const std::string& _file_path, float playback_speed,
   ASGE::Point2D position) :
-  Sprite(renderer, file_path, position),
-  speed(playback_speed)
+  Sprite(renderer, _file_path, position),
+  file_path(_file_path), speed(playback_speed)
 {
   auto dims   = Sprite::dimensions();
   frames      = static_cast<size_t>(dims.x) / static_cast<size_t>(dims.y);
@@ -31,4 +31,12 @@ void AnimatedSprite::setFrame(size_t frame)
 void AnimatedSprite::setPlaybackSpeed(float _playback_speed)
 {
   speed = _playback_speed;
+}
+const std::string& AnimatedSprite::getFilePath()
+{
+  return file_path;
+}
+float AnimatedSprite::getPlaybackSpeed()
+{
+  return speed;
 }

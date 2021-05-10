@@ -13,13 +13,16 @@ class AnimatedSprite : public Sprite
 {
  public:
   AnimatedSprite(
-    ASGE::Renderer* renderer, const std::string& file_path, float playback_speed = 1,
+    ASGE::Renderer* renderer, const std::string& _file_path, float playback_speed = 1,
     ASGE::Point2D position = ASGE::Point2D());
   void update(InputTracker& input, float dt) override;
   void setFrame(size_t frame);
   void setPlaybackSpeed(float _playback_speed);
+  [[nodiscard]] const std::string& getFilePath();
+  [[nodiscard]] float getPlaybackSpeed();
 
  private:
+  std::string file_path;
   size_t frames;
   float sprite_size;
   float timer = 0;

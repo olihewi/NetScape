@@ -12,6 +12,9 @@ class Tile : public GameObject
   Tile(
     ASGE::Renderer* renderer, const std::string& tileset_path, std::array<float, 4> rect,
     ASGE::Point2D position, int layer = 0);
+  Tile(
+    ASGE::Renderer* renderer, const std::string& animation_path, float animation_speed,
+    ASGE::Point2D position, int layer = 0);
   void update(InputTracker& input, float dt) override;
   void render(ASGE::Renderer* renderer) override;
 
