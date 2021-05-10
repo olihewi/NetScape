@@ -15,6 +15,7 @@ class Weapon : public AnimatedSprite
   void update(InputTracker& input, float dt) override;
   void fire();
   void reload();
+  int getAmmoReserves();
   void render(ASGE::Renderer* renderer) override;
 
   LineTrace bullet;

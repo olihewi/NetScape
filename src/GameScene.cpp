@@ -36,6 +36,7 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
     camera.second.addObject((std::make_unique<PlayerAmmo>(
       renderer, player.getWeapon(), player, window.x / 2 - 128, window.y / 2 - 64)));
     camera.second.addObject(std::make_unique<Crosshair>(renderer, player.getID()));
+
   }
   window_divider.dimensions(window);
 }

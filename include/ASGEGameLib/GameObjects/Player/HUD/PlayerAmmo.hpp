@@ -12,7 +12,8 @@
 class PlayerAmmo : public GameObject
 {
  public:
-  PlayerAmmo(ASGE::Renderer* renderer, Weapon& _weapon, Player& _player, float x, float y);
+  PlayerAmmo(
+    ASGE::Renderer* renderer, Weapon& _weapon, Player& _player, float x, float y);
 
   void update(InputTracker& input, float dt) override;
 
@@ -24,6 +25,8 @@ class PlayerAmmo : public GameObject
   std::array<Sprite, 10> bullet;
   // Sprite background;
   float posX, posY;
+  int AmmoReserve;
+  Text AmmoReserveDisplay;
 };
 
 #endif // ASGEMOVIEGAME_PLAYERAMMO_HPP

@@ -3,7 +3,6 @@
 //
 
 #include "ASGEGameLib/GameObjects/Player/Weapons/Weapon.h"
-#include <climits>
 #include <cmath>
 Weapon::Weapon(ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _player_id) :
   AnimatedSprite(renderer, "data/images/player/pistol.png", 0), bullet(renderer),
@@ -11,7 +10,8 @@ Weapon::Weapon(ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _p
   sounds(std::array<Sound, 3>{ Sound(audio_engine, "data/audio/guns/pistol/fire.wav"),
                                Sound(audio_engine, "data/audio/guns/pistol/empty.wav"),
                                Sound(audio_engine, "data/audio/guns/pistol/reload.wav") }),
-  player_id(_player_id), ammo_reserve(INT_MAX)
+  player_id(_player_id),
+  ammo_reserve(40)
 {
   // zOrder(2);
 }
@@ -116,4 +116,9 @@ void Weapon::update(InputTracker& input, float dt)
     setFrame(0);
   }
   bullet.update(dt);
+}
+
+int Weapon::getAmmoReserves()
+{
+  return ammo_reserve;
 }

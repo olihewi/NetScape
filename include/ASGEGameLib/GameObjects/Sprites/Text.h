@@ -41,6 +41,7 @@ class Text : public GameObject
  private:
   ASGE::Text text;
   bool visible = true;
+
 };
 
 #endif // ASGEMOVIEGAME_TEXT_H
