@@ -30,7 +30,6 @@ void Player::render(ASGE::Renderer* renderer)
 void Player::input(InputTracker& input, float dt)
 {
   weapon.update(input, dt);
-  AnimatedSprite::update(input, dt);
   /// Movement
   auto left_stick        = input.getControllerStick(controller_id, CONTROLLER::STICKS::LEFT);
   float left_stick_hypot = std::hypot(left_stick.x, left_stick.y);

@@ -4,8 +4,9 @@
 
 #include "ASGEGameLib/Scenes/GameScene.h"
 #include "Engine/Logger.hpp"
+#include <ASGEGameLib/GameObjects/Player/HUD/Crosshair.h>
+#include <ASGEGameLib/GameObjects/Player/HUD/PlayerAmmo.hpp>
 #include <ASGEGameLib/GameObjects/Player/HUD/PlayerHealth.hpp>
-#include <GameObjects/Player/HUD/PlayerAmmo.hpp>
 #include <array>
 #include <utility>
 
@@ -34,22 +35,39 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
       renderer, "Player " + std::to_string(player.getID()), ASGE::Point2D(100, 100)));
     camera.second.addObject((std::make_unique<PlayerAmmo>(
       renderer, player.getWeapon(), player, window.x / 2 - 128, window.y / 2 - 64)));
+    camera.second.addObject(std::make_unique<Crosshair>(renderer, player.getID()));
   }
   window_divider.dimensions(window);
 }
 
 void GameScene::update(InputTracker& input, float dt)
 {
+  auto window_size = ASGE::Point2D(
+    static_cast<float>(ASGE::SETTINGS.window_width),
+    static_cast<float>(ASGE::SETTINGS.window_height));
+
   Scene::update(input, dt);
 
   playerMovement(input, dt);
   checkBullets();
 
+  Scene::update(input, dt);
+
+  size_t index = 0;
   for (auto& camera : player_cameras)
   {
     camera.second.update(input, dt);
+    auto player_pos   = players[index].centre();
+    auto right_stick  = input.getControllerStick(index, CONTROLLER::STICKS::RIGHT);
+    auto left_trigger = input.getControllerAxis(index, CONTROLLER::AXIS::LEFT_TRIGGER);
+    player_pos        = ASGE::Point2D(
+      player_pos.x + right_stick.x * left_trigger * 64,
+      player_pos.y + right_stick.y * left_trigger * 64);
+    camera.first.lookAt(ASGE::Point2D(
+      player_pos.x / camera.first.getZoom() + window_size.x / 4,
+      player_pos.y / camera.first.getZoom() + window_size.y / 4));
+    index++;
   }
-  Scene::update(input, dt);
 
   if (input.getKeyDown(ASGE::KEYS::KEY_ESCAPE))
   {
@@ -65,10 +83,6 @@ void GameScene::render(ASGE::Renderer* renderer)
   int index              = 0;
   for (auto& camera : player_cameras)
   {
-    auto player_pos = players[static_cast<size_t>(index)].centre();
-    camera.first.lookAt(ASGE::Point2D(
-      player_pos.x / camera.first.getZoom() + window_size.x / 4,
-      player_pos.y / camera.first.getZoom() + window_size.y / 4));
     renderer->setViewport({ (index % 2) * ASGE::SETTINGS.window_width / 2,
                             (1 - index / 2) * ASGE::SETTINGS.window_height / 2,
                             static_cast<uint32_t>(ASGE::SETTINGS.window_width / 2),

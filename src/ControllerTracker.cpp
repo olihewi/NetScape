@@ -47,6 +47,11 @@ void ControllerTracker::updateInput()
     for (size_t i = 0; i < static_cast<size_t>(this_input.no_of_axis); i++)
     {
       controller.new_data.axis[i] = this_input.axis[i];
+      if (i >= CONTROLLER::AXIS::LEFT_TRIGGER)
+      {
+        controller.new_data.axis[i] /= 2;
+        controller.new_data.axis[i] += 0.5F;
+      }
     }
   }
 }
