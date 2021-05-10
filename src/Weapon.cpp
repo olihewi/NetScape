@@ -13,6 +13,8 @@ Weapon::Weapon(ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _p
   player_id(_player_id), ammo_reserve(40)
 {
   // zOrder(2);
+  el         = std::default_random_engine(r());
+  random_num = std::uniform_real_distribution<float>(-1.F, 1.F);
 }
 
 void Weapon::render(ASGE::Renderer* renderer)
@@ -30,7 +32,9 @@ void Weapon::fire()
     current_ammo--;
     fire_timer = fire_rate;
     sounds[0].play();
-    bullet.hitCheck(250, muzzle, AnimatedSprite::rotation());
+    float bullet_dir = random_num(el) * current_inaccuracy + AnimatedSprite::rotation();
+    bullet.hitCheck(250, muzzle, bullet_dir);
+    current_inaccuracy += recoil;
   }
   else
   {
@@ -114,10 +118,14 @@ void Weapon::update(InputTracker& input, float dt)
   {
     setFrame(0);
   }
+  if (current_inaccuracy > 0)
+  {
+    current_inaccuracy = max(current_inaccuracy - recoil_regain * dt, 0);
+  }
   bullet.update(dt);
 }
 
-int Weapon::getAmmoReserves()
+int Weapon::getAmmoReserves() const
 {
   return ammo_reserve;
 }

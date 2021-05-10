@@ -8,6 +8,7 @@
 #include <ASGEGameLib/GameObjects/Sprites/AnimatedSprite.h>
 #include <ASGEGameLib/Utilities/LineTrace.h>
 #include <ASGEGameLib/Utilities/Sound.h>
+#include <random>
 class Weapon : public AnimatedSprite
 {
  public:
@@ -15,7 +16,7 @@ class Weapon : public AnimatedSprite
   void update(InputTracker& input, float dt) override;
   void fire();
   void reload();
-  int getAmmoReserves();
+  [[nodiscard]] int getAmmoReserves() const;
   void render(ASGE::Renderer* renderer) override;
 
   LineTrace bullet;
@@ -33,15 +34,24 @@ class Weapon : public AnimatedSprite
   float fire_rate   = 0.2F;
   float reload_time = 0.75F;
 
+  float recoil        = 0.2F;
+  float recoil_regain = 0.6F;
+
   /// Current Stats
 
   int ammo_reserve;
-  float fire_timer   = 0;
-  float reload_timer = 0;
+  float fire_timer         = 0;
+  float reload_timer       = 0;
+  float current_inaccuracy = 0;
 
   /// Animation Data
   size_t fire_frames   = 1;
   size_t reload_frames = 6;
+
+  /// Random Number Generator
+  std::random_device r;
+  std::default_random_engine el;
+  std::uniform_real_distribution<float> random_num;
 };
 
 #endif // ASGEMOVIEGAME_WEAPON_H
