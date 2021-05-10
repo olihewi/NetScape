@@ -23,25 +23,35 @@ void LineTrace::hitCheck(float distance, ASGE::Point2D origin, float angle)
 {
   float segment_distance = distance / 250;
 
-  for (size_t i = 0; i < 250; i++)
+  for (size_t i = 0; i < 249; i++)
   {
     trace_points[i].x = origin.x + segment_distance * static_cast<float>(i) * std::cos(angle);
     trace_points[i].y = origin.y + segment_distance * static_cast<float>(i) * std::sin(angle);
   }
 
-  hit_dist = origin.distance(trace_points[hit_point - 1]);
-  Logging::DEBUG(std::to_string(hit_dist));
+  hit_dist = origin.distance(trace_points[hit_point]);
+
+  if(hit_dist > 249)
+  {
+    hit_dist = 249;
+  }
+
+  int tracers_needed = 4;
 
   if (has_hit)
   {
-    for (size_t i = 0; i < 4; i++)
+    tracers_needed = static_cast<int>(hit_dist /50);
+    Logging::DEBUG(std::to_string(hit_dist));
+    Logging::DEBUG(std::to_string(tracers_needed));
+    for (int i = 0; i < tracers_needed; i++)
     {
-      bullet_sprites[i].position(trace_points[hit_point / 5 * i]);
-      bullet_sprites[i].dimensions(ASGE::Point2D(hit_dist / 5, 3));
+      bullet_sprites[i].position(trace_points[(hit_point / tracers_needed * i) + 25]);
+      bullet_sprites[i].dimensions(ASGE::Point2D(50, 3));
       bullet_sprites[i].rotation(angle);
       bullet_sprites[i].visibility(true);
       tracer_timer = 0;
     }
+    bullet_sprites[tracers_needed].position(trace_points[(hit_point) - 25]);
     has_hit = false;
   }
   else
