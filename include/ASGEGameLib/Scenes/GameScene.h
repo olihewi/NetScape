@@ -31,6 +31,7 @@ class GameScene : public Scene
   std::vector<std::pair<ASGE::Camera, PlayerHUD>> player_cameras;
 
   // std::array<ASGE::Camera, 4> player_cameras;
+  ASGE::Point2D playerVsTiles(InputTracker& input, float dt, Player& player);
 };
 
 #endif // ASGEMOVIEGAME_GAMESCENE_H

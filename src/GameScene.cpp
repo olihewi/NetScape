@@ -29,7 +29,7 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
       ASGE::Camera(
         static_cast<float>(ASGE::SETTINGS.window_width) / 2,
         static_cast<float>(ASGE::SETTINGS.window_height) / 2),
-      PlayerHUD()));
+      PlayerHUD(player.getID())));
     camera.first.setZoom(0.5F);
     camera.second.addObject(std::make_unique<Text>(
       renderer, "Player " + std::to_string(player.getID()), ASGE::Point2D(100, 100)));
@@ -56,12 +56,11 @@ void GameScene::update(InputTracker& input, float dt)
   for (auto& camera : player_cameras)
   {
     camera.second.update(input, dt);
-    auto player_pos   = players[index].centre();
-    auto right_stick  = input.getControllerStick(index, CONTROLLER::STICKS::RIGHT);
-    auto left_trigger = input.getControllerAxis(index, CONTROLLER::AXIS::LEFT_TRIGGER);
-    player_pos        = ASGE::Point2D(
-      player_pos.x + right_stick.x * left_trigger * 64,
-      player_pos.y + right_stick.y * left_trigger * 64);
+    auto player_pos  = players[index].centre();
+    auto right_stick = input.getControllerStick(index, CONTROLLER::STICKS::RIGHT);
+    player_pos       = ASGE::Point2D(
+      player_pos.x + right_stick.x * camera.second.getFocus() * 64,
+      player_pos.y + right_stick.y * camera.second.getFocus() * 64);
     camera.first.lookAt(ASGE::Point2D(
       player_pos.x / camera.first.getZoom() + window_size.x / 4,
       player_pos.y / camera.first.getZoom() + window_size.y / 4));
@@ -120,39 +119,10 @@ void GameScene::playerMovement(InputTracker& input, float dt)
     {
       continue;
     }
-    auto last_pos = player.centre();
-    player.input(input, dt);
-    player.update(input, dt);
-    std::vector<ASGE::Point2D> collision_tiles;
-    for (int x = -32; x <= 32; x++)
-    {
-      for (int y = -32; y <= 32; y++)
-      {
-        ASGE::Point2D this_pos = ASGE::Point2D(
-          player.centre().x + static_cast<float>(x), player.centre().y + static_cast<float>(y));
-        if (tile_map.getCollisionPos(this_pos) > 0)
-        {
-          collision_tiles.emplace_back(
-            ASGE::Point2D(std::floor(this_pos.x / 32) * 32, std::floor(this_pos.y / 32) * 32));
-        }
-      }
-    }
-    for (auto& tile : collision_tiles)
-    {
-      if (playerCollidesWithTile(ASGE::Point2D(player.centre().x, last_pos.y), tile))
-      {
-        player.position(ASGE::Point2D(
-          last_pos.x - player.dimensions().x / 2, player.centre().y - player.dimensions().y / 2));
-      }
-      if (playerCollidesWithTile(ASGE::Point2D(last_pos.x, player.centre().y), tile))
-      {
-        player.position(ASGE::Point2D(
-          player.centre().x - player.dimensions().x / 2, last_pos.y - player.dimensions().y / 2));
-      }
-    }
+    ASGE::Point2D last_pos = playerVsTiles(input, dt, player);
     for (auto& other_player : players)
     {
-      if (other_player.getID() == player.getID())
+      if (other_player.getID() == player.getID() || other_player.is_dead)
       {
         continue;
       }
@@ -167,6 +137,40 @@ void GameScene::playerMovement(InputTracker& input, float dt)
       }
     }
   }
+}
+ASGE::Point2D GameScene::playerVsTiles(InputTracker& input, float dt, Player& player)
+{
+  auto last_pos = player.centre();
+  player.input(input, dt);
+  player.update(input, dt);
+  std::vector<ASGE::Point2D> collision_tiles;
+  for (int x = -32; x <= 32; x++)
+  {
+    for (int y = -32; y <= 32; y++)
+    {
+      ASGE::Point2D this_pos = ASGE::Point2D(
+        player.centre().x + static_cast<float>(x), player.centre().y + static_cast<float>(y));
+      if (tile_map.getCollisionPos(this_pos) > 0)
+      {
+        collision_tiles.emplace_back(
+          ASGE::Point2D(floor(this_pos.x / 32) * 32, floor(this_pos.y / 32) * 32));
+      }
+    }
+  }
+  for (auto& tile : collision_tiles)
+  {
+    if (playerCollidesWithTile(ASGE::Point2D(player.centre().x, last_pos.y), tile))
+    {
+      player.position(ASGE::Point2D(
+        last_pos.x - player.dimensions().x / 2, player.centre().y - player.dimensions().y / 2));
+    }
+    if (playerCollidesWithTile(ASGE::Point2D(last_pos.x, player.centre().y), tile))
+    {
+      player.position(ASGE::Point2D(
+        player.centre().x - player.dimensions().x / 2, last_pos.y - player.dimensions().y / 2));
+    }
+  }
+  return last_pos;
 }
 void GameScene::checkBullets()
 {

@@ -51,6 +51,10 @@ void Player::input(InputTracker& input, float dt)
     setFrame(3);
   }
   player_walk.setSpeed(left_stick_hypot);
+  if (is_dead)
+  {
+    player_walk.volume(0);
+  }
 }
 void Player::position(ASGE::Point2D _position)
 {
