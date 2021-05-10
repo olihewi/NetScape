@@ -102,7 +102,7 @@ void GameScene::render(ASGE::Renderer* renderer)
       player.render(renderer);
     }
 
-    renderer->setProjectionMatrix(0, 0, window_size.x / 2, window_size.y / 2);
+    renderer->setProjectionMatrix(0, 0, 1920 / 2, 1080 / 2);
     camera.second.render(renderer);
 
     index++;

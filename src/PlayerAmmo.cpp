@@ -7,18 +7,17 @@
 PlayerAmmo::PlayerAmmo(
   ASGE::Renderer* renderer, Weapon& _weapon, Player& _player, float x, float y) :
   weapon(_weapon),
-  player(_player),
-  bullet(std::array<Sprite, 10>{
-    Sprite(renderer, "data/images/player/pistol_bullet.png", ASGE::Point2D(0, 0)),
-    Sprite(renderer, "data/images/player/pistol_bullet.png", ASGE::Point2D(0, 0)),
-    Sprite(renderer, "data/images/player/pistol_bullet.png", ASGE::Point2D(0, 0)),
-    Sprite(renderer, "data/images/player/pistol_bullet.png", ASGE::Point2D(0, 0)),
-    Sprite(renderer, "data/images/player/pistol_bullet.png", ASGE::Point2D(0, 0)),
-    Sprite(renderer, "data/images/player/pistol_bullet.png", ASGE::Point2D(0, 0)),
-    Sprite(renderer, "data/images/player/pistol_bullet.png", ASGE::Point2D(0, 0)),
-    Sprite(renderer, "data/images/player/pistol_bullet.png", ASGE::Point2D(0, 0)),
-    Sprite(renderer, "data/images/player/pistol_bullet.png", ASGE::Point2D(0, 0)),
-    Sprite(renderer, "data/images/player/pistol_bullet.png", ASGE::Point2D(0, 0)) }),
+  player(_player), bullet(std::array<Sprite, 10>{
+                     Sprite(renderer, "data/images/ui/pistol_bullet.png", ASGE::Point2D(0, 0)),
+                     Sprite(renderer, "data/images/ui/pistol_bullet.png", ASGE::Point2D(0, 0)),
+                     Sprite(renderer, "data/images/ui/pistol_bullet.png", ASGE::Point2D(0, 0)),
+                     Sprite(renderer, "data/images/ui/pistol_bullet.png", ASGE::Point2D(0, 0)),
+                     Sprite(renderer, "data/images/ui/pistol_bullet.png", ASGE::Point2D(0, 0)),
+                     Sprite(renderer, "data/images/ui/pistol_bullet.png", ASGE::Point2D(0, 0)),
+                     Sprite(renderer, "data/images/ui/pistol_bullet.png", ASGE::Point2D(0, 0)),
+                     Sprite(renderer, "data/images/ui/pistol_bullet.png", ASGE::Point2D(0, 0)),
+                     Sprite(renderer, "data/images/ui/pistol_bullet.png", ASGE::Point2D(0, 0)),
+                     Sprite(renderer, "data/images/ui/pistol_bullet.png", ASGE::Point2D(0, 0)) }),
   posX(x), posY(y),
   AmmoReserveDisplay(
     renderer, std::to_string(player.getWeapon().getAmmoReserves()), ASGE::Point2D(0, 0)),
