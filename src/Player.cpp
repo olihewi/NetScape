@@ -81,6 +81,7 @@ Weapon& Player::getWeapon()
 {
   return weapon;
 }
+
 size_t Player::getID() const
 {
   return controller_id;
@@ -100,9 +101,8 @@ void Player::update(InputTracker& input, float dt)
   {
     if (playerB < 1)
     {
-      float colour_gain = 1;
-      playerG += colour_gain * (dt * 1.25F);
-      playerB += colour_gain * (dt * 1.25F);
+      playerG += colour_gain * (dt);
+      playerB += colour_gain * (dt);
     }
   }
 
