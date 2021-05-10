@@ -19,7 +19,7 @@ PlayerAmmo::PlayerAmmo(
     Sprite(renderer, "data/images/player/pistol_bullet.png", ASGE::Point2D(0, 0)),
     Sprite(renderer, "data/images/player/pistol_bullet.png", ASGE::Point2D(0, 0)),
     Sprite(renderer, "data/images/player/pistol_bullet.png", ASGE::Point2D(0, 0)) }),
-  posX(x), posY(y), AmmoReserve(_weapon.getAmmoReserves()),
+  posX(x), posY(y),
   AmmoReserveDisplay(
     renderer, std::to_string(player.getWeapon().getAmmoReserves()), ASGE::Point2D(0, 0)),
   AmmoReserveDisplayX(renderer, "x", ASGE::Point2D(0, 0))
@@ -46,7 +46,7 @@ void PlayerAmmo::update(InputTracker& input, float dt)
 
 void PlayerAmmo::render(ASGE::Renderer* renderer)
 {
-  if (player.health > 0)
+  if (!player.is_dead)
   {
     for (size_t i = 0; i < static_cast<size_t>(weapon.getCurrentAmmo()); ++i)
     {

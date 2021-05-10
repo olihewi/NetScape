@@ -20,8 +20,6 @@ class PlayerHealth : public Sprite
  private:
   Player& player;
   Sprite background;
-
-  //
 };
 
 #endif // ASGEMOVIEGAME_PLAYERHEALTH_HPP

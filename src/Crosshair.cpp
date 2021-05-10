@@ -22,5 +22,5 @@ void Crosshair::update(InputTracker& input, float /*dt*/)
     static_cast<float>(ASGE::SETTINGS.window_width) / 4,
     static_cast<float>(ASGE::SETTINGS.window_height) / 4);
   opacity(mag);
-  centrePos(ASGE::Point2D(screen.x + right_stick.x * 300, screen.y + right_stick.y * 300));
+  centrePos(ASGE::Point2D(screen.x + right_stick.x * 275, screen.y + right_stick.y * 275));
 }

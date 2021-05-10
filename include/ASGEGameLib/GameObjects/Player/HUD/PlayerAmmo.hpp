@@ -24,7 +24,7 @@ class PlayerAmmo : public GameObject
   std::array<Sprite, 10> bullet;
   // Sprite background;
   float posX, posY;
-  int AmmoReserve;
+
   Text AmmoReserveDisplay;
   Text AmmoReserveDisplayX;
 };

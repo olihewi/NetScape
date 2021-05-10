@@ -5,6 +5,8 @@
 #ifndef ASGEMOVIEGAME_WEAPONDATA_H
 #define ASGEMOVIEGAME_WEAPONDATA_H
 
+#include <string>
+
 struct WeaponData
 {
  public:

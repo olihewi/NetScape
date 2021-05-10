@@ -12,13 +12,15 @@ Player::Player(
   SoLoud::Soloud* audio_engine) :
   AnimatedSprite(renderer, "data/images/player/legs.png", 15, _position),
   controller_id(control_id), weapon(renderer, audio_engine, controller_id, WeaponData()),
-  player_walk(audio_engine, "data/audio/player_walk.wav")
+  player_walk(audio_engine, "data/audio/player_walk.wav"), lives(3),
+  player_damaged(audio_engine, "data/audio/damaged.wav")
 {
   // zOrder(1);
   weapon.position(_position);
   player_walk.setLoop(true);
   player_walk.volume(0);
   player_walk.play();
+  player_damaged.volume(5);
 }
 
 void Player::render(ASGE::Renderer* renderer)
@@ -33,12 +35,15 @@ void Player::input(InputTracker& input, float dt)
   /// Movement
   auto left_stick        = input.getControllerStick(controller_id, CONTROLLER::STICKS::LEFT);
   float left_stick_hypot = std::hypot(left_stick.x, left_stick.y);
+  auto sprint_button     = input.getControllerButton(controller_id, CONTROLLER::BUTTONS::B);
   if (left_stick_hypot > 1)
   {
     left_stick = ASGE::Point2D(left_stick.x / left_stick_hypot, left_stick.y / left_stick_hypot);
     left_stick_hypot = 1;
   }
-  translate(ASGE::Point2D(left_stick.x * move_speed * dt, left_stick.y * move_speed * dt));
+  translate(
+    ASGE::Point2D(left_stick.x * move_speed * dt, left_stick.y * move_speed * dt) *
+    (sprint_button ? 2.F : 1.F));
   if (left_stick_hypot >= CONTROLLER::AXIS_DEADZONE)
   {
     rotation(atan2f(left_stick.y, left_stick.x));
@@ -71,8 +76,8 @@ void Player::takeDamage(float damage)
   health -= damage;
   has_been_hit       = true;
   has_been_hit_timer = 0;
+  player_damaged.play();
   Logging::DEBUG("HIT");
-
   if (health <= 0)
   {
     is_dead = true;
@@ -81,15 +86,12 @@ void Player::takeDamage(float damage)
     Logging::DEBUG("DEAD");
   }
 }
-Weapon& Player::getWeapon()
-{
-  return weapon;
-}
 
 size_t Player::getID() const
 {
   return controller_id;
 }
+
 void Player::update(InputTracker& input, float dt)
 {
   // Logging::DEBUG("HAS BEEN HIT: " +std::to_string(static_cast<int>(has_been_hit)));
@@ -111,4 +113,47 @@ void Player::update(InputTracker& input, float dt)
   }
 
   AnimatedSprite::update(input, dt);
+}
+
+/// GETTERS AND SETTERS LIST
+
+Weapon& Player::getWeapon()
+{
+  return weapon;
+}
+
+float Player::getMaxHealth() const
+{
+  return max_health;
+}
+
+float Player::getHealth() const
+{
+  return health;
+}
+void Player::setHealth(float _health)
+{
+  health = _health;
+}
+
+int Player::getMaxLives() const
+{
+  return max_lives;
+}
+int Player::getLives() const
+{
+  return lives;
+}
+void Player::setLives(int _lives)
+{
+  lives = _lives;
+}
+
+ASGE::Point2D Player::getSpawnPoint()
+{
+  return spawn_point;
+}
+void Player::setSpawnPoint(ASGE::Point2D _spawn_point)
+{
+  spawn_point = _spawn_point;
 }

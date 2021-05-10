@@ -3,7 +3,7 @@
 //
 
 #include "ASGEGameLib/GameObjects/Player/HUD/PlayerHealth.hpp"
-
+#include "Engine/Logger.hpp"
 PlayerHealth::PlayerHealth(ASGE::Renderer* renderer, Player& _player) :
   Sprite(renderer, "data/images/player/player_health_bar.png", ASGE::Point2D(0, 0)),
   player(_player),
@@ -15,7 +15,7 @@ void PlayerHealth::update(InputTracker& input, float dt)
 {
   GameObject::update(input, dt);
   // position(player.AnimatedSprite::position());
-  dimensions(ASGE::Point2D((player.health / player.max_health) * 32, 5));
+  dimensions(ASGE::Point2D((player.getHealth() / player.getMaxHealth()) * 32, 5));
   position(
     ASGE::Point2D(player.AnimatedSprite::position().x, player.AnimatedSprite::position().y - 5));
   colour(ASGE::COLOURS::GREEN);
@@ -29,7 +29,7 @@ void PlayerHealth::update(InputTracker& input, float dt)
 }
 void PlayerHealth::render(ASGE::Renderer* renderer)
 {
-  if (player.health > 0 && player.health < player.max_health)
+  if (player.getHealth() > 0 && player.getHealth() < player.getMaxHealth())
   {
     Sprite::render(renderer);
     background.render(renderer);
