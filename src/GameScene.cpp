@@ -33,9 +33,9 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
     camera.second.addObject(std::make_unique<Text>(
       renderer, "Player " + std::to_string(player.getID()), ASGE::Point2D(100, 100)));
     camera.second.addObject((std::make_unique<PlayerAmmo>(
-      renderer, player.getWeapon(), player, window.x / 2 - 128, window.y / 2 - 64)));
+      renderer, player.getWeapon(), player, 1920 / 2 - 128, 1080 / 2 - 64)));
     camera.second.addObject(
-      (std::make_unique<PlayerLives>(renderer, player, window.x / 2 - 128, window.y / 2 - 96)));
+      (std::make_unique<PlayerLives>(renderer, player, 1920 / 2 - 128, 1080 / 2 - 96)));
     camera.second.addObject(std::make_unique<Crosshair>(renderer, player.getID()));
   }
   window_divider.dimensions(window);
@@ -102,7 +102,7 @@ void GameScene::render(ASGE::Renderer* renderer)
       player.render(renderer);
     }
 
-    renderer->setProjectionMatrix(0, 0, 1920 / 2, 1080 / 2);
+    renderer->setProjectionMatrix(0, 0, 1920.F / 2, 1080.F / 2);
     camera.second.render(renderer);
 
     index++;
@@ -137,7 +137,6 @@ void GameScene::playerMovement(InputTracker& input, float dt)
         auto push_dist =
           ASGE::Point2D((last_pos.x - player.centre().x) / 2, (last_pos.y - player.centre().y) / 2);
         player.translate(push_dist);
-        other_player.translate(ASGE::Point2D(-push_dist.x, -push_dist.y));
       }
     }
   }
@@ -193,7 +192,7 @@ void GameScene::checkBullets()
       size_t index = 0;
       for (auto& trace_point : player.getWeapon().bullet.trace_points)
       {
-        if(!other_player.getWeapon().bullet.has_hit)
+        if (!other_player.getWeapon().bullet.has_hit)
         {
           index++;
           if (player.isInside(trace_point))

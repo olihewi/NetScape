@@ -17,6 +17,7 @@ TileMap::TileMap(ASGE::Renderer* _renderer, std::string _tileset_path, size_t nu
   spawn_points.emplace_back(ASGE::Point2D(200, 200));
   spawn_points.emplace_back(ASGE::Point2D(300, 300));
   spawn_points.emplace_back(ASGE::Point2D(400, 400));
+  weapon_drops.emplace_back(WeaponDrop(renderer, WeaponData(), ASGE::Point2D(600, 600)));
 }
 void TileMap::update(InputTracker& input, float dt)
 {
@@ -44,6 +45,10 @@ void TileMap::render(ASGE::Renderer* _renderer)
   for (auto& animation : animations)
   {
     animation.render(renderer);
+  }
+  for (auto& weapon_drop : weapon_drops)
+  {
+    weapon_drop.render(renderer);
   }
 }
 void TileMap::setTile(size_t layer, size_t index, std::array<float, 4> rect)
@@ -101,6 +106,15 @@ nlohmann::json TileMap::saveTileMap()
     j_animations.emplace_back(this_json);
   }
   j["animations"] = j_animations;
+  std::vector<nlohmann::json> j_drops;
+  for (auto& weapon_drop : weapon_drops)
+  {
+    nlohmann::json this_j;
+    this_j["position"] = std::make_pair(weapon_drop.position().x, weapon_drop.position().y);
+    this_j["data"]     = weapon_drop.getWeapon().toJson();
+    j_drops.emplace_back(this_j);
+  }
+  j["weapon_drops"] = j_drops;
   return j;
 }
 TileMap::TileMap(ASGE::Renderer* _renderer, const std::string& file_path) :
@@ -187,6 +201,13 @@ void TileMap::loadFromJson(nlohmann::json j)
     auto speed         = animation["speed"].get<float>();
     auto& this_anim    = animations.emplace_back(AnimatedSprite(renderer, path, speed, position));
     this_anim.zOrder(static_cast<short>(layer));
+  }
+  for (auto& weapon_drop : j["weapon_drops"])
+  {
+    auto pos_pair = weapon_drop["position"].get<std::pair<float, float>>();
+    auto weapon   = WeaponData(weapon_drop["data"]);
+    weapon_drops.emplace_back(
+      WeaponDrop(renderer, weapon, ASGE::Point2D(pos_pair.first, pos_pair.second)));
   }
 }
 void TileMap::setCollision(size_t index, int _collision)
