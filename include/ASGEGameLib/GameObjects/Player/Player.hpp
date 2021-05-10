@@ -28,7 +28,6 @@ class Player : public AnimatedSprite
 
   void takeDamage(float damage);
 
-
   Weapon& getWeapon();
 
   [[nodiscard]] size_t getID() const;
@@ -39,7 +38,7 @@ class Player : public AnimatedSprite
   float move_speed = 100.0F;
   bool is_dead     = false;
 
-  bool has_been_hit = false;
+  bool has_been_hit        = false;
   float has_been_hit_timer = 0;
 
  private:
@@ -47,9 +46,7 @@ class Player : public AnimatedSprite
   Weapon weapon;
   Sound player_walk;
 
-  float playerR = 1,
-        playerG = 1,
-        playerB = 1;
+  float playerR = 1, playerG = 1, playerB = 1;
 };
 
 #endif // ASGEMOVIEGAME_PLAYER_HPP

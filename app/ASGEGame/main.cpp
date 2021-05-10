@@ -1,18 +1,24 @@
 #include "ASGEGame.hpp"
 #include <Engine/Logger.hpp>
-#include <wtypes.h>
+#if _WIN32
+#  include <wtypes.h>
+#endif
 
 int main(int /*argc*/, char* /*argv*/[])
 {
   ASGE::GameSettings game_settings;
   game_settings.window_title = "NetScape";
 
+#if _WIN32
   RECT desktop;
   HWND h_desktop = GetDesktopWindow();
   GetWindowRect(h_desktop, &desktop);
-
   game_settings.window_width  = desktop.right;
   game_settings.window_height = desktop.bottom;
+#else
+  game_settings.window_width  = 1920;
+  game_settings.window_height = 1080;
+#endif
 
   game_settings.mode     = ASGE::GameSettings::WindowMode::BORDERLESS_WINDOWED;
   game_settings.fixed_ts = 1; // We're not using fixed ts so this is to avoid debug messages...

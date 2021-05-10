@@ -14,7 +14,7 @@ Player::Player(
   controller_id(control_id), weapon(renderer, audio_engine, controller_id),
   player_walk(audio_engine, "data/audio/player_walk.wav")
 {
-  zOrder(1);
+  // zOrder(1);
   weapon.position(_position);
   player_walk.setLoop(true);
   player_walk.volume(0);
@@ -66,7 +66,7 @@ void Player::translate(ASGE::Point2D _translation)
 void Player::takeDamage(float damage)
 {
   health -= damage;
-  has_been_hit = true;
+  has_been_hit       = true;
   has_been_hit_timer = 0;
   Logging::DEBUG("HIT");
 
@@ -88,13 +88,13 @@ size_t Player::getID() const
 }
 void Player::update(InputTracker& input, float dt)
 {
-  //Logging::DEBUG("HAS BEEN HIT: " +std::to_string(static_cast<int>(has_been_hit)));
+  // Logging::DEBUG("HAS BEEN HIT: " +std::to_string(static_cast<int>(has_been_hit)));
 
-  weapon.colour(ASGE::Colour(playerR,playerG,playerB));
+  weapon.colour(ASGE::Colour(playerR, playerG, playerB));
   if (has_been_hit)
   {
-    playerG = 0;
-    playerB = 0;
+    playerG      = 0;
+    playerB      = 0;
     has_been_hit = false;
   }
   else
@@ -106,6 +106,6 @@ void Player::update(InputTracker& input, float dt)
       playerB += colour_gain * (dt * 1.25F);
     }
   }
-  
+
   AnimatedSprite::update(input, dt);
 }
