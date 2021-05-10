@@ -193,18 +193,18 @@ void GameScene::checkBullets()
       size_t index = 0;
       for (auto& trace_point : player.getWeapon().bullet.trace_points)
       {
-        if(!other_player.getWeapon().bullet.has_hit)
+        if(!player.getWeapon().bullet.has_hit)
         {
           index++;
-          if (player.isInside(trace_point))
+          if (other_player.isInside(trace_point))
           {
-            other_player.getWeapon().bullet.hit_point = index;
-            other_player.getWeapon().bullet.has_hit   = true;
+            player.getWeapon().bullet.hit_point = index;
+            player.getWeapon().bullet.has_hit   = true;
             Logging::DEBUG(
-              "Player " + std::to_string(other_player.getID() + 1) + " hit Player " +
-              std::to_string(player.getID()) + " - " +
-              std::to_string(other_player.getWeapon().bullet.damage) + " damage");
-            player.takeDamage(other_player.getWeapon().bullet.damage);
+              "Player " + std::to_string(player.getID() + 1) + " hit Player " +
+              std::to_string(other_player.getID()) + " - " +
+              std::to_string(player.getWeapon().bullet.damage) + " damage");
+            other_player.takeDamage(player.getWeapon().bullet.damage);
             break;
           }
 
