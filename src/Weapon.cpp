@@ -8,9 +8,10 @@ Weapon::Weapon(
   ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _player_id,
   const WeaponData& _weapon) :
   AnimatedSprite(renderer, _weapon.sprite_held, 0),
-  bullet(renderer), sounds(std::array<Sound, 3>{ Sound(audio_engine, _weapon.sfx_fire),
+  bullet(renderer), sounds(std::array<Sound, 4>{ Sound(audio_engine, _weapon.sfx_fire),
                                                  Sound(audio_engine, _weapon.sfx_empty),
-                                                 Sound(audio_engine, _weapon.sfx_reload) }),
+                                                 Sound(audio_engine, _weapon.sfx_reload),
+                                                 Sound(audio_engine, _weapon.sfx_pickup) }),
   player_id(_player_id), weapon_data(_weapon), current_ammo(_weapon.max_ammo),
   ammo_reserve(_weapon.ammo_reserve)
 {
@@ -147,9 +148,11 @@ void Weapon::setWeapon(ASGE::Renderer* renderer, const WeaponData& _weapon)
   sounds[0].setSound(weapon_data.sfx_fire);
   sounds[1].setSound(weapon_data.sfx_empty);
   sounds[2].setSound(weapon_data.sfx_reload);
+  sounds[3].setSound(weapon_data.sfx_pickup);
   current_ammo       = weapon_data.max_ammo;
   ammo_reserve       = weapon_data.ammo_reserve;
   current_inaccuracy = weapon_data.inaccuracy;
+  sounds[3].play();
 }
 WeaponData& Weapon::getWeaponData()
 {

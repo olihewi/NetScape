@@ -5,12 +5,13 @@
 #include "../include/ASGEGameLib/GameObjects/Player/Weapons/WeaponDrop.h"
 WeaponDrop::WeaponDrop(
   ASGE::Renderer* renderer, WeaponData weapon, float _respawn_time, ASGE::Point2D position) :
-  Sprite(renderer, weapon.sprite_floor, position),
+  Sprite(renderer, weapon.sprite_floor),
   data(std::move(weapon)), respawn_time(_respawn_time)
 {
   Sprite::dimensions(ASGE::Point2D(Sprite::getTextureSize().x / 2, Sprite::getTextureSize().y));
   Sprite::srcRect(
     0.1F, 0.1F, Sprite::getTextureSize().x / 2 - 0.2F, Sprite::getTextureSize().y - 0.2F);
+  Sprite::centrePos(position);
 }
 WeaponData WeaponDrop::getWeapon()
 {

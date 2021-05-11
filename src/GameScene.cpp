@@ -258,23 +258,38 @@ bool GameScene::playerCollidesWithTile(ASGE::Point2D player, ASGE::Point2D tile)
 }
 void GameScene::updateDrops(InputTracker& input)
 {
-  for (auto& drop : tile_map.getDrops())
+  auto& drops = tile_map.getDrops();
+  for (auto& drop : drops)
   {
-    if (!drop.visibility())
-    {
-      continue;
-    }
     drop.playerInRange(false);
-    for (auto& player : players)
+  }
+  for (auto& player : players)
+  {
+    int closest        = -1;
+    float closest_dist = 9999;
+    int index          = 0;
+    for (auto& drop : drops)
     {
-      if (std::hypot(player.centre().x - drop.centre().x, player.centre().y - drop.centre().y) < 48)
+      if (drop.visibility())
       {
-        drop.playerInRange(true);
-        if (input.getControllerButtonDown(player.getID(), CONTROLLER::BUTTONS::Y))
+        float this_dist =
+          std::hypot(player.centre().x - drop.centre().x, player.centre().y - drop.centre().y);
+        if (this_dist < 24 && this_dist < closest_dist)
         {
-          player.getWeapon().setWeapon(m_renderer, drop.getWeapon());
-          drop.setRespawnTimer();
+          closest_dist = this_dist;
+          closest      = index;
         }
+      }
+      index++;
+    }
+    if (closest != -1)
+    {
+      auto& drop = drops[static_cast<size_t>(closest)];
+      drop.playerInRange(true);
+      if (input.getControllerButtonDown(player.getID(), CONTROLLER::BUTTONS::Y))
+      {
+        player.getWeapon().setWeapon(m_renderer, drop.getWeapon());
+        drop.setRespawnTimer();
       }
     }
   }

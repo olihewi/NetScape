@@ -24,6 +24,7 @@ struct WeaponData
   std::string sfx_fire   = "data/audio/guns/pistol/fire.wav";
   std::string sfx_reload = "data/audio/guns/pistol/reload.wav";
   std::string sfx_empty  = "data/audio/guns/pistol/empty.wav";
+  std::string sfx_pickup = "data/audio/guns/pistol/pickup.wav";
   /// Stats
   bool is_automatic   = false;
   float damage        = 20;

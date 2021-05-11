@@ -30,7 +30,7 @@ class Weapon : public AnimatedSprite
   LineTrace bullet;
 
  private:
-  std::array<Sound, 3> sounds;
+  std::array<Sound, 4> sounds;
   size_t player_id;
 
   /// Weapon Stats
