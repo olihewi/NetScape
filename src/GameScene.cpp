@@ -7,6 +7,7 @@
 #include <ASGEGameLib/GameObjects/Player/HUD/Crosshair.h>
 #include <ASGEGameLib/GameObjects/Player/HUD/PlayerAmmo.hpp>
 #include <ASGEGameLib/GameObjects/Player/HUD/PlayerHealth.hpp>
+#include <ASGEGameLib/Utilities/FontManager.h>
 #include <GameObjects/Player/HUD/PlayerLives.hpp>
 #include <array>
 #include <utility>
@@ -18,7 +19,8 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
                                  Player(renderer, ASGE::Point2D(), 1, audio_engine.get()),
                                  Player(renderer, ASGE::Point2D(), 2, audio_engine.get()),
                                  Player(renderer, ASGE::Point2D(), 3, audio_engine.get()) }),
-  window_divider(renderer, "images/ui/ingame_windowdivider.png")
+  window_divider(renderer, "images/ui/ingame_windowdivider.png"),
+  round_time_text(renderer, "", ASGE::Point2D(), FONTS::PIXEL)
 {
   auto window = ASGE::Point2D(
     static_cast<float>(ASGE::SETTINGS.window_width),
@@ -65,6 +67,9 @@ void GameScene::update(InputTracker& input, float dt)
     camera.first.setZoom(0.5F + (0.05F * right_mag * camera.second.getFocus()));
     index++;
   }
+  round_timer -= dt;
+  round_time_text.contents(std::to_string(static_cast<int>(round_timer)));
+  round_time_text.centrePos(ASGE::Point2D(static_cast<float>(ASGE::SETTINGS.window_width) / 2, 64));
 
   if (input.getKeyDown(ASGE::KEYS::KEY_ESCAPE))
   {
@@ -106,6 +111,7 @@ void GameScene::render(ASGE::Renderer* renderer)
     static_cast<float>(ASGE::SETTINGS.window_width),
     static_cast<float>(ASGE::SETTINGS.window_height));
   window_divider.render(renderer);
+  round_time_text.render(renderer);
 }
 void GameScene::playerMovement(InputTracker& input, float dt)
 {

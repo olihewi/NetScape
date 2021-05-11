@@ -73,6 +73,7 @@ class Player : public AnimatedSprite
   float colour_gain = 1.5F;
   ASGE::Point2D spawn_point;
   Score score;
+  Sound player_killed;
 };
 
 /// STRUCTS

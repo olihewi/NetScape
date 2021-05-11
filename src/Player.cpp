@@ -13,7 +13,8 @@ Player::Player(
   AnimatedSprite(renderer, "data/images/player/legs.png", 15, _position),
   controller_id(control_id), weapon(renderer, audio_engine, controller_id, WeaponData()),
   player_walk(audio_engine, "data/audio/player_walk.wav"), lives(3),
-  player_damaged(audio_engine, "data/audio/damaged.wav")
+  player_damaged(audio_engine, "data/audio/damaged.wav"),
+  player_killed(audio_engine, "data/audio/wilhelm.wav")
 {
   // zOrder(1);
   weapon.position(_position);
@@ -97,6 +98,7 @@ void Player::takeDamage(float damage)
     score.deaths++;
     Sprite::visibility(false);
     weapon.visibility(false);
+    player_killed.play();
     // Logging::DEBUG("DEAD");
   }
 }

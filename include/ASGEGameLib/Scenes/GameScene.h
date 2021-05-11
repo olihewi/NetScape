@@ -32,6 +32,8 @@ class GameScene : public Scene
   std::array<Player, 4> players;
   Sprite window_divider;
   std::vector<std::pair<ASGE::Camera, PlayerHUD>> player_cameras;
+  float round_timer = 120;
+  Text round_time_text;
 
   // std::array<ASGE::Camera, 4> player_cameras;
 };
