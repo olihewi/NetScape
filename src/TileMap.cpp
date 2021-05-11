@@ -217,6 +217,10 @@ void TileMap::setCollision(size_t index, int _collision)
 }
 int TileMap::getCollision(size_t index)
 {
+  if (index >= collisions.size())
+  {
+    return 0;
+  }
   return collisions[index];
 }
 int TileMap::getCollisionPos(ASGE::Point2D position)
