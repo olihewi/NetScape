@@ -193,8 +193,8 @@ void GameScene::checkBullets()
           Logging::DEBUG(
             "Player " + std::to_string(player.getID() + 1) + " hit Player " +
             std::to_string(other_player.getID()) + " - " +
-            std::to_string(player.getWeapon().bullet.damage) + " damage");
-          other_player.takeDamage(player.getWeapon().bullet.damage);
+            std::to_string(player.getWeapon().getWeaponData().damage) + " damage");
+          other_player.takeDamage(player.getWeapon().getWeaponData().damage);
           break;
         }
       }
