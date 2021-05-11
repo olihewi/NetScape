@@ -64,7 +64,7 @@ void GameScene::update(InputTracker& input, float dt)
       player_pos.x + camera.second.getCameraShake().x,
       player_pos.y + camera.second.getCameraShake().y);
     camera.first.lookAt(ASGE::Point2D(player_pos.x, player_pos.y));
-    float right_mag = min(std::hypot(right_stick.x, right_stick.y), 1);
+    float right_mag = std::fmin(std::hypotf(right_stick.x, right_stick.y), 1.F);
     camera.first.setZoom(0.5F + (0.05F * right_mag * camera.second.getFocus()));
     index++;
   }
@@ -178,38 +178,38 @@ void GameScene::checkBullets()
     {
       continue;
     }
-    for (auto& other_player : players)
+    size_t index = 0;
+    for (auto& trace_point : player.getWeapon().bullet.trace_points)
     {
-      if (other_player.getID() == player.getID())
+      for (auto& other_player : players)
       {
-        continue;
-      }
-      size_t index = 0;
-      for (auto& trace_point : player.getWeapon().bullet.trace_points)
-      {
-        if (!player.getWeapon().bullet.has_hit)
+        if (other_player.getID() == player.getID())
         {
-          index++;
-          if (other_player.isInside(trace_point))
-          {
-            player.getWeapon().bullet.hit_point = index;
-            player.getWeapon().bullet.has_hit   = true;
-            Logging::DEBUG(
-              "Player " + std::to_string(player.getID() + 1) + " hit Player " +
-              std::to_string(other_player.getID()) + " - " +
-              std::to_string(player.getWeapon().bullet.damage) + " damage");
-            other_player.takeDamage(player.getWeapon().bullet.damage);
-            break;
-          }
-
-          if (tile_map.getCollisionPos(trace_point))
-          {
-            other_player.getWeapon().bullet.hit_point = index;
-            other_player.getWeapon().bullet.has_hit   = true;
-            break;
-          }
+          continue;
+        }
+        if (other_player.isInside(trace_point))
+        {
+          player.getWeapon().bullet.hit_point = index;
+          player.getWeapon().bullet.has_hit   = true;
+          Logging::DEBUG(
+            "Player " + std::to_string(player.getID() + 1) + " hit Player " +
+            std::to_string(other_player.getID()) + " - " +
+            std::to_string(player.getWeapon().bullet.damage) + " damage");
+          other_player.takeDamage(player.getWeapon().bullet.damage);
+          break;
         }
       }
+      if (tile_map.getCollisionPos(trace_point) > 0)
+      {
+        player.getWeapon().bullet.hit_point = index;
+        player.getWeapon().bullet.has_hit   = true;
+        break;
+      }
+      if (player.getWeapon().bullet.has_hit)
+      {
+        break;
+      }
+      index++;
     }
   }
 }

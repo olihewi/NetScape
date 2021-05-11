@@ -19,6 +19,7 @@ class Sound
   void setSpeed(float _speed);
 
   void setSound(std::string& file_path);
+
  private:
   SoLoud::Soloud* engine;
   SoLoud::Wav clip;

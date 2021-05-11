@@ -14,7 +14,8 @@ class Weapon : public AnimatedSprite
 {
  public:
   Weapon(
-    ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _player_id, WeaponData _weapon);
+    ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _player_id,
+    const WeaponData& _weapon);
   void update(InputTracker& input, float dt) override;
   void fire();
   void reload();
