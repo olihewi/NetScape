@@ -16,7 +16,7 @@ LineTrace::LineTrace(ASGE::Renderer* renderer) :
 {
   for (auto& bullet_sprite : bullet_sprites)
   {
-    bullet_sprite.zOrder(0);
+    bullet_sprite.zOrder(1);
   }
 }
 void LineTrace::hitCheck(float distance, ASGE::Point2D origin, float angle)
@@ -51,7 +51,7 @@ void LineTrace::hitCheck(float distance, ASGE::Point2D origin, float angle)
       bullet_sprites[i].visibility(true);
       tracer_timer = 0;
     }
-    bullet_sprites[tracers_needed].position(trace_points[(hit_point)-25]);
+   // bullet_sprites[tracers_needed].position(trace_points[(hit_point)-25]);
     has_hit = false;
   }
   else
