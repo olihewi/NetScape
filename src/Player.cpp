@@ -37,7 +37,7 @@ void Player::input(InputTracker& input, float dt)
   auto left_stick        = input.getControllerStick(controller_id, CONTROLLER::STICKS::LEFT);
   float left_stick_hypot = std::hypot(left_stick.x, left_stick.y);
   auto sprint_button     = input.getControllerButton(controller_id, CONTROLLER::BUTTONS::B);
-  auto score_readout_button     = input.getControllerButton(controller_id, CONTROLLER::BUTTONS::X);
+  auto score_readout_button     = input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::X);
   if (left_stick_hypot > 1)
   {
     left_stick = ASGE::Point2D(left_stick.x / left_stick_hypot, left_stick.y / left_stick_hypot);

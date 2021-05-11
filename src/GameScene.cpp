@@ -193,7 +193,7 @@ void GameScene::checkBullets()
           {
             continue;
           }
-          if (other_player.isInside(trace_point))
+          if (other_player.isInside(trace_point) && !other_player.is_dead)
           {
             player.getWeapon().bullet.hit_point = index;
             player.getWeapon().bullet.has_hit   = true;
