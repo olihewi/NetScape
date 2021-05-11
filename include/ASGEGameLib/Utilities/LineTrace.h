@@ -27,6 +27,7 @@ class LineTrace
   float hit_dist   = 0;
 
  private:
+
   float tracer_timer = 0;
 };
 

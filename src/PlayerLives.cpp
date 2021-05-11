@@ -46,6 +46,7 @@ void PlayerLives::playerRespawn()
 {
   if (player.is_dead && player.getLives() > 0)
   {
+
     player.visibility(true);
     player.getWeapon().visibility(true);
     player.setLives(player.getLives() - 1);

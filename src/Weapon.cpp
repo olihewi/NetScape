@@ -81,6 +81,7 @@ void Weapon::update(InputTracker& input, float dt)
       input.getControllerAxis(player_id, CONTROLLER::AXIS::RIGHT_TRIGGER) >
         CONTROLLER::AXIS_DEADZONE)
     {
+
       fire();
     }
   }

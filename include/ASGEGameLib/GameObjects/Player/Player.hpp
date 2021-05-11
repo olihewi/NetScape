@@ -11,6 +11,16 @@
 #include "ASGEGameLib/GameObjects/Sprites/Text.h"
 #include "ASGEGameLib/Utilities/InputTracker.h"
 #include "ASGEGameLib/Utilities/Sound.h"
+struct Score
+{
+ public:
+
+  int kills  = 0;
+  int deaths = 0;
+  float hit    = 0;
+  float miss   = 0;
+
+};
 
 class Player : public AnimatedSprite
 {
@@ -50,6 +60,8 @@ class Player : public AnimatedSprite
   bool has_been_hit        = false;
   float has_been_hit_timer = 0;
 
+  Score& getScore();
+
  private:
   float max_health = 100.0F;
   float health     = max_health;
@@ -60,10 +72,13 @@ class Player : public AnimatedSprite
   int lives;
   Sound player_damaged;
   float playerR = 1, playerG = 1, playerB = 1;
-
   float colour_gain = 1.5F;
-
   ASGE::Point2D spawn_point;
+  Score score;
+
 };
+
+/// STRUCTS
+
 
 #endif // ASGEMOVIEGAME_PLAYER_HPP
