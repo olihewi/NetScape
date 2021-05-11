@@ -36,11 +36,9 @@ void LineTrace::hitCheck(float distance, ASGE::Point2D origin, float angle)
     hit_dist = 249;
   }
 
-  size_t tracers_needed = 4;
-
   if (has_hit)
   {
-    tracers_needed = static_cast<size_t>(hit_dist / 50);
+    auto tracers_needed = static_cast<size_t>(hit_dist / 50);
     Logging::DEBUG(std::to_string(hit_dist));
     Logging::DEBUG(std::to_string(tracers_needed));
     for (size_t i = 0; i < tracers_needed; i++)

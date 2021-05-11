@@ -5,7 +5,8 @@
 #include "ASGEGameLib/GameObjects/Player/Weapons/Weapon.h"
 #include <cmath>
 Weapon::Weapon(
-  ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _player_id, WeaponData _weapon) :
+  ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _player_id,
+  const WeaponData& _weapon) :
   AnimatedSprite(renderer, _weapon.sprite_held, 0),
   bullet(renderer), sounds(std::array<Sound, 3>{ Sound(audio_engine, _weapon.sfx_fire),
                                                  Sound(audio_engine, _weapon.sfx_empty),
@@ -51,10 +52,11 @@ void Weapon::fire()
 }
 void Weapon::reload()
 {
-  if (current_ammo < weapon_data.max_ammo && fire_timer <= 0 && reload_timer <= 0)
+  if (current_ammo < weapon_data.max_ammo && fire_timer <= 0 && reload_timer <= 0 && ammo_reserve > 0)
   {
-    ammo_reserve = max(ammo_reserve - (weapon_data.max_ammo - current_ammo), 0);
-    current_ammo = min(current_ammo + ammo_reserve, weapon_data.max_ammo);
+    ammo_reserve =
+      static_cast<int>(std::fmax(ammo_reserve - (weapon_data.max_ammo - current_ammo), 0));
+    current_ammo = static_cast<int>(std::fmin(current_ammo + ammo_reserve, weapon_data.max_ammo));
     reload_timer = weapon_data.reload_time;
     sounds[2].play();
   }
@@ -140,8 +142,7 @@ bool Weapon::hasFired() const
 void Weapon::setWeapon(ASGE::Renderer* renderer, const WeaponData& _weapon)
 {
   weapon_data = _weapon;
-  AnimatedSprite::loadSprite(renderer, weapon_data.sprite_held);
-  AnimatedSprite::dimensions(ASGE::Point2D(32, 32));
+  AnimatedSprite::loadAnimation(renderer, weapon_data.sprite_held, 0);
   sounds[0].setSound(weapon_data.sfx_fire);
   sounds[1].setSound(weapon_data.sfx_empty);
   sounds[2].setSound(weapon_data.sfx_reload);

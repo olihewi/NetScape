@@ -8,11 +8,11 @@ AnimatedSprite::AnimatedSprite(
   ASGE::Renderer* renderer, const std::string& _file_path, float playback_speed,
   ASGE::Point2D position) :
   Sprite(renderer, _file_path, position),
-  file_path(_file_path), speed(playback_speed)
+  file_path(_file_path),
+  frames(static_cast<size_t>(Sprite::dimensions().x) / static_cast<size_t>(Sprite::dimensions().y)),
+  sprite_size(Sprite::dimensions().y), speed(playback_speed)
 {
-  auto dims   = Sprite::dimensions();
-  frames      = static_cast<size_t>(dims.x) / static_cast<size_t>(dims.y);
-  sprite_size = dims.y;
+  auto dims = Sprite::dimensions();
   Sprite::srcRect(0, 0, dims.y, dims.y);
   Sprite::dimensions(ASGE::Point2D(dims.y, dims.y));
 }
@@ -36,7 +36,20 @@ const std::string& AnimatedSprite::getFilePath()
 {
   return file_path;
 }
-float AnimatedSprite::getPlaybackSpeed()
+float AnimatedSprite::getPlaybackSpeed() const
 {
   return speed;
+}
+void AnimatedSprite::loadAnimation(
+  ASGE::Renderer* renderer, const std::string& _file_path, float playback_speed)
+{
+  Sprite::loadSprite(renderer, file_path);
+  file_path   = _file_path;
+  auto dims   = Sprite::dimensions();
+  frames      = static_cast<size_t>(dims.x) / static_cast<size_t>(dims.y);
+  sprite_size = dims.y;
+  timer       = 0;
+  speed       = playback_speed;
+  Sprite::srcRect(0, 0, dims.y, dims.y);
+  Sprite::dimensions(ASGE::Point2D(dims.y, dims.y));
 }

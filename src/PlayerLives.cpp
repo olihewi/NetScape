@@ -46,7 +46,6 @@ void PlayerLives::playerRespawn()
 {
   if (player.is_dead && player.getLives() > 0)
   {
-    Logging::DEBUG("isdead: " + std::to_string(player.is_dead));
     player.visibility(true);
     player.getWeapon().visibility(true);
     player.setLives(player.getLives() - 1);

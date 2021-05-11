@@ -19,7 +19,9 @@ class AnimatedSprite : public Sprite
   void setFrame(size_t frame);
   void setPlaybackSpeed(float _playback_speed);
   [[nodiscard]] const std::string& getFilePath();
-  [[nodiscard]] float getPlaybackSpeed();
+  [[nodiscard]] float getPlaybackSpeed() const;
+  void
+  loadAnimation(ASGE::Renderer* renderer, const std::string& _file_path, float playback_speed = 1);
 
  private:
   std::string file_path;
