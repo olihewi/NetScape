@@ -63,9 +63,9 @@ void GameScene::update(InputTracker& input, float dt)
     player_pos = ASGE::Point2D(
       player_pos.x + camera.second.getCameraShake().x,
       player_pos.y + camera.second.getCameraShake().y);
-    camera.first.lookAt(ASGE::Point2D(
-      player_pos.x / camera.first.getZoom() + 1920.F / 4,
-      player_pos.y / camera.first.getZoom() + 1080.F / 4));
+    camera.first.lookAt(ASGE::Point2D(player_pos.x, player_pos.y));
+    float right_mag = min(std::hypot(right_stick.x, right_stick.y), 1);
+    camera.first.setZoom(0.5F + (0.05F * right_mag * camera.second.getFocus()));
     index++;
   }
 
@@ -83,8 +83,8 @@ void GameScene::render(ASGE::Renderer* renderer)
     auto camera_view = camera.first.getView();
     renderer->setViewport({ (index % 2) * ASGE::SETTINGS.window_width / 2,
                             (1 - index / 2) * ASGE::SETTINGS.window_height / 2,
-                            static_cast<uint32_t>(ASGE::SETTINGS.window_width / 2),
-                            static_cast<uint32_t>(ASGE::SETTINGS.window_height / 2) });
+                            ASGE::SETTINGS.window_width / 2,
+                            ASGE::SETTINGS.window_height / 2 });
     renderer->setProjectionMatrix(camera_view);
 
     Scene::render(renderer);
