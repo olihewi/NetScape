@@ -4,8 +4,11 @@
 
 #include "../include/ASGEGameLib/GameObjects/Player/Weapons/WeaponDrop.h"
 WeaponDrop::WeaponDrop(ASGE::Renderer* renderer, WeaponData weapon, ASGE::Point2D position) :
-  AnimatedSprite(renderer, weapon.sprite_floor, 0, position), data(std::move(weapon))
+  Sprite(renderer, weapon.sprite_floor, position), data(std::move(weapon))
 {
+  Sprite::dimensions(ASGE::Point2D(Sprite::getTextureSize().x / 2, Sprite::getTextureSize().y));
+  Sprite::srcRect(
+    0.1F, 0.1F, Sprite::getTextureSize().x / 2 - 0.2F, Sprite::getTextureSize().y - 0.2F);
 }
 WeaponData WeaponDrop::getWeapon()
 {
@@ -13,5 +16,9 @@ WeaponData WeaponDrop::getWeapon()
 }
 void WeaponDrop::playerInRange(bool yes)
 {
-  AnimatedSprite::setFrame(yes ? 1 : 0);
+  Sprite::srcRect(
+    yes ? Sprite::getTextureSize().x / 2 + 0.1F : 0.1F,
+    0.1F,
+    Sprite::getTextureSize().x / 2 - 0.2F,
+    Sprite::getTextureSize().y - 0.2F);
 }

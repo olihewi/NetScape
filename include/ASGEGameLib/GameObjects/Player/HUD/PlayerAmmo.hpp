@@ -21,13 +21,14 @@ class PlayerAmmo : public GameObject
  private:
   Weapon& weapon;
   Player& player;
-  std::array<Sprite, 10> bullet;
-  // Sprite background;
-  float posX, posY;
+  ASGE::Renderer* m_renderer;
+  std::vector<Sprite> counters;
+  ASGE::Point2D position;
 
   Text AmmoReserveDisplay;
-  Text AmmoReserveDisplayX;
   Text weapon_name;
+  Sprite weapon_sprite;
+  std::string last_weapon;
 };
 
 #endif // ASGEMOVIEGAME_PLAYERAMMO_HPP

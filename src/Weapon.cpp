@@ -54,10 +54,11 @@ void Weapon::reload()
 {
   if (current_ammo < weapon_data.max_ammo && fire_timer <= 0 && reload_timer <= 0 && ammo_reserve > 0)
   {
-    ammo_reserve =
-      static_cast<int>(std::fmax(ammo_reserve - (weapon_data.max_ammo - current_ammo), 0));
-    current_ammo = static_cast<int>(std::fmin(current_ammo + ammo_reserve, weapon_data.max_ammo));
-    reload_timer = weapon_data.reload_time;
+    int ammo_gain = current_ammo;
+    current_ammo  = static_cast<int>(std::fmin(current_ammo + ammo_reserve, weapon_data.max_ammo));
+    ammo_gain     = current_ammo - ammo_gain;
+    ammo_reserve  = static_cast<int>(std::fmax(ammo_reserve - ammo_gain, 0));
+    reload_timer  = weapon_data.reload_time;
     sounds[2].play();
   }
 }

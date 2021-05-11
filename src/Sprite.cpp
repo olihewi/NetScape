@@ -125,3 +125,7 @@ std::array<float, 4> Sprite::srcRect()
   auto* src_rect = sprite->srcRect();
   return std::array<float, 4>{ src_rect[0], src_rect[1], src_rect[2], src_rect[3] };
 }
+void Sprite::setFlipFlags(ASGE::Sprite::FlipFlags flags)
+{
+  sprite->setFlipFlags(flags);
+}

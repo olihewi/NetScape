@@ -5,7 +5,8 @@
 WeaponData::WeaponData(nlohmann::json j) :
   weapon_name(j["weapon_name"].get<std::string>()),
   sprite_held(j["sprite_held"].get<std::string>()),
-  sprite_floor(j["sprite_floor"].get<std::string>()), sfx_fire(j["sfx_fire"].get<std::string>()),
+  sprite_floor(j["sprite_floor"].get<std::string>()),
+  sprite_ammo(j["sprite_ammo"].get<std::string>()), sfx_fire(j["sfx_fire"].get<std::string>()),
   sfx_reload(j["sfx_reload"].get<std::string>()), sfx_empty(j["sfx_empty"].get<std::string>()),
   is_automatic(j["is_automatic"].get<bool>()), max_ammo(j["max_ammo"].get<int>()),
   ammo_reserve(j["ammo_reserve"].get<int>()), fire_rate(j["fire_rate"].get<float>()),
@@ -21,6 +22,7 @@ nlohmann::json WeaponData::toJson()
   j["weapon_name"]   = weapon_name;
   j["sprite_held"]   = sprite_held;
   j["sprite_floor"]  = sprite_floor;
+  j["sprite_ammo"]   = sprite_ammo;
   j["sfx_fire"]      = sfx_fire;
   j["sfx_reload"]    = sfx_reload;
   j["sfx_empty"]     = sfx_empty;

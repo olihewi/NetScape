@@ -32,11 +32,10 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
       std::make_pair(ASGE::Camera(1920.F / 2, 1080.F / 2), PlayerHUD(player)));
     camera.first.setZoom(0.5F);
     camera.second.addObject(std::make_unique<Text>(
-      renderer, "Player " + std::to_string(player.getID()), ASGE::Point2D(100, 100)));
+      renderer, "Player " + std::to_string(player.getID() + 1), ASGE::Point2D(100, 100)));
     camera.second.addObject((std::make_unique<PlayerAmmo>(
-      renderer, player.getWeapon(), player, 1920 / 2 - 128, 1080 / 2 - 64)));
-    camera.second.addObject(
-      (std::make_unique<PlayerLives>(renderer, player, 1920 / 2 - 128, 1080 / 2 - 96)));
+      renderer, player.getWeapon(), player, 1920 / 2 - 200, 1080 / 2 - 40)));
+    camera.second.addObject((std::make_unique<PlayerLives>(renderer, player, 140, 1080 / 2 - 40)));
     camera.second.addObject(std::make_unique<Crosshair>(renderer, player.getID()));
   }
   window_divider.dimensions(window);

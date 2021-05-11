@@ -6,8 +6,8 @@
 #define ASGEMOVIEGAME_WEAPONDROP_H
 
 #include "WeaponData.h"
-#include <ASGEGameLib/GameObjects/Sprites/AnimatedSprite.h>
-class WeaponDrop : public AnimatedSprite
+#include <ASGEGameLib/GameObjects/Sprites/Sprite.h>
+class WeaponDrop : public Sprite
 {
  public:
   WeaponDrop(ASGE::Renderer* renderer, WeaponData weapon, ASGE::Point2D position = ASGE::Point2D());

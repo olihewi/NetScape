@@ -49,6 +49,7 @@ class Sprite : public GameObject
   [[nodiscard]] std::array<float, 4> srcRect();
 
   [[nodiscard]] ASGE::Point2D getTextureSize();
+  void setFlipFlags(ASGE::Sprite::FlipFlags flags);
 
  private:
   std::unique_ptr<ASGE::Sprite> sprite;

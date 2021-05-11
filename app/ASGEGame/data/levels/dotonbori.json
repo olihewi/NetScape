@@ -340,7 +340,7 @@
         "fire_frames": 1,
         "fire_rate": 0.20000000298023224,
         "inaccuracy": 0.0,
-        "is_automatic": true,
+        "is_automatic": false,
         "look_distance": 1.0,
         "max_ammo": 10,
         "recoil": 0.20000000298023224,
@@ -350,6 +350,7 @@
         "sfx_empty": "data/audio/guns/pistol/empty.wav",
         "sfx_fire": "data/audio/guns/pistol/fire.wav",
         "sfx_reload": "data/audio/guns/pistol/reload.wav",
+        "sprite_ammo": "data/images/weapons/pistol_bullet.png",
         "sprite_floor": "data/images/weapons/pistol.png",
         "sprite_held": "data/images/player/pistol.png",
         "weapon_name": "Pistol"
@@ -357,6 +358,58 @@
       "position": [
         600.0,
         600.0
+      ]
+    },
+    {
+      "data": {
+        "ammo_reserve": 24,
+        "fire_frames": 3,
+        "fire_rate": 1.0,
+        "inaccuracy": 0.0,
+        "is_automatic": false,
+        "look_distance": 0.6,
+        "max_ammo": 6,
+        "recoil": 0.3,
+        "recoil_regain": 0.6000000238418579,
+        "reload_frames": 14,
+        "reload_time": 2.0,
+        "sfx_empty": "data/audio/guns/shotgun/empty.wav",
+        "sfx_fire": "data/audio/guns/shotgun/fire.wav",
+        "sfx_reload": "data/audio/guns/shotgun/reload.wav",
+        "sprite_ammo": "data/images/weapons/shotgun_pellet.png",
+        "sprite_floor": "data/images/weapons/shotgun.png",
+        "sprite_held": "data/images/player/shotgun.png",
+        "weapon_name": "Shotgun"
+      },
+      "position": [
+        600.0,
+        700.0
+      ]
+    },
+    {
+      "data": {
+        "ammo_reserve": 90,
+        "fire_frames": 1,
+        "fire_rate": 0.05,
+        "inaccuracy": 0.2,
+        "is_automatic": true,
+        "look_distance": 1.0,
+        "max_ammo": 30,
+        "recoil": 0.025,
+        "recoil_regain": 0.4,
+        "reload_frames": 6,
+        "reload_time": 1.0,
+        "sfx_empty": "data/audio/guns/smg/empty.wav",
+        "sfx_fire": "data/audio/guns/smg/fire.wav",
+        "sfx_reload": "data/audio/guns/smg/reload.wav",
+        "sprite_ammo": "data/images/weapons/pistol_bullet.png",
+        "sprite_floor": "data/images/weapons/micro_smg.png",
+        "sprite_held": "data/images/player/pistol.png",
+        "weapon_name": "Micro SMG"
+      },
+      "position": [
+        600.0,
+        800.0
       ]
     }
   ]

@@ -43,7 +43,7 @@ float AnimatedSprite::getPlaybackSpeed() const
 void AnimatedSprite::loadAnimation(
   ASGE::Renderer* renderer, const std::string& _file_path, float playback_speed)
 {
-  Sprite::loadSprite(renderer, file_path);
+  Sprite::loadSprite(renderer, _file_path);
   file_path   = _file_path;
   auto dims   = Sprite::dimensions();
   frames      = static_cast<size_t>(dims.x) / static_cast<size_t>(dims.y);

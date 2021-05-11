@@ -19,6 +19,7 @@ struct WeaponData
   /// Sprites
   std::string sprite_held  = "data/images/player/pistol.png";
   std::string sprite_floor = "data/images/weapons/pistol.png"; // change
+  std::string sprite_ammo  = "data/images/weapons/pistol_bullet.png";
   /// Audio
   std::string sfx_fire   = "data/audio/guns/pistol/fire.wav";
   std::string sfx_reload = "data/audio/guns/pistol/reload.wav";
