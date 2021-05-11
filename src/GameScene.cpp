@@ -273,7 +273,7 @@ void GameScene::updateDrops(InputTracker& input)
         if (input.getControllerButtonDown(player.getID(), CONTROLLER::BUTTONS::Y))
         {
           player.getWeapon().setWeapon(m_renderer, drop.getWeapon());
-          drop.visibility(false);
+          drop.setRespawnTimer();
         }
       }
     }

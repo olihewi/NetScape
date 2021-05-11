@@ -32,6 +32,10 @@ void TileMap::update(InputTracker& input, float dt)
   {
     animation.update(input, dt);
   }
+  for (auto& weapon_drop : weapon_drops)
+  {
+    weapon_drop.update(input, dt);
+  }
 }
 void TileMap::render(ASGE::Renderer* _renderer)
 {
@@ -110,8 +114,9 @@ nlohmann::json TileMap::saveTileMap()
   for (auto& weapon_drop : weapon_drops)
   {
     nlohmann::json this_j;
-    this_j["position"] = std::make_pair(weapon_drop.position().x, weapon_drop.position().y);
-    this_j["data"]     = weapon_drop.getWeapon().toJson();
+    this_j["position"]     = std::make_pair(weapon_drop.position().x, weapon_drop.position().y);
+    this_j["data"]         = weapon_drop.getWeapon().toJson();
+    this_j["respawn_time"] = weapon_drop.getRespawnTime();
     j_drops.emplace_back(this_j);
   }
   j["weapon_drops"] = j_drops;
@@ -205,10 +210,11 @@ void TileMap::loadFromJson(nlohmann::json j)
   weapon_drops = std::vector<WeaponDrop>();
   for (auto& weapon_drop : j["weapon_drops"])
   {
-    auto pos_pair = weapon_drop["position"].get<std::pair<float, float>>();
-    auto weapon   = WeaponData(weapon_drop["data"]);
+    auto pos_pair     = weapon_drop["position"].get<std::pair<float, float>>();
+    auto weapon       = WeaponData(weapon_drop["data"]);
+    auto respawn_time = weapon_drop["respawn_time"].get<float>();
     weapon_drops.emplace_back(
-      WeaponDrop(renderer, weapon, ASGE::Point2D(pos_pair.first, pos_pair.second)));
+      WeaponDrop(renderer, weapon, respawn_time, ASGE::Point2D(pos_pair.first, pos_pair.second)));
   }
 }
 void TileMap::setCollision(size_t index, int _collision)

@@ -359,7 +359,8 @@
       "position": [
         600.0,
         600.0
-      ]
+      ],
+      "respawn_time": 10.0
     },
     {
       "data": {
@@ -386,7 +387,8 @@
       "position": [
         600.0,
         700.0
-      ]
+      ],
+      "respawn_time": 10.0
     },
     {
       "data": {
@@ -413,7 +415,8 @@
       "position": [
         600.0,
         800.0
-      ]
+      ],
+      "respawn_time": 10.0
     },
 	{
 	  "data": {
@@ -440,7 +443,8 @@
       "position": [
         600.0,
         900.0
-      ]
+      ],
+      "respawn_time": 10.0
     },
 	{
       "data": {
@@ -467,7 +471,8 @@
       "position": [
         600.0,
         975.0
-      ]
+      ],
+      "respawn_time": 10.0
 	}
   ]
 }
