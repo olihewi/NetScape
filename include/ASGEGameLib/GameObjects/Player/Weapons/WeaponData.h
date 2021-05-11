@@ -26,7 +26,7 @@ struct WeaponData
   std::string sfx_empty  = "data/audio/guns/pistol/empty.wav";
   /// Stats
   bool is_automatic   = false;
-  float damage        = 25;
+  float damage        = 20;
   int max_ammo        = 10;
   int ammo_reserve    = 40;
   float fire_rate     = 0.2F;

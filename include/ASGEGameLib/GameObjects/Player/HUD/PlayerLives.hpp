@@ -18,11 +18,13 @@ class PlayerLives : public GameObject
 
  private:
   Player& player;
-  std::array<Sprite, 10> lives;
-  float posX, posY;
+  Sprite lives;
+  ASGE::Point2D position;
+  Sprite health_bd;
+  Sprite health_bg;
+  Sprite health_bar;
 
-  Text LivesReserveDisplay;
-  Text LivesReserveDisplayX;
+  Text player_name;
 
   void playerRespawn();
 };

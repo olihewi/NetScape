@@ -52,8 +52,8 @@ TitleScene::TitleScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _sc
     static_cast<float>(ASGE::SETTINGS.window_width),
     static_cast<float>(ASGE::SETTINGS.window_height));
   std::unique_ptr<Text> game_title =
-    std::make_unique<Text>(renderer, "NetScape", ASGE::Point2D(), FONTS::ROBOTO);
-  game_title->centrePos(ASGE::Point2D(window.x / 2, window.y / 2 - 250));
+    std::make_unique<Text>(renderer, "NetScape", ASGE::Point2D(), FONTS::BARCODE);
+  game_title->centrePos(ASGE::Point2D(window.x / 2, window.y / 2 - 150));
   addObject(std::move(game_title));
   selectButton(button_selection);
   test_clip.getSound().setLooping(true);

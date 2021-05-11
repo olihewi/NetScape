@@ -337,7 +337,7 @@
     {
       "data": {
         "ammo_reserve": 40,
-        "damage": 25.0,
+        "damage": 20.0,
         "fire_frames": 1,
         "fire_rate": 0.20000000298023224,
         "inaccuracy": 0.0,
@@ -390,14 +390,14 @@
     },
     {
       "data": {
-        "ammo_reserve": 90,
+        "ammo_reserve": 40,
         "damage": 12.5,
         "fire_frames": 1,
         "fire_rate": 0.05,
         "inaccuracy": 0.2,
         "is_automatic": true,
         "look_distance": 1.0,
-        "max_ammo": 30,
+        "max_ammo": 20,
         "recoil": 0.025,
         "recoil_regain": 0.4,
         "reload_frames": 6,
@@ -405,7 +405,7 @@
         "sfx_empty": "data/audio/guns/micro_smg/empty.wav",
         "sfx_fire": "data/audio/guns/micro_smg/fire.wav",
         "sfx_reload": "data/audio/guns/micro_smg/reload.wav",
-        "sprite_ammo": "data/images/weapons/pistol_bullet.png",
+        "sprite_ammo": "data/images/weapons/smg_round.png",
         "sprite_floor": "data/images/weapons/micro_smg.png",
         "sprite_held": "data/images/player/pistol.png",
         "weapon_name": "Micro SMG"
@@ -432,7 +432,7 @@
         "sfx_empty": "data/audio/guns/sniper/empty.wav",
         "sfx_fire": "data/audio/guns/sniper/fire.wav",
         "sfx_reload": "data/audio/guns/sniper/reload.wav",
-        "sprite_ammo": "data/images/weapons/pistol_bullet.png",
+        "sprite_ammo": "data/images/weapons/sniper_round.png",
         "sprite_floor": "data/images/weapons/sniper.png",
         "sprite_held": "data/images/player/pistol.png",
         "weapon_name": "Sniper Rifle"
@@ -459,7 +459,7 @@
         "sfx_empty": "data/audio/guns/smg/empty.wav",
         "sfx_fire": "data/audio/guns/smg/fire.wav",
         "sfx_reload": "data/audio/guns/smg/reload.wav",
-        "sprite_ammo": "data/images/weapons/pistol_bullet.png",
+        "sprite_ammo": "data/images/weapons/smg_round.png",
         "sprite_floor": "data/images/weapons/smg.png",
         "sprite_held": "data/images/player/pistol.png",
         "weapon_name": "SMG"

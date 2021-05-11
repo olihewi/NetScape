@@ -16,7 +16,9 @@ class FontManager
 namespace FONTS
 {
   /// Available fonts go here
-  constexpr int ROBOTO = 1;
+  constexpr int ROBOTO  = 1;
+  constexpr int BARCODE = 2;
+  constexpr int PIXEL   = 3;
 }
 
 #endif // ASGEMOVIEGAME_FONTMANAGER_H

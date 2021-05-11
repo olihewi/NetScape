@@ -42,13 +42,12 @@ void Player::input(InputTracker& input, float dt)
     left_stick = ASGE::Point2D(left_stick.x / left_stick_hypot, left_stick.y / left_stick_hypot);
     left_stick_hypot = 1;
   }
-  translate(
-    ASGE::Point2D(left_stick.x * move_speed * dt, left_stick.y * move_speed * dt) *
-    (sprint_button ? 2.F : 1.F));
+  float movespeed = move_speed * (sprint_button ? 2.F : 1.F);
+  translate(ASGE::Point2D(left_stick.x, left_stick.y) * movespeed * dt);
   if (left_stick_hypot >= CONTROLLER::AXIS_DEADZONE)
   {
     rotation(atan2f(left_stick.y, left_stick.x));
-    setPlaybackSpeed(15 * left_stick_hypot);
+    setPlaybackSpeed(15 * left_stick_hypot * movespeed / move_speed);
     player_walk.volume(1);
   }
   else
@@ -56,7 +55,7 @@ void Player::input(InputTracker& input, float dt)
     player_walk.volume(0);
     setFrame(3);
   }
-  player_walk.setSpeed(left_stick_hypot);
+  player_walk.setSpeed(left_stick_hypot * movespeed / move_speed);
   if (is_dead)
   {
     player_walk.volume(0);

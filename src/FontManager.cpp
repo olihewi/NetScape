@@ -25,4 +25,6 @@ void FontManager::loadFonts(ASGE::Renderer* renderer)
 {
   /// Load required fonts here!
   loadFont(renderer, "data/fonts/RobotoMono-Regular.ttf", 48);
+  loadFont(renderer, "data/fonts/Paskowy.ttf", 400);
+  loadFont(renderer, "data/fonts/superstar_memesbruh03.ttf", 64);
 }
