@@ -10,7 +10,7 @@ Tile::Tile(
   sprite(std::make_unique<Sprite>(renderer, tileset_path, position))
 {
   sprite->dimensions(ASGE::Point2D(rect[2], rect[3]));
-  sprite->srcRect(rect[0], rect[1], rect[2], rect[3]);
+  sprite->srcRect(rect[0] + 0.1F, rect[1] + 0.1F, rect[2] - 0.2F, rect[3] - 0.2F);
   sprite->zOrder(static_cast<short>(layer));
 }
 void Tile::update(InputTracker& input, float dt)

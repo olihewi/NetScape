@@ -5,6 +5,7 @@
 #ifndef ASGEMOVIEGAME_TILEMAP_H
 #define ASGEMOVIEGAME_TILEMAP_H
 
+#include <ASGEGameLib/GameObjects/Player/Weapons/WeaponDrop.h>
 #include <ASGEGameLib/GameObjects/Sprites/AnimatedSprite.h>
 #include <ASGEGameLib/GameObjects/Tilemap/Tile.h>
 #include <nlohmann/json.hpp>
@@ -32,6 +33,7 @@ class TileMap : public GameObject
   [[nodiscard]] int getCollisionPos(ASGE::Point2D position);
 
   [[nodiscard]] ASGE::Point2D getSpawn(size_t index);
+  [[nodiscard]] std::vector<WeaponDrop>& getDrops();
 
  private:
   std::vector<std::array<Tile, 2500>> tiles;
@@ -40,6 +42,7 @@ class TileMap : public GameObject
   std::string tileset_path;
   std::vector<ASGE::Point2D> spawn_points;
   std::vector<AnimatedSprite> animations;
+  std::vector<WeaponDrop> weapon_drops;
 };
 
 #endif // ASGEMOVIEGAME_TILEMAP_H

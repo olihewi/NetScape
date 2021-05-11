@@ -27,6 +27,7 @@ class PlayerAmmo : public GameObject
 
   Text AmmoReserveDisplay;
   Text AmmoReserveDisplayX;
+  Text weapon_name;
 };
 
 #endif // ASGEMOVIEGAME_PLAYERAMMO_HPP

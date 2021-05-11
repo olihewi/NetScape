@@ -12,7 +12,8 @@
 #include <utility>
 
 GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
-  Scene(std::move(_scene_callback)), tile_map(renderer, "levels/dotonbori.json"),
+  Scene(std::move(_scene_callback)), m_renderer(renderer),
+  tile_map(renderer, "levels/dotonbori.json"),
   players(std::array<Player, 4>{ Player(renderer, ASGE::Point2D(), 0, audio_engine.get()),
                                  Player(renderer, ASGE::Point2D(), 1, audio_engine.get()),
                                  Player(renderer, ASGE::Point2D(), 2, audio_engine.get()),
@@ -33,9 +34,9 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
     camera.second.addObject(std::make_unique<Text>(
       renderer, "Player " + std::to_string(player.getID()), ASGE::Point2D(100, 100)));
     camera.second.addObject((std::make_unique<PlayerAmmo>(
-      renderer, player.getWeapon(), player, window.x / 2 - 128, window.y / 2 - 64)));
+      renderer, player.getWeapon(), player, 1920 / 2 - 128, 1080 / 2 - 64)));
     camera.second.addObject(
-      (std::make_unique<PlayerLives>(renderer, player, window.x / 2 - 128, window.y / 2 - 96)));
+      (std::make_unique<PlayerLives>(renderer, player, 1920 / 2 - 128, 1080 / 2 - 96)));
     camera.second.addObject(std::make_unique<Crosshair>(renderer, player.getID()));
   }
   window_divider.dimensions(window);
@@ -43,15 +44,12 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
 
 void GameScene::update(InputTracker& input, float dt)
 {
-  auto window_size = ASGE::Point2D(
-    static_cast<float>(ASGE::SETTINGS.window_width),
-    static_cast<float>(ASGE::SETTINGS.window_height));
-
   Scene::update(input, dt);
   tile_map.update(input, dt);
 
   playerMovement(input, dt);
   checkBullets();
+  updateDrops(input);
 
   size_t index = 0;
   for (auto& camera : player_cameras)
@@ -65,9 +63,9 @@ void GameScene::update(InputTracker& input, float dt)
     player_pos = ASGE::Point2D(
       player_pos.x + camera.second.getCameraShake().x,
       player_pos.y + camera.second.getCameraShake().y);
-    camera.first.lookAt(ASGE::Point2D(
-      player_pos.x / camera.first.getZoom() + 1920 / 4,
-      player_pos.y / camera.first.getZoom() + 1080 / 4));
+    camera.first.lookAt(ASGE::Point2D(player_pos.x, player_pos.y));
+    float right_mag = min(std::hypot(right_stick.x, right_stick.y), 1);
+    camera.first.setZoom(0.5F + (0.05F * right_mag * camera.second.getFocus()));
     index++;
   }
 
@@ -78,9 +76,6 @@ void GameScene::update(InputTracker& input, float dt)
 }
 void GameScene::render(ASGE::Renderer* renderer)
 {
-  auto window_size = ASGE::Point2D(
-    static_cast<float>(ASGE::SETTINGS.window_width),
-    static_cast<float>(ASGE::SETTINGS.window_height));
   auto renderer_viewport = renderer->getViewport();
   int index              = 0;
   for (auto& camera : player_cameras)
@@ -88,8 +83,8 @@ void GameScene::render(ASGE::Renderer* renderer)
     auto camera_view = camera.first.getView();
     renderer->setViewport({ (index % 2) * ASGE::SETTINGS.window_width / 2,
                             (1 - index / 2) * ASGE::SETTINGS.window_height / 2,
-                            static_cast<uint32_t>(ASGE::SETTINGS.window_width / 2),
-                            static_cast<uint32_t>(ASGE::SETTINGS.window_height / 2) });
+                            ASGE::SETTINGS.window_width / 2,
+                            ASGE::SETTINGS.window_height / 2 });
     renderer->setProjectionMatrix(camera_view);
 
     Scene::render(renderer);
@@ -102,7 +97,7 @@ void GameScene::render(ASGE::Renderer* renderer)
       player.render(renderer);
     }
 
-    renderer->setProjectionMatrix(0, 0, 1920 / 2, 1080 / 2);
+    renderer->setProjectionMatrix(0, 0, 1920.F / 2, 1080.F / 2);
     camera.second.render(renderer);
 
     index++;
@@ -137,7 +132,6 @@ void GameScene::playerMovement(InputTracker& input, float dt)
         auto push_dist =
           ASGE::Point2D((last_pos.x - player.centre().x) / 2, (last_pos.y - player.centre().y) / 2);
         player.translate(push_dist);
-        other_player.translate(ASGE::Point2D(-push_dist.x, -push_dist.y));
       }
     }
   }
@@ -193,7 +187,7 @@ void GameScene::checkBullets()
       size_t index = 0;
       for (auto& trace_point : player.getWeapon().bullet.trace_points)
       {
-        if(!player.getWeapon().bullet.has_hit)
+        if (!player.getWeapon().bullet.has_hit)
         {
           index++;
           if (other_player.isInside(trace_point))
@@ -245,4 +239,27 @@ bool GameScene::playerCollidesWithTile(ASGE::Point2D player, ASGE::Point2D tile)
   float mag          = std::hypot(dist.x, dist.y);
   /// If the distance is less than the radius, collision!
   return mag <= p_radius;
+}
+void GameScene::updateDrops(InputTracker& input)
+{
+  for (auto& drop : tile_map.getDrops())
+  {
+    if (!drop.visibility())
+    {
+      continue;
+    }
+    drop.playerInRange(false);
+    for (auto& player : players)
+    {
+      if (std::hypot(player.centre().x - drop.centre().x, player.centre().y - drop.centre().y) < 48)
+      {
+        drop.playerInRange(true);
+        if (input.getControllerButtonDown(player.getID(), CONTROLLER::BUTTONS::Y))
+        {
+          player.getWeapon().setWeapon(m_renderer, drop.getWeapon());
+          drop.visibility(false);
+        }
+      }
+    }
+  }
 }

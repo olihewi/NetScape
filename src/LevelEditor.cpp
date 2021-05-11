@@ -56,10 +56,8 @@ void LevelEditor::render(ASGE::Renderer* /*renderer*/)
   }
 
   auto renderer_view = renderer->getViewport();
-  renderer->setViewport({ 256,
-                          0,
-                          static_cast<uint32_t>(ASGE::SETTINGS.window_width) - 256,
-                          static_cast<uint32_t>(ASGE::SETTINGS.window_height) - 125 });
+  renderer->setViewport(
+    { 256, 0, ASGE::SETTINGS.window_width - 256, ASGE::SETTINGS.window_height - 125 });
   renderer->setProjectionMatrix(tilemap_camera.getView());
   tile_map.render(renderer);
   renderer->setViewport(renderer_view);
@@ -92,9 +90,9 @@ void LevelEditor::update(InputTracker& input, float dt)
   auto relative_mouse_pos = input.getMousePos();
   auto camera_view        = tilemap_camera.getView();
   relative_mouse_pos.x =
-    (relative_mouse_pos.x - 256 + camera_view.min_x) * tilemap_camera.getZoom();
+    (relative_mouse_pos.x - 256) * tilemap_camera.getZoom() + camera_view.min_x;
   relative_mouse_pos.y =
-    (relative_mouse_pos.y - 125 + camera_view.min_y) * tilemap_camera.getZoom();
+    (relative_mouse_pos.y - 125) * tilemap_camera.getZoom() + camera_view.min_y;
   if (relative_mouse_pos.x >= 0 && relative_mouse_pos.y >= 0)
   {
     if (input.getMouseButton(MOUSE::LEFT_CLICK))

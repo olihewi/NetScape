@@ -5,21 +5,26 @@
 #ifndef ASGEMOVIEGAME_WEAPONDATA_H
 #define ASGEMOVIEGAME_WEAPONDATA_H
 
+#include <nlohmann/json.hpp>
 #include <string>
 
 struct WeaponData
 {
  public:
   WeaponData() = default;
+  explicit WeaponData(nlohmann::json j);
+  [[nodiscard]] nlohmann::json toJson();
+
+  std::string weapon_name = "Pistol";
   /// Sprites
   std::string sprite_held  = "data/images/player/pistol.png";
-  std::string sprite_floor = "data/images/player/pistol_bullet.png"; // change
+  std::string sprite_floor = "data/images/weapons/pistol.png"; // change
   /// Audio
   std::string sfx_fire   = "data/audio/guns/pistol/fire.wav";
   std::string sfx_reload = "data/audio/guns/pistol/reload.wav";
   std::string sfx_empty  = "data/audio/guns/pistol/empty.wav";
   /// Stats
-  bool is_automatic   = true;
+  bool is_automatic   = false;
   int max_ammo        = 10;
   int ammo_reserve    = 40;
   float fire_rate     = 0.2F;

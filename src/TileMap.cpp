@@ -5,6 +5,7 @@
 #include "GameObjects/Tilemap/TileMap.h"
 
 #include <Engine/FileIO.hpp>
+#include <iostream>
 #include <utility>
 TileMap::TileMap(ASGE::Renderer* _renderer, std::string _tileset_path, size_t num_layers) :
   collisions(), renderer(_renderer), tileset_path(std::move(_tileset_path))
@@ -44,6 +45,10 @@ void TileMap::render(ASGE::Renderer* _renderer)
   for (auto& animation : animations)
   {
     animation.render(renderer);
+  }
+  for (auto& weapon_drop : weapon_drops)
+  {
+    weapon_drop.render(renderer);
   }
 }
 void TileMap::setTile(size_t layer, size_t index, std::array<float, 4> rect)
@@ -101,6 +106,15 @@ nlohmann::json TileMap::saveTileMap()
     j_animations.emplace_back(this_json);
   }
   j["animations"] = j_animations;
+  std::vector<nlohmann::json> j_drops;
+  for (auto& weapon_drop : weapon_drops)
+  {
+    nlohmann::json this_j;
+    this_j["position"] = std::make_pair(weapon_drop.position().x, weapon_drop.position().y);
+    this_j["data"]     = weapon_drop.getWeapon().toJson();
+    j_drops.emplace_back(this_j);
+  }
+  j["weapon_drops"] = j_drops;
   return j;
 }
 TileMap::TileMap(ASGE::Renderer* _renderer, const std::string& file_path) :
@@ -188,6 +202,14 @@ void TileMap::loadFromJson(nlohmann::json j)
     auto& this_anim    = animations.emplace_back(AnimatedSprite(renderer, path, speed, position));
     this_anim.zOrder(static_cast<short>(layer));
   }
+  weapon_drops = std::vector<WeaponDrop>();
+  for (auto& weapon_drop : j["weapon_drops"])
+  {
+    auto pos_pair = weapon_drop["position"].get<std::pair<float, float>>();
+    auto weapon   = WeaponData(weapon_drop["data"]);
+    weapon_drops.emplace_back(
+      WeaponDrop(renderer, weapon, ASGE::Point2D(pos_pair.first, pos_pair.second)));
+  }
 }
 void TileMap::setCollision(size_t index, int _collision)
 {
@@ -243,6 +265,10 @@ void TileMap::renderSection(ASGE::Point2D top_left, ASGE::Point2D bottom_right)
       animation.render(renderer);
     }
   }
+  for (auto& weapon_drop : weapon_drops)
+  {
+    weapon_drop.render(renderer);
+  }
 }
 void TileMap::setAnimatedTile(size_t layer, size_t index, const std::string& file_path, float speed)
 {
@@ -253,4 +279,8 @@ void TileMap::setAnimatedTile(size_t layer, size_t index, const std::string& fil
     speed,
     ASGE::Point2D(static_cast<float>(index % 50) * 32, static_cast<float>(row) * 32)));
   this_anim.zOrder(static_cast<short>(layer));
+}
+std::vector<WeaponDrop>& TileMap::getDrops()
+{
+  return weapon_drops;
 }
