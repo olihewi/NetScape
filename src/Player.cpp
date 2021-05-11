@@ -33,9 +33,10 @@ void Player::input(InputTracker& input, float dt)
 {
   weapon.update(input, dt);
   /// Movement
-  auto left_stick        = input.getControllerStick(controller_id, CONTROLLER::STICKS::LEFT);
-  float left_stick_hypot = std::hypot(left_stick.x, left_stick.y);
-  auto sprint_button     = input.getControllerButton(controller_id, CONTROLLER::BUTTONS::B);
+  auto left_stick           = input.getControllerStick(controller_id, CONTROLLER::STICKS::LEFT);
+  float left_stick_hypot    = std::hypot(left_stick.x, left_stick.y);
+  auto sprint_button        = input.getControllerButton(controller_id, CONTROLLER::BUTTONS::B);
+  auto score_readout_button = input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::X);
   if (left_stick_hypot > 1)
   {
     left_stick = ASGE::Point2D(left_stick.x / left_stick_hypot, left_stick.y / left_stick_hypot);
@@ -60,6 +61,15 @@ void Player::input(InputTracker& input, float dt)
   {
     player_walk.volume(0);
   }
+
+  if (score_readout_button)
+  {
+    Logging::DEBUG(
+      "Player: " + std::to_string(controller_id + 1) + "\nkills: " + std::to_string(score.kills) +
+      "\ndeaths: " + std::to_string(score.deaths) + "\nmisses: " + std::to_string(score.miss) +
+      "\nhits: " + std::to_string(score.hit) +
+      "\naccuracy: " + std::to_string((score.hit / (score.hit + score.miss)) * 100));
+  }
 }
 void Player::position(ASGE::Point2D _position)
 {
@@ -80,13 +90,15 @@ void Player::takeDamage(float damage)
   {
     player_damaged.play();
   }
+
   Logging::DEBUG("HIT");
   if (health <= 0)
   {
     is_dead = true;
+    score.deaths++;
     Sprite::visibility(false);
     weapon.visibility(false);
-    Logging::DEBUG("DEAD");
+    // Logging::DEBUG("DEAD");
   }
 }
 
@@ -159,4 +171,9 @@ ASGE::Point2D Player::getSpawnPoint()
 void Player::setSpawnPoint(ASGE::Point2D _spawn_point)
 {
   spawn_point = _spawn_point;
+}
+
+Score& Player::getScore()
+{
+  return score;
 }

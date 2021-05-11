@@ -43,18 +43,19 @@ void LineTrace::hitCheck(float distance, ASGE::Point2D origin, float angle)
     Logging::DEBUG(std::to_string(tracers_needed));
     for (size_t i = 0; i < tracers_needed; i++)
     {
+      Logging::DEBUG("tracers needed: " + std::to_string(i));
       bullet_sprites[i].position(trace_points[(hit_point / tracers_needed * i) + 25]);
-      bullet_sprites[i].dimensions(ASGE::Point2D(hit_dist/ static_cast<float>(tracers_needed), 3));
+      bullet_sprites[i].dimensions(ASGE::Point2D(hit_dist / static_cast<float>(tracers_needed), 3));
       bullet_sprites[i].rotation(angle);
       bullet_sprites[i].visibility(true);
       tracer_timer = 0;
     }
-   // bullet_sprites[tracers_needed].position(trace_points[(hit_point)-25]);
+    // bullet_sprites[tracers_needed].position(trace_points[(hit_point)-25]);
     has_hit = false;
   }
   else
   {
-    for (size_t i = 0; i < 5 ; i++)
+    for (size_t i = 0; i < 5; i++)
     {
       bullet_sprites[i].position(trace_points[(i * 50) + 25]);
       bullet_sprites[i].dimensions(ASGE::Point2D(50, 3));

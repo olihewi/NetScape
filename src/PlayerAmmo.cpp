@@ -39,7 +39,7 @@ void PlayerAmmo::update(InputTracker& input, float dt)
       weapon_sprite.getTextureSize().y - 0.2F);
     weapon_sprite.position(ASGE::Point2D(
       position.x + 16 * 10 - weapon_sprite.dimensions().x,
-      counters.back().position().y - weapon_sprite.dimensions().y - 4));
+      counters.back().position().y - weapon_sprite.dimensions().y - 8));
     weapon_sprite.setFlipFlags(ASGE::Sprite::FLIP_X);
   }
   int i = 0;
