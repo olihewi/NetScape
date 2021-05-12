@@ -101,11 +101,11 @@ void Player::input(InputTracker& input, float dt)
 
   if(dash_button && dash_cooldown <= 0)
   {
+    dash_timer = 0;
     dash_cooldown = 0;
     dashing = true;
-    translate( ASGE::Point2D(left_stick.x, left_stick.y) * 2000 * dt);
+    move_speed = 500;
   }
-
 }
 void Player::position(ASGE::Point2D _position)
 {
@@ -150,26 +150,6 @@ void Player::update(InputTracker& input, float dt)
   invisibility(dt);
   heal(dt);
   dash(dt);
-
-  if (invis_cooldown <= 0.1 && invis_cooldown >= 0)
-  {
-    invis_recharged.play();
-  }
-
-  if (is_invis)
-  {
-    invis_timer += dt;
-
-    if (invis_timer >= 5 || weapon.hasFired() || has_been_hit)
-    {
-      invis_timer    = 0;
-      invis_cooldown = 15;
-      is_invis       = false;
-      this->opacity(1.0F);
-      weapon.opacity(1.0F);
-    }
-  }
-  invisibility(dt);
 
   weapon.colour(ASGE::Colour(playerR, playerG, playerB));
   if (has_been_hit)
@@ -290,10 +270,17 @@ void Player::dash(float dt)
     invis_recharged.play();
   }
 
-  if(dashing)
+  if (dashing)
   {
-    dash_cooldown = 10;
-    dashing = false;
+    dash_timer += dt;
+
+    if (dash_timer >= 0.1 || weapon.hasFired() || has_been_hit)
+    {
+      dash_timer    = 0;
+      dash_cooldown = 15;
+      dashing       = false;
+      move_speed    = 100;
+    }
   }
 }
 

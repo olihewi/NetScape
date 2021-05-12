@@ -23,6 +23,7 @@ class PlayerAbilities : public GameObject
   ASGE::Point2D position;
 
   std::array<Sprite, 3> ability_icons;
+  std::array<Sprite, 3> button_icons;
 };
 
 #endif // ASGEMOVIEGAME_PLAYERABILITIES_HPP
