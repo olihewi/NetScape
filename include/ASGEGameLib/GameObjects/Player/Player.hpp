@@ -18,6 +18,8 @@ struct Score
   int deaths = 0;
   float hit  = 0;
   float miss = 0;
+
+  std::array<int, 4> nemesis_points{};
 };
 
 class Player : public AnimatedSprite
@@ -52,21 +54,21 @@ class Player : public AnimatedSprite
   [[nodiscard]] ASGE::Point2D getSpawnPoint();
   void setSpawnPoint(ASGE::Point2D _spawn_point);
 
-  //Abilities
+  // Abilities
   void invisibility(float dt);
-  float invis_cooldown = 15;
-  float invis_timer = 0;
-  bool is_invis = false;
+  float invis_cooldown = 0;
+  float invis_timer    = 0;
+  bool is_invis        = false;
 
   void heal(float dt);
-  bool healing = true;
+  bool healing        = false;
   float heal_cooldown = 0;
-  float heal_amount = 50;
+  float heal_amount   = 50;
 
   void dash(float dt);
-  bool dashing = true;
+  bool dashing        = false;
   float dash_cooldown = 0;
-
+  float dash_timer    = 0;
 
   float move_speed = 100.0F;
   bool is_dead     = false;

@@ -37,13 +37,13 @@ void Player::input(InputTracker& input, float dt)
 {
   weapon.update(input, dt);
   /// Movement
-  auto left_stick           = input.getControllerStick(controller_id, CONTROLLER::STICKS::LEFT);
-  float left_stick_hypot    = std::hypot(left_stick.x, left_stick.y);
-  auto sprint_button        = input.getControllerButton(controller_id, CONTROLLER::BUTTONS::LEFT_STICK);
+  auto left_stick        = input.getControllerStick(controller_id, CONTROLLER::STICKS::LEFT);
+  float left_stick_hypot = std::hypot(left_stick.x, left_stick.y);
+  auto sprint_button = input.getControllerButton(controller_id, CONTROLLER::BUTTONS::LEFT_STICK);
   auto score_readout_button = input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::X);
-  auto invis_button         = input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::DPAD_LEFT);
-  auto dash_button          = input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::B);
-  auto heal_button          = input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::DPAD_RIGHT);
+  auto invis_button = input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::DPAD_LEFT);
+  auto dash_button  = input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::B);
+  auto heal_button  = input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::DPAD_RIGHT);
 
   if (left_stick_hypot > 1)
   {
@@ -72,10 +72,11 @@ void Player::input(InputTracker& input, float dt)
   if (score_readout_button)
   {
     Logging::DEBUG(
-      "Player: " + std::to_string(controller_id + 1) + "\nkills: " + std::to_string(score.kills) +
-      "\ndeaths: " + std::to_string(score.deaths) + "\nmisses: " + std::to_string(score.miss) +
-      "\nhits: " + std::to_string(score.hit) +
-      "\naccuracy: " + std::to_string((score.hit / (score.hit + score.miss)) * 100));
+      "\n  PLAYER " + std::to_string(getID() + 1) +
+      "\nPLayer 1: " + std::to_string(score.nemesis_points[0]) +
+      "\nPLayer 2: " + std::to_string(score.nemesis_points[1]) +
+      "\nPLayer 3: " + std::to_string(score.nemesis_points[2]) +
+      "\nPLayer 4: " + std::to_string(score.nemesis_points[3]));
   }
 
   if (invis_button && invis_cooldown <= 0)
@@ -87,25 +88,25 @@ void Player::input(InputTracker& input, float dt)
     invis_timer = 0;
   }
 
-  if(heal_button && heal_cooldown <= 0 && health < 100)
+  if (heal_button && heal_cooldown <= 0 && health < 100)
   {
     heal_cooldown = 0;
-    healing = true;
+    healing       = true;
     health += heal_amount;
 
-    if(health > max_health)
+    if (health > max_health)
     {
       health = 100;
     }
   }
 
-  if(dash_button && dash_cooldown <= 0)
+  if (dash_button && dash_cooldown <= 0)
   {
+    dash_timer    = 0;
     dash_cooldown = 0;
-    dashing = true;
-    translate( ASGE::Point2D(left_stick.x, left_stick.y) * 2000 * dt);
+    dashing       = true;
+    move_speed    = 500;
   }
-
 }
 void Player::position(ASGE::Point2D _position)
 {
@@ -150,26 +151,6 @@ void Player::update(InputTracker& input, float dt)
   invisibility(dt);
   heal(dt);
   dash(dt);
-
-  if (invis_cooldown <= 0.1 && invis_cooldown >= 0)
-  {
-    invis_recharged.play();
-  }
-
-  if (is_invis)
-  {
-    invis_timer += dt;
-
-    if (invis_timer >= 5 || weapon.hasFired() || has_been_hit)
-    {
-      invis_timer    = 0;
-      invis_cooldown = 15;
-      is_invis       = false;
-      this->opacity(1.0F);
-      weapon.opacity(1.0F);
-    }
-  }
-  invisibility(dt);
 
   weapon.colour(ASGE::Colour(playerR, playerG, playerB));
   if (has_been_hit)
@@ -246,7 +227,7 @@ void Player::invisibility(float dt)
 {
   invis_cooldown -= dt;
 
-  if(invis_cooldown <= 0.05 && invis_cooldown >= 0)
+  if (invis_cooldown <= 0.05 && invis_cooldown >= 0)
   {
     invis_recharged.play();
   }
@@ -269,15 +250,15 @@ void Player::heal(float dt)
 {
   heal_cooldown -= dt;
 
-  if(heal_cooldown <= 0.05 && heal_cooldown >= 0)
+  if (heal_cooldown <= 0.05 && heal_cooldown >= 0)
   {
     invis_recharged.play();
   }
 
-  if(healing)
+  if (healing)
   {
     heal_cooldown = 15;
-    healing = false;
+    healing       = false;
   }
 }
 
@@ -285,15 +266,21 @@ void Player::dash(float dt)
 {
   dash_cooldown -= dt;
 
-  if(dash_cooldown <= 0.05 && dash_cooldown >= 0)
+  if (dash_cooldown <= 0.05 && dash_cooldown >= 0)
   {
     invis_recharged.play();
   }
 
-  if(dashing)
+  if (dashing)
   {
-    dash_cooldown = 10;
-    dashing = false;
+    dash_timer += dt;
+
+    if (dash_timer >= 0.1 || weapon.hasFired() || has_been_hit)
+    {
+      dash_timer    = 0;
+      dash_cooldown = 15;
+      dashing       = false;
+      move_speed    = 100;
+    }
   }
 }
-
