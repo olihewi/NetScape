@@ -123,26 +123,7 @@ size_t Player::getID() const
 void Player::update(InputTracker& input, float dt)
 {
   // Logging::DEBUG("HAS BEEN HIT: " +std::to_string(static_cast<int>(has_been_hit)));
-  invis_cooldown -= dt;
-
-  if(invis_cooldown <= 0.1 && invis_cooldown >= 0)
-  {
-    invis_recharged.play();
-  }
-
-  if(is_invis == true)
-  {
-    invis_timer += dt;
-
-    if (invis_timer >= 5 || weapon.hasFired() || has_been_hit)
-    {
-      invis_timer = 0;
-      invis_cooldown = 15;
-      is_invis       = false;
-      this->opacity(1.0F);
-      weapon.opacity(1.0F);
-    }
-  }
+    invisibility(dt);
 
   weapon.colour(ASGE::Colour(playerR, playerG, playerB));
   if (has_been_hit)
@@ -214,4 +195,26 @@ bool Player::circleCollision(ASGE::Point2D position)
 {
   auto diff = ASGE::Point2D(position.x - centre().x, position.y - centre().y);
   return (std::hypot(diff.x, diff.y) < 16);
+}
+void Player::invisibility(float dt)
+{
+    invis_cooldown -= dt;
+  if(invis_cooldown <= 0.1 && invis_cooldown >= 0)
+  {
+    invis_recharged.play();
+  }
+
+  if(is_invis == true)
+  {
+    invis_timer += dt;
+
+    if (invis_timer >= 5 || weapon.hasFired() || has_been_hit)
+    {
+      invis_timer = 0;
+      invis_cooldown = 15;
+      is_invis       = false;
+      this->opacity(1.0F);
+      weapon.opacity(1.0F);
+    }
+  }
 }
