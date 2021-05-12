@@ -8,6 +8,7 @@
 #include <ASGEGameLib/GameObjects/Player/HUD/PlayerAmmo.hpp>
 #include <ASGEGameLib/GameObjects/Player/HUD/PlayerHealth.hpp>
 #include <ASGEGameLib/Utilities/FontManager.h>
+#include <GameObjects/Player/HUD/PlayerAbilities.hpp>
 #include <GameObjects/Player/HUD/PlayerLives.hpp>
 #include <array>
 #include <utility>
@@ -37,6 +38,7 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
       renderer, player.getWeapon(), player, 1920 / 2 - 40, 1080 / 2 - 40)));
     camera.second.addObject((std::make_unique<PlayerLives>(renderer, player, 40, 1080 / 2 - 40)));
     camera.second.addObject(std::make_unique<Crosshair>(renderer, player.getID()));
+    camera.second.addObject(std::make_unique<PlayerAbilities>(renderer, player, 1920 / 2 - 150, 1080 / 2 - 100));
   }
   window_divider.dimensions(window);
 }

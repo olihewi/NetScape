@@ -14,7 +14,8 @@ Player::Player(
   controller_id(control_id), weapon(renderer, audio_engine, controller_id, WeaponData()),
   player_walk(audio_engine, "data/audio/player_walk.wav"), lives(3),
   player_damaged(audio_engine, "data/audio/damaged.wav"),
-  player_killed(audio_engine, "data/audio/wilhelm.wav")
+  player_killed(audio_engine, "data/audio/wilhelm.wav"),
+  invis_recharged(audio_engine, "data/audio/solo_beeps_24.wav")
 {
   // zOrder(1);
   weapon.position(_position);
@@ -38,6 +39,7 @@ void Player::input(InputTracker& input, float dt)
   float left_stick_hypot    = std::hypot(left_stick.x, left_stick.y);
   auto sprint_button        = input.getControllerButton(controller_id, CONTROLLER::BUTTONS::B);
   auto score_readout_button = input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::X);
+  auto invis_button         = input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::LEFT_SHOULDER);
   if (left_stick_hypot > 1)
   {
     left_stick = ASGE::Point2D(left_stick.x / left_stick_hypot, left_stick.y / left_stick_hypot);
@@ -70,6 +72,16 @@ void Player::input(InputTracker& input, float dt)
       "\nhits: " + std::to_string(score.hit) +
       "\naccuracy: " + std::to_string((score.hit / (score.hit + score.miss)) * 100));
   }
+
+  if(invis_button && invis_cooldown <= 0)
+  {
+    invis_cooldown = 0;
+    is_invis = true;
+    this->opacity(0.1F);
+    weapon.opacity(0.1F);
+    invis_timer = 0;
+  }
+
 }
 void Player::position(ASGE::Point2D _position)
 {
@@ -111,6 +123,26 @@ size_t Player::getID() const
 void Player::update(InputTracker& input, float dt)
 {
   // Logging::DEBUG("HAS BEEN HIT: " +std::to_string(static_cast<int>(has_been_hit)));
+  invis_cooldown -= dt;
+
+  if(invis_cooldown <= 0.1 && invis_cooldown >= 0)
+  {
+    invis_recharged.play();
+  }
+
+  if(is_invis == true)
+  {
+    invis_timer += dt;
+
+    if (invis_timer >= 5 || weapon.hasFired() || has_been_hit)
+    {
+      invis_timer = 0;
+      invis_cooldown = 15;
+      is_invis       = false;
+      this->opacity(1.0F);
+      weapon.opacity(1.0F);
+    }
+  }
 
   weapon.colour(ASGE::Colour(playerR, playerG, playerB));
   if (has_been_hit)
