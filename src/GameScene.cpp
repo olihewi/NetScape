@@ -38,8 +38,7 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
       renderer, player.getWeapon(), player, 1920 / 2 - 40, 1080 / 2 - 40)));
     camera.second.addObject((std::make_unique<PlayerLives>(renderer, player, 40, 1080 / 2 - 40)));
     camera.second.addObject(std::make_unique<Crosshair>(renderer, player.getID()));
-    camera.second.addObject(
-      std::make_unique<PlayerAbilities>(renderer, player, 1920 / 2 - 150, 1080 / 2 - 100));
+    camera.second.addObject(std::make_unique<PlayerAbilities>(renderer, player, 1920 / 2 - 450, 1080 / 2 - 50));
   }
   window_divider.dimensions(window);
 }
