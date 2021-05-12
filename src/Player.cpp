@@ -198,7 +198,8 @@ bool Player::circleCollision(ASGE::Point2D position)
 }
 void Player::invisibility(float dt)
 {
-    invis_cooldown -= dt;
+  invis_cooldown -= dt;
+  
   if(invis_cooldown <= 0.1 && invis_cooldown >= 0)
   {
     invis_recharged.play();
