@@ -114,7 +114,7 @@ nlohmann::json TileMap::saveTileMap()
   for (auto& weapon_drop : weapon_drops)
   {
     nlohmann::json this_j;
-    this_j["position"]     = std::make_pair(weapon_drop.position().x, weapon_drop.position().y);
+    this_j["position"]     = std::make_pair(weapon_drop.centre().x, weapon_drop.centre().y);
     this_j["data"]         = weapon_drop.getWeapon().toJson();
     this_j["respawn_time"] = weapon_drop.getRespawnTime();
     j_drops.emplace_back(this_j);
