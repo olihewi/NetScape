@@ -247,6 +247,9 @@ void GameScene::onKill(Player& player, Player& hit_player)
   hit_player.getScore().nemesis_points[player.getID()] += 1;
   player.getScore().kills++;
   player.getScore().kill_spree++;
+  std::string held_weapon = player.getWeapon().getWeaponData().weapon_name;
+  player.getScore().favourite_gun[held_weapon]++;
+
   for (auto& camera : player_cameras)
   {
     camera.second.addKillFeed(player, hit_player);
