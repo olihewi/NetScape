@@ -179,59 +179,53 @@ void GameScene::checkBullets()
   {
     if (player.getWeapon().hasFired())
     {
-      Logging::DEBUG(
-        "Player " + std::to_string(player.getID()) +
-        " has Fired: " + std::to_string(player.getWeapon().hasFired()));
-
       if (player.is_dead)
       {
         continue;
       }
-      size_t index = 0;
-      for (auto& trace_point : player.getWeapon().bullet.trace_points)
+      ASGE::Point2D origin = player.centre();
+      ASGE::Point2D dir    = ASGE::Point2D(
+        std::cos(player.getWeapon().rotation()), std::sin(player.getWeapon().rotation()));
+      float dist        = player.getWeapon().getWeaponData().range;
+      ASGE::Point2D end = dir * dist;
+      end               = ASGE::Point2D(end.x + origin.x, end.y + origin.y);
+      end               = bulletVsTiles(origin, end);
+
+      int closest_player_index = -1;
+      float closest_dist       = 9999;
+      for (auto& other_player : players)
       {
-        for (auto& other_player : players)
+        if (other_player.getID() == player.getID() || other_player.is_dead)
         {
-          if (other_player.getID() == player.getID())
-          {
-            continue;
-          }
-          if (other_player.isInside(trace_point) && !other_player.is_dead)
-          {
-            player.getWeapon().bullet.hit_point = index;
-            player.getWeapon().bullet.has_hit   = true;
-            player.getScore().hit++;
-            Logging::DEBUG(
-              "Player " + std::to_string(player.getID() + 1) + " hit Player " +
-              std::to_string(other_player.getID() + 1) + " - " +
-              std::to_string(player.getWeapon().getWeaponData().damage) + " damage");
-            other_player.takeDamage(player.getWeapon().getWeaponData().damage);
-            if (other_player.is_dead)
-            {
-              player.getScore().kills++;
-            }
-            break;
-          }
+          continue;
         }
-        if (tile_map.getCollisionPos(trace_point) > 0)
+        float hit_dist = bulletVsPlayer(origin, end, other_player);
+        if (hit_dist >= 0 && hit_dist < closest_dist)
         {
-          player.getWeapon().bullet.hit_point = index;
-          player.getWeapon().bullet.has_hit   = true;
-          player.getScore().miss++;
-          break;
+          closest_player_index = static_cast<int>(other_player.getID());
+          closest_dist         = hit_dist;
+          dist                 = hit_dist;
         }
-        if (player.getWeapon().bullet.has_hit)
-        {
-          break;
-        }
-        index++;
       }
-      if (player.getWeapon().hasFired() && !player.getWeapon().bullet.has_hit)
+      if (closest_player_index != -1) /// Hit
+      {
+        auto& hit_player = players[static_cast<size_t>(closest_player_index)];
+        end              = dir * dist;
+        end              = ASGE::Point2D(end.x + origin.x, end.y + origin.y);
+
+        player.getScore().hit++;
+        hit_player.takeDamage(player.getWeapon().getWeaponData().damage);
+        if (hit_player.is_dead)
+        {
+          player.getScore().kills++;
+        }
+      }
+      else /// Miss
       {
         player.getScore().miss++;
-        // Logging::DEBUG("Player " + std::to_string(player.getID()) +
-        //               " has missed: " + std::to_string(player.getWeapon().hasFired()));
       }
+
+      player.getWeapon().bullet.setLine(origin, end);
     }
   }
 }
@@ -299,4 +293,116 @@ void GameScene::updateDrops(InputTracker& input)
       }
     }
   }
+}
+ASGE::Point2D GameScene::bulletVsTiles(ASGE::Point2D origin, ASGE::Point2D end)
+{
+  int x0    = static_cast<int>(origin.x) / 32;
+  int y0    = static_cast<int>(origin.y) / 32;
+  int x1    = static_cast<int>(end.x) / 32;
+  int y1    = static_cast<int>(end.y) / 32;
+  int dx    = std::abs(x1 - x0);
+  int dy    = std::abs(y1 - y0);
+  int x     = x0;
+  int y     = y0;
+  int x_inc = (x1 > x0) ? 1 : -1;
+  int y_inc = (y1 > y0) ? 1 : -1;
+  int error = dx - dy;
+  dx *= 2;
+  dy *= 2;
+
+  for (int n = 1 + dx + dy; n > 0; --n)
+  {
+    auto grid_pos = static_cast<size_t>(x) + static_cast<size_t>(y) * 50;
+    if (tile_map.getCollision(grid_pos) > 0)
+    {
+      ASGE::Point2D tile_pos =
+        ASGE::Point2D(static_cast<float>(x) * 32, static_cast<float>(y) * 32);
+      std::array<ASGE::Point2D, 4> intersections{
+        lineIntersect(origin, end, tile_pos, ASGE::Point2D(tile_pos.x + 32, tile_pos.y)), // top
+        lineIntersect(origin, end, tile_pos, ASGE::Point2D(tile_pos.x, tile_pos.y)),      // left
+        lineIntersect(
+          origin,
+          end,
+          ASGE::Point2D(tile_pos.x, tile_pos.y + 32),
+          ASGE::Point2D(tile_pos.x + 32, tile_pos.y + 32)), // bottom
+        lineIntersect(
+          origin,
+          end,
+          ASGE::Point2D(tile_pos.x + 32, tile_pos.y),
+          ASGE::Point2D(tile_pos.x + 32, tile_pos.y + 32)) // right
+      };
+      ASGE::Point2D closest_intersect = ASGE::Point2D(tile_pos.x + 16, tile_pos.y + 16);
+      float closest_distance          = 9999;
+      for (auto& intersection : intersections)
+      {
+        float this_distance = origin.distance(intersection);
+        if (this_distance < closest_distance && intersection.x >= 0.1F && intersection.y >= 0.1F)
+        {
+          closest_intersect = intersection;
+          closest_distance  = this_distance;
+        }
+      }
+      return closest_intersect;
+    }
+
+    if (error > 0)
+    {
+      x += x_inc;
+      error -= dy;
+    }
+    else
+    {
+      y += y_inc;
+      error += dx;
+    }
+  }
+  return end;
+}
+float GameScene::bulletVsPlayer(ASGE::Point2D origin, ASGE::Point2D end, Player& player)
+{
+  /// Check ends
+  if (player.circleCollision(origin) || player.circleCollision(end))
+  {
+    return -1;
+  }
+  /// Get point along line
+  ASGE::Point2D p    = player.centre();
+  ASGE::Point2D dist = ASGE::Point2D(end.x - origin.x, end.y - origin.y);
+  float mag          = std::hypot(dist.x, dist.y);
+  float dot = (((p.x - origin.x) * (end.x - origin.x)) + ((p.y - origin.y) * (end.y - origin.y))) /
+              std::powf(mag, 2);
+  ASGE::Point2D closest =
+    ASGE::Point2D(origin.x + (dot * (end.x - origin.x)), origin.y + (dot * (end.y - origin.y)));
+  /// If point is on segment
+  /// 1 2 closest
+  float dist_1    = closest.distance(origin);
+  float dist_2    = closest.distance(end);
+  float buffer    = 0.1F; /// floating point inaccuracy
+  bool on_segment = (dist_1 + dist_2 >= mag - buffer && dist_1 + dist_2 <= mag + buffer);
+  if (!on_segment)
+  {
+    return -1;
+  }
+  dist = ASGE::Point2D(closest.x - p.x, closest.y - p.y);
+  mag  = std::hypot(dist.x, dist.y);
+  return (mag < 16 ? closest.distance(origin) : -1);
+}
+ASGE::Point2D GameScene::lineIntersect(
+  ASGE::Point2D origin1, ASGE::Point2D end1, ASGE::Point2D origin2, ASGE::Point2D end2)
+{
+  float u_a =
+    ((end2.x - origin2.x) * (origin1.y - origin2.y) -
+     (end2.y - origin2.y) * (origin1.x - origin2.x)) /
+    ((end2.y - origin2.y) * (end1.x - origin1.x) - (end2.x - origin2.x) * (end1.y - origin1.y));
+  float u_b =
+    ((end1.x - origin1.x) * (origin1.y - origin2.y) -
+     (end1.y - origin1.y) * (origin1.x - origin2.x)) /
+    ((end2.y - origin2.y) * (end1.x - origin1.x) - (end2.x - origin2.x) * (end1.y - origin1.y));
+  if (u_a >= 0 && u_a <= 1 && u_b >= 0 && u_b <= 1)
+  {
+    ASGE::Point2D intersection = ASGE::Point2D(
+      origin1.x + (u_a * (end1.x - origin1.x)), origin1.y + (u_a * (end1.y - origin1.y)));
+    return intersection;
+  }
+  return ASGE::Point2D();
 }

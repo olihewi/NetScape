@@ -36,6 +36,7 @@ struct WeaponData
   float recoil_regain = 0.6F;
   float inaccuracy    = 0.F;
   float look_distance = 1.F;
+  float range         = 600.F;
   /// Animation Data
   size_t fire_frames   = 1;
   size_t reload_frames = 6;

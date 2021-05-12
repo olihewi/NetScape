@@ -178,3 +178,8 @@ Score& Player::getScore()
 {
   return score;
 }
+bool Player::circleCollision(ASGE::Point2D position)
+{
+  auto diff = ASGE::Point2D(position.x - centre().x, position.y - centre().y);
+  return (std::hypot(diff.x, diff.y) < 16);
+}

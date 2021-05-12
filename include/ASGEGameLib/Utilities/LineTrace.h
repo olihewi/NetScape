@@ -13,18 +13,14 @@ class LineTrace
  public:
   explicit LineTrace(ASGE::Renderer* renderer);
 
-  void hitCheck(float distance, ASGE::Point2D origin, float angle);
+  void setLine(ASGE::Point2D origin, ASGE::Point2D end, float time = 0.1F, float width = 3);
 
   void render(ASGE::Renderer* renderer);
 
   void update(float dt);
 
-  float damage = 25;
-  std::array<Sprite, 5> bullet_sprites;
-  std::array<ASGE::Point2D, 250> trace_points;
-  size_t hit_point = 0;
-  bool has_hit     = false;
-  float hit_dist   = 0;
+  Sprite line;
+  float hit_dist = 0;
 
  private:
   float tracer_timer = 0;

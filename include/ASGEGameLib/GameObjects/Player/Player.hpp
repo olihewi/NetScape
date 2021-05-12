@@ -60,6 +60,8 @@ class Player : public AnimatedSprite
 
   Score& getScore();
 
+  [[nodiscard]] bool circleCollision(ASGE::Point2D position);
+
  private:
   float max_health = 100.0F;
   float health     = max_health;

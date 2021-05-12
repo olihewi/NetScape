@@ -24,6 +24,10 @@ class GameScene : public Scene
  private:
   void playerMovement(InputTracker& input, float dt);
   void checkBullets();
+  [[nodiscard]] ASGE::Point2D bulletVsTiles(ASGE::Point2D origin, ASGE::Point2D end);
+  [[nodiscard]] float bulletVsPlayer(ASGE::Point2D origin, ASGE::Point2D end, Player& player);
+  [[nodiscard]] ASGE::Point2D lineIntersect(
+    ASGE::Point2D origin1, ASGE::Point2D end1, ASGE::Point2D origin2, ASGE::Point2D end2);
   ASGE::Point2D playerVsTiles(InputTracker& input, float dt, Player& player);
   [[nodiscard]] bool playerCollidesWithTile(ASGE::Point2D player, ASGE::Point2D tile);
   void updateDrops(InputTracker& input);

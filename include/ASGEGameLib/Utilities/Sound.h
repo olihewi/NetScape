@@ -17,7 +17,6 @@ class Sound
   void volume(float _volume);
   void setLoop(bool _loop);
   void setSpeed(float _speed);
-
   void setSound(std::string& file_path);
 
  private:

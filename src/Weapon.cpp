@@ -40,7 +40,7 @@ void Weapon::fire()
     fire_timer = weapon_data.fire_rate;
     sounds[0].play();
     float bullet_dir = random_num(el) * current_inaccuracy + AnimatedSprite::rotation();
-    bullet.hitCheck(250, muzzle, bullet_dir);
+    // bullet.hitCheck(250, muzzle, bullet_dir);
     rotation(bullet_dir);
     current_inaccuracy += weapon_data.recoil;
     has_fired = true;
