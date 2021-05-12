@@ -186,53 +186,56 @@ void GameScene::checkBullets()
       {
         continue;
       }
-      ASGE::Point2D origin = player.centre();
-      ASGE::Point2D dir    = ASGE::Point2D(
-        std::cos(player.getWeapon().rotation()), std::sin(player.getWeapon().rotation()));
-      origin            = ASGE::Point2D(origin.x + dir.x * 12, origin.y + dir.y * 12);
-      float dist        = player.getWeapon().getWeaponData().range;
-      ASGE::Point2D end = dir * dist;
-      end               = ASGE::Point2D(end.x + origin.x, end.y + origin.y);
-      end               = bulletVsTiles(origin, end);
-
-      int closest_player_index = -1;
-      float closest_dist       = 9999;
-      for (auto& other_player : players)
+      for (int i = 0; i < player.getWeapon().getWeaponData().num_bullets; i++)
       {
-        if (other_player.getID() == player.getID() || other_player.is_dead)
-        {
-          continue;
-        }
-        float hit_dist = bulletVsPlayer(origin, end, other_player);
-        if (hit_dist >= 0 && hit_dist < closest_dist)
-        {
-          closest_player_index = static_cast<int>(other_player.getID());
-          closest_dist         = hit_dist;
-          dist                 = hit_dist;
-        }
-      }
-      if (closest_player_index != -1) /// Hit
-      {
-        auto& hit_player = players[static_cast<size_t>(closest_player_index)];
-        end              = dir * dist;
-        end              = ASGE::Point2D(end.x + origin.x, end.y + origin.y);
+        ASGE::Point2D origin = player.centre();
+        ASGE::Point2D dir    = ASGE::Point2D(
+          std::cos(player.getWeapon().rotation()), std::sin(player.getWeapon().rotation()));
+        origin            = ASGE::Point2D(origin.x + dir.x * 12, origin.y + dir.y * 12);
+        float dist        = player.getWeapon().getWeaponData().range;
+        ASGE::Point2D end = dir * dist;
+        end               = ASGE::Point2D(end.x + origin.x, end.y + origin.y);
+        end               = bulletVsTiles(origin, end);
 
-        player.getScore().hit++;
-        auto& this_weapon = player.getWeapon().getWeaponData();
-        float damage      = this_weapon.damage;
-        damage *= 1 - dist / this_weapon.range * this_weapon.range_falloff;
-        hit_player.takeDamage(damage);
-        if (hit_player.is_dead)
+        int closest_player_index = -1;
+        float closest_dist       = 9999;
+        for (auto& other_player : players)
         {
-          player.getScore().kills++;
+          if (other_player.getID() == player.getID() || other_player.is_dead)
+          {
+            continue;
+          }
+          float hit_dist = bulletVsPlayer(origin, end, other_player);
+          if (hit_dist >= 0 && hit_dist < closest_dist)
+          {
+            closest_player_index = static_cast<int>(other_player.getID());
+            closest_dist         = hit_dist;
+            dist                 = hit_dist;
+          }
         }
-      }
-      else /// Miss
-      {
-        player.getScore().miss++;
-      }
+        if (closest_player_index != -1) /// Hit
+        {
+          auto& hit_player = players[static_cast<size_t>(closest_player_index)];
+          end              = dir * dist;
+          end              = ASGE::Point2D(end.x + origin.x, end.y + origin.y);
 
-      player.getWeapon().bullet.setLine(origin, end);
+          player.getScore().hit++;
+          auto& this_weapon = player.getWeapon().getWeaponData();
+          float damage      = this_weapon.damage;
+          damage *= 1 - dist / this_weapon.range * this_weapon.range_falloff;
+          hit_player.takeDamage(damage);
+          if (hit_player.is_dead)
+          {
+            player.getScore().kills++;
+          }
+        }
+        else /// Miss
+        {
+          player.getScore().miss++;
+        }
+
+        player.getWeapon().trace(origin, end, static_cast<size_t>(i));
+      }
     }
   }
 }
