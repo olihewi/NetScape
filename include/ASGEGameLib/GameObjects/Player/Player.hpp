@@ -52,6 +52,8 @@ class Player : public AnimatedSprite
   [[nodiscard]] ASGE::Point2D getSpawnPoint();
   void setSpawnPoint(ASGE::Point2D _spawn_point);
 
+  void invisibility(float dt);
+
   float invis_cooldown = 0;
   float invis_timer    = 0;
   bool is_invis        = false;
