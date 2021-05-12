@@ -52,6 +52,11 @@ class Player : public AnimatedSprite
   [[nodiscard]] ASGE::Point2D getSpawnPoint();
   void setSpawnPoint(ASGE::Point2D _spawn_point);
 
+
+  float invis_cooldown = 0;
+  float invis_timer = 0;
+  bool is_invis = false;
+
   float move_speed = 100.0F;
   bool is_dead     = false;
 
@@ -74,6 +79,7 @@ class Player : public AnimatedSprite
   ASGE::Point2D spawn_point;
   Score score;
   Sound player_killed;
+  Sound invis_recharged;
 };
 
 /// STRUCTS
