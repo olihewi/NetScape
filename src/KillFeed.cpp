@@ -33,14 +33,10 @@ void KillFeed::update(InputTracker& input, float dt)
     index++;
   }
   index = 0;
-  for (auto& message : messages_to_remove)
+  if (!messages_to_remove.empty())
   {
-    if (messages.begin() + message - index >= messages.end())
-    {
-      break;
-    }
-    messages.erase(messages.begin() + message - index);
-    index++;
+    messages.erase(messages.begin() + messages_to_remove[0]);
+    index = 1;
   }
   for (auto& message : messages)
   {
