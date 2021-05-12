@@ -5,9 +5,9 @@
 #include "ASGEGameLib/GameObjects/Player/HUD/PlayerAbilities.hpp"
 PlayerAbilities::PlayerAbilities(ASGE::Renderer* renderer, Player& _player, float x, float y) :
   player(_player), position(ASGE::Point2D(x, y)),
-  ability_icons(std::array<Sprite, 3>{ Sprite(renderer, "data/images/ui/invisible_icon.png", 0),
-                                       Sprite(renderer, "data/images/ui/invisible_icon.png", 0),
-                                       Sprite(renderer, "data/images/ui/invisible_icon.png", 0) })
+  ability_icons(std::array<Sprite, 3>{Sprite(renderer, "data/images/ui/invisible_icon.png", 0),
+                                      Sprite(renderer, "data/images/ui/sprint.png", 0),
+                                      Sprite(renderer, "data/images/ui/healing.png", 0)})
 {
   for (size_t i = 0; i < 3; i++)
   {
@@ -28,7 +28,31 @@ void PlayerAbilities::update(InputTracker& input, float dt)
   {
     ability_icons[0].colour(ASGE::COLOURS::WHITE);
   }
-  ability_icons[0].opacity(1 - player.invis_cooldown / 15);
+  ability_icons[0].opacity(1 -player.invis_cooldown / 15);
+
+
+  if(player.healing)
+  {
+    ability_icons[2].colour(ASGE::COLOURS::GREEN);
+  }
+  else
+  {
+    ability_icons[2].colour(ASGE::COLOURS::WHITE);
+  }
+  ability_icons[2].opacity(1 - player.heal_cooldown / 15);
+
+
+  if(player.dashing)
+  {
+    ability_icons[1].colour(ASGE::COLOURS::GREEN);
+  }
+  else
+  {
+    ability_icons[1].colour(ASGE::COLOURS::WHITE);
+  }
+  ability_icons[1].opacity(1 -player.dash_cooldown / 10);
+
+
 }
 
 void PlayerAbilities::render(ASGE::Renderer* renderer)

@@ -23,6 +23,8 @@ Player::Player(
   player_walk.volume(0);
   player_walk.play();
   player_damaged.volume(5);
+
+  invis_recharged.volume(0.2F);
 }
 
 void Player::render(ASGE::Renderer* renderer)
@@ -37,10 +39,12 @@ void Player::input(InputTracker& input, float dt)
   /// Movement
   auto left_stick           = input.getControllerStick(controller_id, CONTROLLER::STICKS::LEFT);
   float left_stick_hypot    = std::hypot(left_stick.x, left_stick.y);
-  auto sprint_button        = input.getControllerButton(controller_id, CONTROLLER::BUTTONS::B);
+  auto sprint_button        = input.getControllerButton(controller_id, CONTROLLER::BUTTONS::LEFT_STICK);
   auto score_readout_button = input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::X);
-  auto invis_button =
-    input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::LEFT_SHOULDER);
+  auto invis_button         = input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::DPAD_LEFT);
+  auto dash_button          = input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::B);
+  auto heal_button          = input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::DPAD_RIGHT);
+
   if (left_stick_hypot > 1)
   {
     left_stick = ASGE::Point2D(left_stick.x / left_stick_hypot, left_stick.y / left_stick_hypot);
@@ -82,6 +86,26 @@ void Player::input(InputTracker& input, float dt)
     weapon.opacity(0.1F);
     invis_timer = 0;
   }
+
+  if(heal_button && heal_cooldown <= 0 && health < 100)
+  {
+    heal_cooldown = 0;
+    healing = true;
+    health += heal_amount;
+
+    if(health > max_health)
+    {
+      health = 100;
+    }
+  }
+
+  if(dash_button && dash_cooldown <= 0)
+  {
+    dash_cooldown = 0;
+    dashing = true;
+    translate( ASGE::Point2D(left_stick.x, left_stick.y) * 2000 * dt);
+  }
+
 }
 void Player::position(ASGE::Point2D _position)
 {
@@ -123,7 +147,9 @@ size_t Player::getID() const
 void Player::update(InputTracker& input, float dt)
 {
   // Logging::DEBUG("HAS BEEN HIT: " +std::to_string(static_cast<int>(has_been_hit)));
-  invis_cooldown -= dt;
+  invisibility(dt);
+  heal(dt);
+  dash(dt);
 
   if (invis_cooldown <= 0.1 && invis_cooldown >= 0)
   {
@@ -220,7 +246,7 @@ void Player::invisibility(float dt)
 {
   invis_cooldown -= dt;
 
-  if (invis_cooldown <= 0.1 && invis_cooldown >= 0)
+  if(invis_cooldown <= 0.05 && invis_cooldown >= 0)
   {
     invis_recharged.play();
   }
@@ -239,3 +265,35 @@ void Player::invisibility(float dt)
     }
   }
 }
+void Player::heal(float dt)
+{
+  heal_cooldown -= dt;
+
+  if(heal_cooldown <= 0.05 && heal_cooldown >= 0)
+  {
+    invis_recharged.play();
+  }
+
+  if(healing)
+  {
+    heal_cooldown = 15;
+    healing = false;
+  }
+}
+
+void Player::dash(float dt)
+{
+  dash_cooldown -= dt;
+
+  if(dash_cooldown <= 0.05 && dash_cooldown >= 0)
+  {
+    invis_recharged.play();
+  }
+
+  if(dashing)
+  {
+    dash_cooldown = 10;
+    dashing = false;
+  }
+}
+
