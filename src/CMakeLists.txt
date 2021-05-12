@@ -15,7 +15,7 @@ set(GAMELIB_SOURCES
         TestScene.cpp FontManager.cpp LevelEditor.cpp Tile.cpp TileMap.cpp EditorTileSet.cpp TitleScene.cpp GameScene.cpp
         Cursor.cpp ControllerTracker.cpp Sound.cpp Player.cpp KeyboardTracker.cpp MouseTracker.cpp InputTracker.cpp
         OptionsScene.cpp Weapon.cpp LineTrace.cpp ControllerDisplay.cpp LevelSelector.cpp CreditsScene.cpp PlayerHealth.cpp
-        PlayerHUD.cpp PlayerAmmo.cpp Crosshair.cpp WeaponData.cpp PlayerLives.cpp WeaponDrop.cpp)
+        PlayerHUD.cpp PlayerAmmo.cpp Crosshair.cpp WeaponData.cpp PlayerLives.cpp WeaponDrop.cpp PlayerAbilities.cpp PlayerScore.cpp)
 
 ## create the game library
 add_library(${GAMELIB} STATIC ${GAMELIB_SOURCES} "${HEADER_LIST}")

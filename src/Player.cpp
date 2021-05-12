@@ -72,10 +72,11 @@ void Player::input(InputTracker& input, float dt)
   if (score_readout_button)
   {
     Logging::DEBUG(
-      "Player: " + std::to_string(controller_id + 1) + "\nkills: " + std::to_string(score.kills) +
-      "\ndeaths: " + std::to_string(score.deaths) + "\nmisses: " + std::to_string(score.miss) +
-      "\nhits: " + std::to_string(score.hit) +
-      "\naccuracy: " + std::to_string((score.hit / (score.hit + score.miss)) * 100));
+      "\n  PLAYER " + std::to_string(getID() + 1) +
+      "\nPLayer 1: " + std::to_string(score.nemesis_points[0]) +
+      "\nPLayer 2: " + std::to_string(score.nemesis_points[1]) +
+      "\nPLayer 3: " + std::to_string(score.nemesis_points[2]) +
+      "\nPLayer 4: " + std::to_string(score.nemesis_points[3]));
   }
 
   if (invis_button && invis_cooldown <= 0)

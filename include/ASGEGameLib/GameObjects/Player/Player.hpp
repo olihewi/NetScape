@@ -18,6 +18,9 @@ struct Score
   int deaths = 0;
   float hit  = 0;
   float miss = 0;
+
+  std::array<int, 4> nemesis_points{};
+
 };
 
 class Player : public AnimatedSprite

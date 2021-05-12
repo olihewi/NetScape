@@ -10,6 +10,7 @@
 #include <ASGEGameLib/Utilities/FontManager.h>
 #include <GameObjects/Player/HUD/PlayerAbilities.hpp>
 #include <GameObjects/Player/HUD/PlayerLives.hpp>
+#include <GameObjects/Player/HUD/PlayerScore.hpp>
 #include <array>
 #include <utility>
 
@@ -37,6 +38,7 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
     camera.second.addObject((std::make_unique<PlayerAmmo>(
       renderer, player.getWeapon(), player, 1920 / 2 - 40, 1080 / 2 - 40)));
     camera.second.addObject((std::make_unique<PlayerLives>(renderer, player, 40, 1080 / 2 - 40)));
+    camera.second.addObject(std::make_unique<PlayerScore>(renderer,player, 1920.F / 4,1080.F / 4));
     camera.second.addObject(std::make_unique<Crosshair>(renderer, player.getID()));
     camera.second.addObject(std::make_unique<PlayerAbilities>(renderer, player, 1920 / 2 - 450, 1080 / 2 - 50));
   }
@@ -225,6 +227,7 @@ void GameScene::checkBullets()
           hit_player.takeDamage(damage);
           if (hit_player.is_dead)
           {
+            hit_player.getScore().nemesis_points[player.getID()] += 1;
             player.getScore().kills++;
           }
         }
