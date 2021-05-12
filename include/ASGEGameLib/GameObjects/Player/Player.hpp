@@ -20,6 +20,9 @@ struct Score
   float miss = 0;
 
   std::array<int, 4> nemesis_points{};
+  std::unordered_map<std::string, int> favourite_gun{};
+  //Pistol, Shotgun, Uzi, Sniper
+
 };
 
 class Player : public AnimatedSprite

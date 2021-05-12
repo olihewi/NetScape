@@ -22,7 +22,11 @@ class PlayerScore : public GameObject
   ASGE::Point2D position;
   Player& player;
   Sprite score_card;
-  std::array<Text, 3> score_text;
+  std::array<Text, 6> score_text;
+
+  int current_favourite_weapon_index = 0;
+  std::string favourite_weapon;
+
 };
 
 #endif // ASGEMOVIEGAME_PLAYERSCORE_HPP
