@@ -8,22 +8,29 @@ Weapon::Weapon(
   ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _player_id,
   const WeaponData& _weapon) :
   AnimatedSprite(renderer, _weapon.sprite_held, 0),
-  bullet(renderer), sounds(std::array<Sound, 4>{ Sound(audio_engine, _weapon.sfx_fire),
-                                                 Sound(audio_engine, _weapon.sfx_empty),
-                                                 Sound(audio_engine, _weapon.sfx_reload),
-                                                 Sound(audio_engine, _weapon.sfx_pickup) }),
+  sounds(std::array<Sound, 4>{ Sound(audio_engine, _weapon.sfx_fire),
+                               Sound(audio_engine, _weapon.sfx_empty),
+                               Sound(audio_engine, _weapon.sfx_reload),
+                               Sound(audio_engine, _weapon.sfx_pickup) }),
   player_id(_player_id), weapon_data(_weapon), current_ammo(_weapon.max_ammo),
   ammo_reserve(_weapon.ammo_reserve)
 {
   // zOrder(2);
   el         = std::default_random_engine(r());
   random_num = std::uniform_real_distribution<float>(-1.F, 1.F);
+  for (int i = 0; i < weapon_data.num_bullets; i++)
+  {
+    bullets.emplace_back(LineTrace(renderer));
+  }
 }
 
 void Weapon::render(ASGE::Renderer* renderer)
 {
   AnimatedSprite::render(renderer);
-  bullet.render(renderer);
+  for (auto& bullet : bullets)
+  {
+    bullet.render(renderer);
+  }
 }
 void Weapon::fire()
 {
@@ -39,9 +46,12 @@ void Weapon::fire()
     current_ammo--;
     fire_timer = weapon_data.fire_rate;
     sounds[0].play();
-    float bullet_dir = random_num(el) * current_inaccuracy + AnimatedSprite::rotation();
-    // bullet.hitCheck(250, muzzle, bullet_dir);
-    rotation(bullet_dir);
+    if (weapon_data.num_bullets == 1)
+    {
+      float bullet_dir = random_num(el) * current_inaccuracy + AnimatedSprite::rotation();
+      rotation(bullet_dir);
+    }
+    last_safe_rotation = rotation();
     current_inaccuracy += weapon_data.recoil;
     has_fired = true;
   }
@@ -126,7 +136,10 @@ void Weapon::update(InputTracker& input, float dt)
     current_inaccuracy =
       fmax(current_inaccuracy - weapon_data.recoil_regain * dt, weapon_data.inaccuracy);
   }
-  bullet.update(dt);
+  for (auto& bullet : bullets)
+  {
+    bullet.update(dt);
+  }
 }
 
 int Weapon::getAmmoReserves() const
@@ -153,6 +166,11 @@ void Weapon::setWeapon(ASGE::Renderer* renderer, const WeaponData& _weapon)
   ammo_reserve       = weapon_data.ammo_reserve;
   current_inaccuracy = weapon_data.inaccuracy;
   sounds[3].play();
+  bullets.clear();
+  for (int i = 0; i < weapon_data.num_bullets; i++)
+  {
+    bullets.emplace_back(LineTrace(renderer));
+  }
 }
 WeaponData& Weapon::getWeaponData()
 {
@@ -161,4 +179,15 @@ WeaponData& Weapon::getWeaponData()
 int Weapon::getCurrentAmmo() const
 {
   return current_ammo;
+}
+void Weapon::trace(ASGE::Point2D origin, ASGE::Point2D end, size_t index)
+{
+  rotation(last_safe_rotation);
+  float falloff = origin.distance(end) / weapon_data.range * weapon_data.range_falloff;
+  bullets[index].setLine(origin, end, 0.1F, 3, falloff);
+  if (static_cast<int>(index) < weapon_data.num_bullets - 1)
+  {
+    float bullet_dir = random_num(el) * weapon_data.inaccuracy + AnimatedSprite::rotation();
+    rotation(bullet_dir);
+  }
 }

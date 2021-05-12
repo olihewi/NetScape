@@ -38,6 +38,7 @@ struct WeaponData
   float look_distance = 1.F;
   float range         = 300.F;
   float range_falloff = 0.F;
+  int num_bullets     = 1;
   /// Animation Data
   size_t fire_frames   = 1;
   size_t reload_frames = 6;

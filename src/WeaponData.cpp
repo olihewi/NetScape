@@ -14,8 +14,8 @@ WeaponData::WeaponData(nlohmann::json j) :
   reload_time(j["reload_time"].get<float>()), recoil(j["recoil"].get<float>()),
   recoil_regain(j["recoil_regain"].get<float>()), inaccuracy(j["inaccuracy"].get<float>()),
   look_distance(j["look_distance"].get<float>()), range(j["range"].get<float>()),
-  range_falloff(j["range_falloff"].get<float>()), fire_frames(j["fire_frames"].get<size_t>()),
-  reload_frames(j["reload_frames"].get<size_t>())
+  range_falloff(j["range_falloff"].get<float>()), num_bullets(j["num_bullets"].get<int>()),
+  fire_frames(j["fire_frames"].get<size_t>()), reload_frames(j["reload_frames"].get<size_t>())
 {
 }
 nlohmann::json WeaponData::toJson()
@@ -41,6 +41,7 @@ nlohmann::json WeaponData::toJson()
   j["look_distance"] = look_distance;
   j["range"]         = range;
   j["range_falloff"] = range_falloff;
+  j["num_bullets"]   = num_bullets;
   j["fire_frames"]   = fire_frames;
   j["reload_frames"] = reload_frames;
   return j;

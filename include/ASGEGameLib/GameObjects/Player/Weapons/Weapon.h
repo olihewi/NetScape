@@ -26,12 +26,12 @@ class Weapon : public AnimatedSprite
   void setWeapon(ASGE::Renderer* renderer, const WeaponData& _weapon);
   [[nodiscard]] WeaponData& getWeaponData();
   [[nodiscard]] int getCurrentAmmo() const;
-
-  LineTrace bullet;
+  void trace(ASGE::Point2D origin, ASGE::Point2D end, size_t index = 0);
 
  private:
   std::array<Sound, 4> sounds;
   size_t player_id;
+  std::vector<LineTrace> bullets;
 
   /// Weapon Stats
   WeaponData weapon_data;
@@ -43,6 +43,7 @@ class Weapon : public AnimatedSprite
   float reload_timer       = 0;
   float current_inaccuracy = 0;
   bool has_fired           = false;
+  float last_safe_rotation = 0;
 
   /// Random Number Generator
   std::random_device r;
