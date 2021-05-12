@@ -81,9 +81,10 @@ void KillFeedElement::render(ASGE::Renderer* renderer)
 }
 KillFeedElement::KillFeedElement(
   ASGE::Renderer* renderer, const std::string& message, ASGE::Point2D _position) :
-  name1(renderer, message, _position),
+  name1(renderer, message, _position, FONTS::PIXEL, ASGE::COLOURS::WHITE, 0.6F),
   name2(renderer, ""), weapon(renderer, "data/images/weapons/pistol.png")
 {
+  name1.position(ASGE::Point2D(_position.x - name1.getWidth(), _position.y));
   weapon.visibility(false);
 }
 void KillFeedElement::translate(ASGE::Point2D _translation)

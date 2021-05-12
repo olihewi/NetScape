@@ -58,3 +58,7 @@ void PlayerHUD::addKillFeed(Player& p1, Player& p2)
 {
   kill_feed.addMessage(p1, p2);
 }
+void PlayerHUD::addKillFeed(const std::string& message)
+{
+  kill_feed.addMessage(message);
+}

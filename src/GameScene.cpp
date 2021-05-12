@@ -229,12 +229,7 @@ void GameScene::checkBullets()
           hit_player.takeDamage(damage);
           if (hit_player.is_dead)
           {
-            hit_player.getScore().nemesis_points[player.getID()] += 1;
-            player.getScore().kills++;
-            for (auto& camera : player_cameras)
-            {
-              camera.second.addKillFeed(player, hit_player);
-            }
+            onKill(player, hit_player);
           }
         }
         else /// Miss
@@ -244,6 +239,30 @@ void GameScene::checkBullets()
 
         player.getWeapon().trace(origin, end, static_cast<size_t>(i));
       }
+    }
+  }
+}
+void GameScene::onKill(Player& player, Player& hit_player)
+{
+  hit_player.getScore().nemesis_points[player.getID()] += 1;
+  player.getScore().kills++;
+  for (auto& camera : player_cameras)
+  {
+    camera.second.addKillFeed(player, hit_player);
+    switch (hit_player.getScore().nemesis_points[player.getID()])
+    {
+      case 3:
+        camera.second.addKillFeed(
+          "P" + std::to_string(player.getID() + 1) + " is dominating P" +
+          std::to_string(hit_player.getID() + 1));
+        break;
+      case 5:
+        camera.second.addKillFeed(
+          "P" + std::to_string(player.getID() + 1) + " is humiliating P" +
+          std::to_string(hit_player.getID() + 1));
+        break;
+      default:
+        break;
     }
   }
 }

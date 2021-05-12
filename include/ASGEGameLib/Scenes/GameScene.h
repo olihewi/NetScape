@@ -40,6 +40,7 @@ class GameScene : public Scene
   Text round_time_text;
 
   // std::array<ASGE::Camera, 4> player_cameras;
+  void onKill(Player& player, Player& hit_player);
 };
 
 #endif // ASGEMOVIEGAME_GAMESCENE_H

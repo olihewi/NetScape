@@ -17,6 +17,7 @@ class PlayerHUD : public GameObject
   void cameraShake(ASGE::Point2D _shake);
   [[nodiscard]] ASGE::Point2D getCameraShake();
   void addKillFeed(Player& p1, Player& p2);
+  void addKillFeed(const std::string& message);
 
   [[nodiscard]] float getFocus() const;
 
