@@ -10,6 +10,7 @@ void PlayerHUD::update(InputTracker& input, float dt)
   {
     object->update(input, dt);
   }
+  kill_feed.update(input, dt);
   auto left_trigger = input.getControllerAxis(player.getID(), CONTROLLER::AXIS::LEFT_TRIGGER);
   lerped_focus      = lerped_focus + 8.F * dt * (left_trigger - lerped_focus);
   camera_shake      = ASGE::Point2D(
@@ -31,6 +32,7 @@ void PlayerHUD::render(ASGE::Renderer* renderer)
   {
     object->render(renderer);
   }
+  kill_feed.render(renderer);
 }
 void PlayerHUD::addObject(std::unique_ptr<GameObject> _object)
 {
@@ -40,7 +42,10 @@ float PlayerHUD::getFocus() const
 {
   return lerped_focus * player.getWeapon().getLookDistance();
 }
-PlayerHUD::PlayerHUD(Player& _player) : player(_player) {}
+PlayerHUD::PlayerHUD(ASGE::Renderer* renderer, Player& _player) :
+  player(_player), kill_feed(renderer, player, ASGE::Point2D(1920.F / 2.F - 40, 0))
+{
+}
 void PlayerHUD::cameraShake(ASGE::Point2D _shake)
 {
   camera_shake = ASGE::Point2D(camera_shake.x + _shake.x, camera_shake.y + _shake.y);
@@ -48,4 +53,8 @@ void PlayerHUD::cameraShake(ASGE::Point2D _shake)
 ASGE::Point2D PlayerHUD::getCameraShake()
 {
   return camera_shake;
+}
+void PlayerHUD::addKillFeed(Player& p1, Player& p2)
+{
+  kill_feed.addMessage(p1, p2);
 }

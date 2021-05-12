@@ -32,13 +32,14 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
     player.setSpawnPoint(tile_map.getSpawn(player.getID()));
     addObject(std::make_unique<PlayerHealth>(renderer, player));
     auto& camera = player_cameras.emplace_back(
-      std::make_pair(ASGE::Camera(1920.F / 2, 1080.F / 2), PlayerHUD(player)));
+      std::make_pair(ASGE::Camera(1920.F / 2, 1080.F / 2), PlayerHUD(renderer, player)));
     camera.first.setZoom(0.5F);
     camera.second.addObject((std::make_unique<PlayerAmmo>(
       renderer, player.getWeapon(), player, 1920 / 2 - 40, 1080 / 2 - 40)));
     camera.second.addObject((std::make_unique<PlayerLives>(renderer, player, 40, 1080 / 2 - 40)));
     camera.second.addObject(std::make_unique<Crosshair>(renderer, player.getID()));
-    camera.second.addObject(std::make_unique<PlayerAbilities>(renderer, player, 1920 / 2 - 450, 1080 / 2 - 50));
+    camera.second.addObject(
+      std::make_unique<PlayerAbilities>(renderer, player, 1920 / 2 - 450, 1080 / 2 - 50));
   }
   window_divider.dimensions(window);
 }
@@ -226,6 +227,10 @@ void GameScene::checkBullets()
           if (hit_player.is_dead)
           {
             player.getScore().kills++;
+            for (auto& camera : player_cameras)
+            {
+              camera.second.addKillFeed(player, hit_player);
+            }
           }
         }
         else /// Miss
