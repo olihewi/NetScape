@@ -12,7 +12,7 @@ KillFeed::KillFeed(ASGE::Renderer* renderer, Player& _player, ASGE::Point2D _pos
 }
 void KillFeed::addMessage(Player& p1, Player& p2)
 {
-  auto pos = ASGE::Point2D(position.x, position.y + (static_cast<float>(messages.size()) + 1) * 32);
+  auto pos = ASGE::Point2D(position.x, position.y + (static_cast<float>(messages.size()) + 1) * 24);
   auto colour =
     (p1.getID() == player.getID()
        ? ASGE::COLOURS::YELLOW
@@ -35,12 +35,16 @@ void KillFeed::update(InputTracker& input, float dt)
   index = 0;
   for (auto& message : messages_to_remove)
   {
+    if (messages.begin() + message - index >= messages.end())
+    {
+      break;
+    }
     messages.erase(messages.begin() + message - index);
     index++;
   }
   for (auto& message : messages)
   {
-    message.translate(ASGE::Point2D(0, static_cast<float>(-index) * 32));
+    message.translate(ASGE::Point2D(0, static_cast<float>(-index) * 24));
   }
 }
 void KillFeed::render(ASGE::Renderer* renderer)
@@ -52,7 +56,7 @@ void KillFeed::render(ASGE::Renderer* renderer)
 }
 void KillFeed::addMessage(const std::string& message)
 {
-  auto pos = ASGE::Point2D(position.x, position.y + (static_cast<float>(messages.size()) + 1) * 32);
+  auto pos = ASGE::Point2D(position.x, position.y + (static_cast<float>(messages.size()) + 1) * 24);
   messages.emplace_back(KillFeedElement(m_renderer, message, pos));
 }
 

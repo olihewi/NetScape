@@ -246,25 +246,53 @@ void GameScene::onKill(Player& player, Player& hit_player)
 {
   hit_player.getScore().nemesis_points[player.getID()] += 1;
   player.getScore().kills++;
+  player.getScore().kill_spree++;
   for (auto& camera : player_cameras)
   {
     camera.second.addKillFeed(player, hit_player);
+    /// Domination
     switch (hit_player.getScore().nemesis_points[player.getID()])
     {
       case 3:
         camera.second.addKillFeed(
           "P" + std::to_string(player.getID() + 1) + " is dominating P" +
-          std::to_string(hit_player.getID() + 1));
+          std::to_string(hit_player.getID() + 1) + "!");
         break;
       case 5:
         camera.second.addKillFeed(
           "P" + std::to_string(player.getID() + 1) + " is humiliating P" +
-          std::to_string(hit_player.getID() + 1));
+          std::to_string(hit_player.getID() + 1) + "!");
+        break;
+      default:
+        break;
+    }
+    /// Revenge
+    if (player.getScore().nemesis_points[hit_player.getID()] >= 3)
+    {
+      camera.second.addKillFeed(
+        "P" + std::to_string(player.getID() + 1) + " got revenge on P" +
+        std::to_string(hit_player.getID() + 1) + "!");
+    }
+    switch (player.getScore().kill_spree)
+    {
+      case 3:
+        camera.second.addKillFeed(
+          "P" + std::to_string(player.getID() + 1) + " is on a Killing Spree!");
+        break;
+      case 5:
+        camera.second.addKillFeed("P" + std::to_string(player.getID() + 1) + " is on a Rampage!");
+        break;
+      case 7:
+        camera.second.addKillFeed("P" + std::to_string(player.getID() + 1) + " is Untouchable!");
+        break;
+      case 9:
+        camera.second.addKillFeed("P" + std::to_string(player.getID() + 1) + " is Invincible!");
         break;
       default:
         break;
     }
   }
+  player.getScore().nemesis_points[hit_player.getID()] = 0;
 }
 bool GameScene::playerCollidesWithTile(ASGE::Point2D player, ASGE::Point2D tile)
 {

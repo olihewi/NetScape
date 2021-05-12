@@ -25,4 +25,5 @@ class ASGEGame : public ASGE::OGLGame
  private:
   std::unique_ptr<Scene> scene;
   InputTracker input_tracker;
+  bool quitting_game = false;
 };

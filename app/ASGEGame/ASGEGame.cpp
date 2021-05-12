@@ -29,7 +29,10 @@ void ASGEGame::render(const ASGE::GameTime& us)
 {
   auto dt = static_cast<float>(us.deltaInSecs());
   scene->update(input_tracker, dt);
-  scene->render(renderer.get());
+  if (!quitting_game)
+  {
+    scene->render(renderer.get());
+  }
 }
 
 void ASGEGame::setScene(Scene::Scenes _scene)
@@ -63,6 +66,7 @@ void ASGEGame::setScene(Scene::Scenes _scene)
       break;
     }
     case Scene::QUIT_GAME:
+      quitting_game = true;
       signalExit();
       break;
   }

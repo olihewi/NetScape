@@ -133,6 +133,7 @@ void Player::takeDamage(float damage)
   {
     is_dead = true;
     score.deaths++;
+    score.kill_spree = 0;
     Sprite::visibility(false);
     weapon.visibility(false);
     player_killed.play();
