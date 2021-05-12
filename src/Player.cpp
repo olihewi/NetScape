@@ -39,7 +39,8 @@ void Player::input(InputTracker& input, float dt)
   float left_stick_hypot    = std::hypot(left_stick.x, left_stick.y);
   auto sprint_button        = input.getControllerButton(controller_id, CONTROLLER::BUTTONS::B);
   auto score_readout_button = input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::X);
-  auto invis_button         = input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::LEFT_SHOULDER);
+  auto invis_button =
+    input.getControllerButtonDown(controller_id, CONTROLLER::BUTTONS::LEFT_SHOULDER);
   if (left_stick_hypot > 1)
   {
     left_stick = ASGE::Point2D(left_stick.x / left_stick_hypot, left_stick.y / left_stick_hypot);
@@ -73,15 +74,14 @@ void Player::input(InputTracker& input, float dt)
       "\naccuracy: " + std::to_string((score.hit / (score.hit + score.miss)) * 100));
   }
 
-  if(invis_button && invis_cooldown <= 0)
+  if (invis_button && invis_cooldown <= 0)
   {
     invis_cooldown = 0;
-    is_invis = true;
+    is_invis       = true;
     this->opacity(0.1F);
     weapon.opacity(0.1F);
     invis_timer = 0;
   }
-
 }
 void Player::position(ASGE::Point2D _position)
 {
@@ -125,18 +125,18 @@ void Player::update(InputTracker& input, float dt)
   // Logging::DEBUG("HAS BEEN HIT: " +std::to_string(static_cast<int>(has_been_hit)));
   invis_cooldown -= dt;
 
-  if(invis_cooldown <= 0.1 && invis_cooldown >= 0)
+  if (invis_cooldown <= 0.1 && invis_cooldown >= 0)
   {
     invis_recharged.play();
   }
 
-  if(is_invis == true)
+  if (is_invis == true)
   {
     invis_timer += dt;
 
     if (invis_timer >= 5 || weapon.hasFired() || has_been_hit)
     {
-      invis_timer = 0;
+      invis_timer    = 0;
       invis_cooldown = 15;
       is_invis       = false;
       this->opacity(1.0F);

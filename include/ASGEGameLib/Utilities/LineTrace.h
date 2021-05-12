@@ -13,7 +13,8 @@ class LineTrace
  public:
   explicit LineTrace(ASGE::Renderer* renderer);
 
-  void setLine(ASGE::Point2D origin, ASGE::Point2D end, float time = 0.1F, float width = 3);
+  void setLine(
+    ASGE::Point2D origin, ASGE::Point2D end, float time = 0.1F, float width = 3, float falloff = 1);
 
   void render(ASGE::Renderer* renderer);
 
@@ -24,6 +25,7 @@ class LineTrace
 
  private:
   float tracer_timer = 0;
+  float tracer_time  = 0.1F;
 };
 
 #endif // ASGEMOVIEGAME_LINETRACE_H

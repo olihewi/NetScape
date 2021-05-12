@@ -25,5 +25,4 @@ class PlayerAbilities : public GameObject
   std::array<Sprite, 3> ability_icons;
 };
 
-
 #endif // ASGEMOVIEGAME_PLAYERABILITIES_HPP

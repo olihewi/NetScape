@@ -38,7 +38,8 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
       renderer, player.getWeapon(), player, 1920 / 2 - 40, 1080 / 2 - 40)));
     camera.second.addObject((std::make_unique<PlayerLives>(renderer, player, 40, 1080 / 2 - 40)));
     camera.second.addObject(std::make_unique<Crosshair>(renderer, player.getID()));
-    camera.second.addObject(std::make_unique<PlayerAbilities>(renderer, player, 1920 / 2 - 150, 1080 / 2 - 100));
+    camera.second.addObject(
+      std::make_unique<PlayerAbilities>(renderer, player, 1920 / 2 - 150, 1080 / 2 - 100));
   }
   window_divider.dimensions(window);
 }
@@ -188,6 +189,7 @@ void GameScene::checkBullets()
       ASGE::Point2D origin = player.centre();
       ASGE::Point2D dir    = ASGE::Point2D(
         std::cos(player.getWeapon().rotation()), std::sin(player.getWeapon().rotation()));
+      origin            = ASGE::Point2D(origin.x + dir.x * 12, origin.y + dir.y * 12);
       float dist        = player.getWeapon().getWeaponData().range;
       ASGE::Point2D end = dir * dist;
       end               = ASGE::Point2D(end.x + origin.x, end.y + origin.y);
@@ -216,7 +218,10 @@ void GameScene::checkBullets()
         end              = ASGE::Point2D(end.x + origin.x, end.y + origin.y);
 
         player.getScore().hit++;
-        hit_player.takeDamage(player.getWeapon().getWeaponData().damage);
+        auto& this_weapon = player.getWeapon().getWeaponData();
+        float damage      = this_weapon.damage;
+        damage *= 1 - dist / this_weapon.range * this_weapon.range_falloff;
+        hit_player.takeDamage(damage);
         if (hit_player.is_dead)
         {
           player.getScore().kills++;
