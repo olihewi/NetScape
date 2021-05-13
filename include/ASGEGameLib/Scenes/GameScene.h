@@ -38,6 +38,11 @@ class GameScene : public Scene
   std::vector<std::pair<ASGE::Camera, PlayerHUD>> player_cameras;
   float round_timer = 120;
   Text round_time_text;
+  Text winner_text;
+  int players_out = 0;
+
+  bool game_end = false;
+  bool timer_end = false;
 
   // std::array<ASGE::Camera, 4> player_cameras;
   void onKill(Player& player, Player& hit_player);

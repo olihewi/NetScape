@@ -19,6 +19,7 @@ struct Score
   float hit      = 0;
   float miss     = 0;
   int kill_spree = 0;
+  bool game_end       = false;
 
   std::array<int, 4> nemesis_points{};
   std::unordered_map<std::string, int> favourite_gun{};
