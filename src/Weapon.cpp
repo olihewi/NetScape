@@ -14,10 +14,9 @@ Weapon::Weapon(
                                Sound(audio_engine, _weapon.sfx_reload),
                                Sound(audio_engine, _weapon.sfx_pickup) }),
   player_id(_player_id), weapon_data(_weapon), current_ammo(_weapon.max_ammo),
-  ammo_reserve(_weapon.ammo_reserve), el(std::random_device{}())
+  ammo_reserve(_weapon.ammo_reserve), el(std::random_device{}()), random_num(-1.F, 1.F)
 {
   // zOrder(2);
-  random_num = std::uniform_real_distribution<float>(-1.F, 1.F);
   for (int i = 0; i < weapon_data.num_bullets; i++)
   {
     bullets.emplace_back(LineTrace(renderer));
