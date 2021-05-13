@@ -101,7 +101,7 @@ void PlayerScore::render(ASGE::Renderer* renderer)
 {
   // if (score_card.visibility())
   //{
-  if (display_score_sheet)
+  if (display_score_sheet || player.getScore().game_end)
   {
     for (auto& i : score_text)
     {

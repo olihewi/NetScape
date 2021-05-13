@@ -14,6 +14,7 @@
 #include <array>
 #include <utility>
 
+
 GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
   Scene(std::move(_scene_callback)), m_renderer(renderer),
   tile_map(renderer, "levels/dotonbori.json"),
@@ -22,7 +23,8 @@ GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scen
                                  Player(renderer, ASGE::Point2D(), 2, audio_engine.get()),
                                  Player(renderer, ASGE::Point2D(), 3, audio_engine.get()) }),
   window_divider(renderer, "images/ui/ingame_windowdivider.png"),
-  round_time_text(renderer, "", ASGE::Point2D(), FONTS::PIXEL)
+  round_time_text(renderer, "", ASGE::Point2D(), FONTS::PIXEL),
+  winner_text(renderer, "", ASGE::Point2D(), FONTS::PIXEL)
 {
   auto window = ASGE::Point2D(
     static_cast<float>(ASGE::SETTINGS.window_width),
@@ -52,9 +54,41 @@ void GameScene::update(InputTracker& input, float dt)
   Scene::update(input, dt);
   tile_map.update(input, dt);
 
-  playerMovement(input, dt);
-  checkBullets();
-  updateDrops(input);
+  if(!game_end)
+  {
+    playerMovement(input, dt);
+    checkBullets();
+    updateDrops(input);
+
+    round_timer -= dt;
+    round_time_text.contents(std::to_string(static_cast<int>(round_timer)));
+    round_time_text.centrePos(ASGE::Point2D(static_cast<float>(ASGE::SETTINGS.window_width) / 2, 64));
+  }
+  else
+  {
+    for(int i = 0; i < 4; i++)
+    {
+      players[i].getScore().game_end = true;
+      if (players[0].getScore().kills > players[i].getScore().kills)
+      {
+        winner_text.contents("Player 1 wins");
+
+      }
+      if (players[1].getScore().kills > players[i].getScore().kills)
+      {
+        winner_text.contents("Player 2 wins");
+      }
+      if (players[2].getScore().kills > players[i].getScore().kills)
+      {
+        winner_text.contents("Player 3 wins");
+      }
+      if (players[3].getScore().kills > players[i].getScore().kills)
+      {
+        winner_text.contents("Player 4 wins");
+      }
+    }
+    winner_text.centrePos(ASGE::Point2D(static_cast<float>(ASGE::SETTINGS.window_width) / 2, 150));
+  }
 
   size_t index = 0;
   for (auto& camera : player_cameras)
@@ -73,9 +107,34 @@ void GameScene::update(InputTracker& input, float dt)
     camera.first.setZoom(0.5F + (0.05F * right_mag * camera.second.getFocus()));
     index++;
   }
-  round_timer -= dt;
-  round_time_text.contents(std::to_string(static_cast<int>(round_timer)));
-  round_time_text.centrePos(ASGE::Point2D(static_cast<float>(ASGE::SETTINGS.window_width) / 2, 64));
+
+  for(auto& player : players)
+  {
+    if (!timer_end)
+    {
+      if (player.getLives() == 0)
+      {
+        players_out++;
+        player.setLives(-1);
+      }
+      if (players_out == 3)
+      {
+        if (player.getLives() > 0)
+        {
+          winner_text.contents("Player " + std::to_string(player.getID() + 1) + " wins");
+          winner_text.centrePos(ASGE::Point2D(static_cast<float>(ASGE::SETTINGS.window_width) / 2, 150));
+        }
+        game_end = true;
+      }
+    }
+  }
+
+
+  if(round_timer <= 0)
+  {
+    timer_end = true;
+    game_end = true;
+  }
 
   if (input.getKeyDown(ASGE::KEYS::KEY_ESCAPE))
   {
@@ -118,6 +177,11 @@ void GameScene::render(ASGE::Renderer* renderer)
     static_cast<float>(ASGE::SETTINGS.window_height));
   window_divider.render(renderer);
   round_time_text.render(renderer);
+
+  if(game_end)
+  {
+    winner_text.render(renderer);
+  }
 }
 void GameScene::playerMovement(InputTracker& input, float dt)
 {
