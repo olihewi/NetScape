@@ -17,10 +17,11 @@
 GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
   Scene(std::move(_scene_callback)), m_renderer(renderer),
   tile_map(renderer, "levels/dotonbori.json"),
-  players(std::array<Player, 4>{ Player(renderer, ASGE::Point2D(), 0, audio_engine.get()),
-                                 Player(renderer, ASGE::Point2D(), 1, audio_engine.get()),
-                                 Player(renderer, ASGE::Point2D(), 2, audio_engine.get()),
-                                 Player(renderer, ASGE::Point2D(), 3, audio_engine.get()) }),
+  players(std::array<Player, 4>{
+    Player(renderer, ASGE::Point2D(), 0, audio_engine.get(), tile_map.getWeapon("Pistol")),
+    Player(renderer, ASGE::Point2D(), 1, audio_engine.get(), tile_map.getWeapon("Pistol")),
+    Player(renderer, ASGE::Point2D(), 2, audio_engine.get(), tile_map.getWeapon("Pistol")),
+    Player(renderer, ASGE::Point2D(), 3, audio_engine.get(), tile_map.getWeapon("Pistol")) }),
   window_divider(renderer, "images/ui/ingame_windowdivider.png"),
   round_time_text(renderer, "", ASGE::Point2D(), FONTS::PIXEL),
   winner_text(renderer, "", ASGE::Point2D(), FONTS::PIXEL)
@@ -262,13 +263,13 @@ void GameScene::checkBullets()
 }
 Player& GameScene::checkPlayerBullet(Player& player)
 {
-  for (int i = 0; i < player.getWeapon().getWeaponData().num_bullets; i++)
+  for (int i = 0; i < player.getWeapon().getWeaponData()->num_bullets; i++)
   {
     ASGE::Point2D origin = player.centre();
     ASGE::Point2D dir =
       ASGE::Point2D(cos(player.getWeapon().rotation()), sin(player.getWeapon().rotation()));
     origin            = ASGE::Point2D(origin.x + dir.x * 12, origin.y + dir.y * 12);
-    float dist        = player.getWeapon().getWeaponData().range;
+    float dist        = player.getWeapon().getWeaponData()->range;
     ASGE::Point2D end = dir * dist;
     end               = ASGE::Point2D(end.x + origin.x, end.y + origin.y);
     end               = bulletVsTiles(origin, end);
@@ -296,9 +297,9 @@ Player& GameScene::checkPlayerBullet(Player& player)
       end              = ASGE::Point2D(end.x + origin.x, end.y + origin.y);
 
       player.getScore().hit++;
-      auto& this_weapon = player.getWeapon().getWeaponData();
-      float damage      = this_weapon.damage;
-      damage *= 1 - dist / this_weapon.range * this_weapon.range_falloff;
+      auto* this_weapon = player.getWeapon().getWeaponData();
+      float damage      = this_weapon->damage;
+      damage *= 1 - dist / this_weapon->range * this_weapon->range_falloff;
       hit_player.takeDamage(damage);
       if (hit_player.is_dead)
       {
@@ -319,7 +320,7 @@ void GameScene::onKill(Player& player, Player& hit_player)
   hit_player.getScore().nemesis_points[player.getID()] += 1;
   player.getScore().kills++;
   player.getScore().kill_spree++;
-  std::string held_weapon = player.getWeapon().getWeaponData().weapon_name;
+  std::string held_weapon = player.getWeapon().getWeaponData()->weapon_name;
   player.getScore().favourite_gun[held_weapon]++;
 
   for (auto& camera : player_cameras)

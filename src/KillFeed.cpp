@@ -60,7 +60,7 @@ KillFeedElement::KillFeedElement(
   ASGE::Renderer* renderer, Player& p1, Player& p2, ASGE::Point2D _position, ASGE::Colour _colour) :
   name1(renderer, "P" + std::to_string(p1.getID() + 1), _position, FONTS::PIXEL, _colour, 0.6F),
   name2(renderer, "P" + std::to_string(p2.getID() + 1), _position, FONTS::PIXEL, _colour, 0.6F),
-  weapon(renderer, p1.getWeapon().getWeaponData().sprite_floor, _position)
+  weapon(renderer, p1.getWeapon().getWeaponData()->sprite_floor, _position)
 {
   weapon.srcRect(0, 0, weapon.getTextureSize().x / 2, weapon.getTextureSize().y);
   weapon.dimensions(ASGE::Point2D(weapon.getTextureSize().x / 2, weapon.getTextureSize().y));

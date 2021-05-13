@@ -15,7 +15,7 @@ class Weapon : public AnimatedSprite
  public:
   Weapon(
     ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _player_id,
-    const WeaponData& _weapon);
+    WeaponData* _weapon_data);
   void update(InputTracker& input, float dt) override;
   void fire();
   void reload();
@@ -23,18 +23,16 @@ class Weapon : public AnimatedSprite
   [[nodiscard]] float getLookDistance() const;
   void render(ASGE::Renderer* renderer) override;
   [[nodiscard]] bool hasFired() const;
-  void setWeapon(ASGE::Renderer* renderer, const WeaponData& _weapon);
-  [[nodiscard]] WeaponData& getWeaponData();
+  void setWeapon(ASGE::Renderer* renderer, WeaponData* _weapon_data);
+  [[nodiscard]] WeaponData* getWeaponData();
   [[nodiscard]] int getCurrentAmmo() const;
   void trace(ASGE::Point2D origin, ASGE::Point2D end, size_t index = 0);
 
  private:
+  WeaponData* weapon_data;
   std::array<Sound, 4> sounds;
   size_t player_id;
   std::vector<LineTrace> bullets;
-
-  /// Weapon Stats
-  WeaponData weapon_data;
 
   /// Current Stats
   int current_ammo;

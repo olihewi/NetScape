@@ -2,6 +2,8 @@
 // Created by hewis on 10/05/2021.
 //
 #include <ASGEGameLib/GameObjects/Player/Weapons/WeaponData.h>
+#include <Engine/FileIO.hpp>
+
 WeaponData::WeaponData(nlohmann::json j) :
   weapon_name(j["weapon_name"].get<std::string>()),
   sprite_held(j["sprite_held"].get<std::string>()),

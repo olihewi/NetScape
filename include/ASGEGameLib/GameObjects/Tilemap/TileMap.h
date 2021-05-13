@@ -20,6 +20,8 @@ class TileMap : public GameObject
   void loadFromJson(nlohmann::json j);
   /// Save to file
   nlohmann::json saveTileMap();
+  void registerWeapons();
+  [[nodiscard]] WeaponData* getWeapon(const std::string& weapon_name);
 
   void update(InputTracker& input, float dt) override;
   void render(ASGE::Renderer* _renderer) override;
@@ -43,6 +45,7 @@ class TileMap : public GameObject
   std::vector<ASGE::Point2D> spawn_points;
   std::vector<AnimatedSprite> animations;
   std::vector<WeaponDrop> weapon_drops;
+  std::unordered_map<std::string, std::unique_ptr<WeaponData>> weapons;
 };
 
 #endif // ASGEMOVIEGAME_TILEMAP_H

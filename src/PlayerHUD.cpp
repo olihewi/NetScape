@@ -15,15 +15,15 @@ void PlayerHUD::update(InputTracker& input, float dt)
   lerped_focus      = lerped_focus + 8.F * dt * (left_trigger - lerped_focus);
   camera_shake      = ASGE::Point2D(
     camera_shake.x +
-      10.F * player.getWeapon().getWeaponData().recoil_regain * dt * (0 - camera_shake.x),
+      10.F * player.getWeapon().getWeaponData()->recoil_regain * dt * (0 - camera_shake.x),
     camera_shake.y +
-      10.F * player.getWeapon().getWeaponData().recoil_regain * dt * (0 - camera_shake.y));
+      10.F * player.getWeapon().getWeaponData()->recoil_regain * dt * (0 - camera_shake.y));
   if (player.getWeapon().hasFired())
   {
     cameraShake(ASGE::Point2D(
-      -std::cos(player.getWeapon().rotation()) * 37.5F * player.getWeapon().getWeaponData().recoil,
+      -std::cos(player.getWeapon().rotation()) * 37.5F * player.getWeapon().getWeaponData()->recoil,
       -std::sin(player.getWeapon().rotation()) * 37.5F *
-        player.getWeapon().getWeaponData().recoil));
+        player.getWeapon().getWeaponData()->recoil));
   }
 }
 void PlayerHUD::render(ASGE::Renderer* renderer)

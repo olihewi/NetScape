@@ -115,7 +115,7 @@ nlohmann::json TileMap::saveTileMap()
   {
     nlohmann::json this_j;
     this_j["position"]     = std::make_pair(weapon_drop.centre().x, weapon_drop.centre().y);
-    this_j["data"]         = weapon_drop.getWeapon().toJson();
+    this_j["data"]         = weapon_drop.getWeapon()->toJson();
     this_j["respawn_time"] = weapon_drop.getRespawnTime();
     j_drops.emplace_back(this_j);
   }
@@ -125,6 +125,7 @@ nlohmann::json TileMap::saveTileMap()
 TileMap::TileMap(ASGE::Renderer* _renderer, const std::string& file_path) :
   collisions(), renderer(_renderer)
 {
+  registerWeapons();
   ASGE::FILEIO::File file;
   if (file.open(file_path, ASGE::FILEIO::File::IOMode::READ))
   {
@@ -211,7 +212,7 @@ void TileMap::loadFromJson(nlohmann::json j)
   for (auto& weapon_drop : j["weapon_drops"])
   {
     auto pos_pair     = weapon_drop["position"].get<std::pair<float, float>>();
-    auto weapon       = WeaponData(weapon_drop["data"]);
+    auto weapon       = getWeapon(weapon_drop["weapon"].get<std::string>());
     auto respawn_time = weapon_drop["respawn_time"].get<float>();
     weapon_drops.emplace_back(
       WeaponDrop(renderer, weapon, respawn_time, ASGE::Point2D(pos_pair.first, pos_pair.second)));
@@ -293,4 +294,25 @@ void TileMap::setAnimatedTile(size_t layer, size_t index, const std::string& fil
 std::vector<WeaponDrop>& TileMap::getDrops()
 {
   return weapon_drops;
+}
+void TileMap::registerWeapons()
+{
+  weapons.clear();
+  ASGE::FILEIO::File file;
+  nlohmann::json j;
+  if (file.open("data/weapons.json", ASGE::FILEIO::File::IOMode::READ))
+  {
+    ASGE::FILEIO::IOBuffer buffer = file.read();
+    j = nlohmann::json::parse(buffer.as_char(), buffer.as_char() + buffer.length);
+    file.close();
+  }
+  for (auto& weapon : j)
+  {
+    weapons.insert(std::make_pair(
+      weapon["weapon_name"].get<std::string>(), std::make_unique<WeaponData>(weapon)));
+  }
+}
+WeaponData* TileMap::getWeapon(const std::string& weapon)
+{
+  return weapons[weapon].get();
 }

@@ -650,31 +650,7 @@
   "tileset": "data/images/tilesets/japanese_city.png",
   "weapon_drops": [
     {
-      "data": {
-        "ammo_reserve": 40,
-        "damage": 20.0,
-        "fire_frames": 1,
-        "fire_rate": 0.20000000298023224,
-        "inaccuracy": 0.0,
-        "is_automatic": false,
-        "look_distance": 1.0,
-        "max_ammo": 10,
-        "num_bullets": 1,
-        "range": 400.0,
-        "range_falloff": 0.25,
-        "recoil": 0.20000000298023224,
-        "recoil_regain": 0.6000000238418579,
-        "reload_frames": 6,
-        "reload_time": 0.75,
-        "sfx_empty": "data/audio/guns/pistol/empty.wav",
-        "sfx_fire": "data/audio/guns/pistol/fire.wav",
-        "sfx_pickup": "data/audio/guns/pistol/pickup.wav",
-        "sfx_reload": "data/audio/guns/pistol/reload.wav",
-        "sprite_ammo": "data/images/weapons/pistol_bullet.png",
-        "sprite_floor": "data/images/weapons/pistol.png",
-        "sprite_held": "data/images/player/pistol.png",
-        "weapon_name": "Pistol"
-      },
+      "weapon": "Pistol",
       "position": [
         448.0,
         512.0
@@ -682,31 +658,7 @@
       "respawn_time": 10.0
     },
     {
-      "data": {
-        "ammo_reserve": 40,
-        "damage": 20.0,
-        "fire_frames": 1,
-        "fire_rate": 0.20000000298023224,
-        "inaccuracy": 0.0,
-        "is_automatic": false,
-        "look_distance": 1.0,
-        "max_ammo": 10,
-        "num_bullets": 1,
-        "range": 400.0,
-        "range_falloff": 0.25,
-        "recoil": 0.20000000298023224,
-        "recoil_regain": 0.6000000238418579,
-        "reload_frames": 6,
-        "reload_time": 0.75,
-        "sfx_empty": "data/audio/guns/pistol/empty.wav",
-        "sfx_fire": "data/audio/guns/pistol/fire.wav",
-        "sfx_pickup": "data/audio/guns/pistol/pickup.wav",
-        "sfx_reload": "data/audio/guns/pistol/reload.wav",
-        "sprite_ammo": "data/images/weapons/pistol_bullet.png",
-        "sprite_floor": "data/images/weapons/pistol.png",
-        "sprite_held": "data/images/player/pistol.png",
-        "weapon_name": "Pistol"
-      },
+      "weapon": "Pistol",
       "position": [
         896.0,
         896.0
@@ -714,31 +666,7 @@
       "respawn_time": 10.0
     },
     {
-      "data": {
-        "ammo_reserve": 40,
-        "damage": 20.0,
-        "fire_frames": 1,
-        "fire_rate": 0.20000000298023224,
-        "inaccuracy": 0.0,
-        "is_automatic": false,
-        "look_distance": 1.0,
-        "max_ammo": 10,
-        "num_bullets": 1,
-        "range": 400.0,
-        "range_falloff": 0.25,
-        "recoil": 0.20000000298023224,
-        "recoil_regain": 0.6000000238418579,
-        "reload_frames": 6,
-        "reload_time": 0.75,
-        "sfx_empty": "data/audio/guns/pistol/empty.wav",
-        "sfx_fire": "data/audio/guns/pistol/fire.wav",
-        "sfx_pickup": "data/audio/guns/pistol/pickup.wav",
-        "sfx_reload": "data/audio/guns/pistol/reload.wav",
-        "sprite_ammo": "data/images/weapons/pistol_bullet.png",
-        "sprite_floor": "data/images/weapons/pistol.png",
-        "sprite_held": "data/images/player/pistol.png",
-        "weapon_name": "Pistol"
-      },
+      "weapon": "Pistol",
       "position": [
         1280.0,
         352.0
@@ -746,31 +674,7 @@
       "respawn_time": 10.0
     },
     {
-      "data": {
-        "ammo_reserve": 24,
-        "damage": 14.0,
-        "fire_frames": 3,
-        "fire_rate": 1.0,
-        "inaccuracy": 0.30000001192092896,
-        "is_automatic": false,
-        "look_distance": 0.6000000238418579,
-        "max_ammo": 6,
-        "num_bullets": 8,
-        "range": 200.0,
-        "range_falloff": 0.3499999940395355,
-        "recoil": 1.0,
-        "recoil_regain": 1.0,
-        "reload_frames": 14,
-        "reload_time": 2.0,
-        "sfx_empty": "data/audio/guns/shotgun/empty.wav",
-        "sfx_fire": "data/audio/guns/shotgun/fire.wav",
-        "sfx_pickup": "data/audio/guns/shotgun/pickup.wav",
-        "sfx_reload": "data/audio/guns/shotgun/reload.wav",
-        "sprite_ammo": "data/images/weapons/shotgun_pellet.png",
-        "sprite_floor": "data/images/weapons/shotgun.png",
-        "sprite_held": "data/images/player/shotgun.png",
-        "weapon_name": "Shotgun"
-      },
+      "weapon": "Shotgun",
       "position": [
         1008.0,
         416.0
@@ -778,31 +682,7 @@
       "respawn_time": 30.0
     },
     {
-      "data": {
-        "ammo_reserve": 24,
-        "damage": 14.0,
-        "fire_frames": 3,
-        "fire_rate": 1.0,
-        "inaccuracy": 0.30000001192092896,
-        "is_automatic": false,
-        "look_distance": 0.6000000238418579,
-        "max_ammo": 6,
-        "num_bullets": 8,
-        "range": 200.0,
-        "range_falloff": 0.3499999940395355,
-        "recoil": 1.0,
-        "recoil_regain": 1.0,
-        "reload_frames": 14,
-        "reload_time": 2.0,
-        "sfx_empty": "data/audio/guns/shotgun/empty.wav",
-        "sfx_fire": "data/audio/guns/shotgun/fire.wav",
-        "sfx_pickup": "data/audio/guns/shotgun/pickup.wav",
-        "sfx_reload": "data/audio/guns/shotgun/reload.wav",
-        "sprite_ammo": "data/images/weapons/shotgun_pellet.png",
-        "sprite_floor": "data/images/weapons/shotgun.png",
-        "sprite_held": "data/images/player/shotgun.png",
-        "weapon_name": "Shotgun"
-      },
+      "weapon": "Shotgun",
       "position": [
         672.0,
         736.0
@@ -810,31 +690,7 @@
       "respawn_time": 30.0
     },
     {
-      "data": {
-        "ammo_reserve": 40,
-        "damage": 12.5,
-        "fire_frames": 1,
-        "fire_rate": 0.05000000074505806,
-        "inaccuracy": 0.20000000298023224,
-        "is_automatic": true,
-        "look_distance": 1.0,
-        "max_ammo": 20,
-        "num_bullets": 1,
-        "range": 350.0,
-        "range_falloff": 0.30000001192092896,
-        "recoil": 0.02500000037252903,
-        "recoil_regain": 0.20000000298023224,
-        "reload_frames": 6,
-        "reload_time": 1.0,
-        "sfx_empty": "data/audio/guns/micro_smg/empty.wav",
-        "sfx_fire": "data/audio/guns/micro_smg/fire.wav",
-        "sfx_pickup": "data/audio/guns/micro_smg/pickup.wav",
-        "sfx_reload": "data/audio/guns/micro_smg/reload.wav",
-        "sprite_ammo": "data/images/weapons/smg_round.png",
-        "sprite_floor": "data/images/weapons/micro_smg.png",
-        "sprite_held": "data/images/player/pistol.png",
-        "weapon_name": "Micro SMG"
-      },
+      "weapon": "Micro SMG",
       "position": [
         860.0,
         866.0
@@ -842,31 +698,7 @@
       "respawn_time": 20.0
     },
     {
-      "data": {
-        "ammo_reserve": 40,
-        "damage": 12.5,
-        "fire_frames": 1,
-        "fire_rate": 0.05000000074505806,
-        "inaccuracy": 0.20000000298023224,
-        "is_automatic": true,
-        "look_distance": 1.0,
-        "max_ammo": 20,
-        "num_bullets": 1,
-        "range": 350.0,
-        "range_falloff": 0.30000001192092896,
-        "recoil": 0.02500000037252903,
-        "recoil_regain": 0.20000000298023224,
-        "reload_frames": 6,
-        "reload_time": 1.0,
-        "sfx_empty": "data/audio/guns/micro_smg/empty.wav",
-        "sfx_fire": "data/audio/guns/micro_smg/fire.wav",
-        "sfx_pickup": "data/audio/guns/micro_smg/pickup.wav",
-        "sfx_reload": "data/audio/guns/micro_smg/reload.wav",
-        "sprite_ammo": "data/images/weapons/smg_round.png",
-        "sprite_floor": "data/images/weapons/micro_smg.png",
-        "sprite_held": "data/images/player/pistol.png",
-        "weapon_name": "Micro SMG"
-      },
+      "weapon": "Micro SMG",
       "position": [
         424.0,
         716.0
@@ -874,31 +706,7 @@
       "respawn_time": 20.0
     },
     {
-      "data": {
-        "ammo_reserve": 40,
-        "damage": 12.5,
-        "fire_frames": 1,
-        "fire_rate": 0.05000000074505806,
-        "inaccuracy": 0.20000000298023224,
-        "is_automatic": true,
-        "look_distance": 1.0,
-        "max_ammo": 20,
-        "num_bullets": 1,
-        "range": 350.0,
-        "range_falloff": 0.30000001192092896,
-        "recoil": 0.02500000037252903,
-        "recoil_regain": 0.20000000298023224,
-        "reload_frames": 6,
-        "reload_time": 1.0,
-        "sfx_empty": "data/audio/guns/micro_smg/empty.wav",
-        "sfx_fire": "data/audio/guns/micro_smg/fire.wav",
-        "sfx_pickup": "data/audio/guns/micro_smg/pickup.wav",
-        "sfx_reload": "data/audio/guns/micro_smg/reload.wav",
-        "sprite_ammo": "data/images/weapons/smg_round.png",
-        "sprite_floor": "data/images/weapons/micro_smg.png",
-        "sprite_held": "data/images/player/pistol.png",
-        "weapon_name": "Micro SMG"
-      },
+      "weapon": "Micro SMG",
       "position": [
         884.0,
         278.0
@@ -906,31 +714,7 @@
       "respawn_time": 20.0
     },
     {
-      "data": {
-        "ammo_reserve": 12,
-        "damage": 75.0,
-        "fire_frames": 1,
-        "fire_rate": 1.25,
-        "inaccuracy": 0.0,
-        "is_automatic": false,
-        "look_distance": 2.0,
-        "max_ammo": 4,
-        "num_bullets": 1,
-        "range": 1200.0,
-        "range_falloff": 0.0,
-        "recoil": 1.0,
-        "recoil_regain": 1.0,
-        "reload_frames": 6,
-        "reload_time": 2.0,
-        "sfx_empty": "data/audio/guns/sniper/empty.wav",
-        "sfx_fire": "data/audio/guns/sniper/fire.wav",
-        "sfx_pickup": "data/audio/guns/sniper/pickup.wav",
-        "sfx_reload": "data/audio/guns/sniper/reload.wav",
-        "sprite_ammo": "data/images/weapons/sniper_round.png",
-        "sprite_floor": "data/images/weapons/sniper.png",
-        "sprite_held": "data/images/player/pistol.png",
-        "weapon_name": "Sniper Rifle"
-      },
+      "weapon": "Sniper Rifle",
       "position": [
         616.0,
         1024.0
@@ -938,31 +722,7 @@
       "respawn_time": 30.0
     },
     {
-      "data": {
-        "ammo_reserve": 12,
-        "damage": 75.0,
-        "fire_frames": 1,
-        "fire_rate": 1.25,
-        "inaccuracy": 0.0,
-        "is_automatic": false,
-        "look_distance": 2.0,
-        "max_ammo": 4,
-        "num_bullets": 1,
-        "range": 1200.0,
-        "range_falloff": 0.0,
-        "recoil": 1.0,
-        "recoil_regain": 1.0,
-        "reload_frames": 6,
-        "reload_time": 2.0,
-        "sfx_empty": "data/audio/guns/sniper/empty.wav",
-        "sfx_fire": "data/audio/guns/sniper/fire.wav",
-        "sfx_pickup": "data/audio/guns/sniper/pickup.wav",
-        "sfx_reload": "data/audio/guns/sniper/reload.wav",
-        "sprite_ammo": "data/images/weapons/sniper_round.png",
-        "sprite_floor": "data/images/weapons/sniper.png",
-        "sprite_held": "data/images/player/pistol.png",
-        "weapon_name": "Sniper Rifle"
-      },
+      "weapon": "Sniper Rifle",
       "position": [
         1152.0,
         832.0
@@ -970,31 +730,7 @@
       "respawn_time": 30.0
     },
     {
-      "data": {
-        "ammo_reserve": 90,
-        "damage": 17.5,
-        "fire_frames": 1,
-        "fire_rate": 0.07999999821186066,
-        "inaccuracy": 0.10000000149011612,
-        "is_automatic": true,
-        "look_distance": 1.0,
-        "max_ammo": 30,
-        "num_bullets": 1,
-        "range": 600.0,
-        "range_falloff": 0.30000001192092896,
-        "recoil": 0.019999999552965164,
-        "recoil_regain": 0.4000000059604645,
-        "reload_frames": 6,
-        "reload_time": 1.2000000476837158,
-        "sfx_empty": "data/audio/guns/smg/empty.wav",
-        "sfx_fire": "data/audio/guns/smg/fire.wav",
-        "sfx_pickup": "data/audio/guns/smg/pickup.wav",
-        "sfx_reload": "data/audio/guns/smg/reload.wav",
-        "sprite_ammo": "data/images/weapons/smg_round.png",
-        "sprite_floor": "data/images/weapons/smg.png",
-        "sprite_held": "data/images/player/pistol.png",
-        "weapon_name": "SMG"
-      },
+      "weapon": "SMG",
       "position": [
         864.0,
         576.0

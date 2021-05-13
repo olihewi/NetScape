@@ -18,20 +18,21 @@ PlayerAmmo::PlayerAmmo(
 
 void PlayerAmmo::update(InputTracker& input, float dt)
 {
-  if (weapon.getWeaponData().weapon_name != last_weapon)
+  if (weapon.getWeaponData()->weapon_name != last_weapon)
   {
-    last_weapon = weapon.getWeaponData().weapon_name;
+    last_weapon = weapon.getWeaponData()->weapon_name;
     counters.clear();
-    for (int i = 0; i <= (weapon.getWeaponData().max_ammo - 1) / 10; i++)
+    for (int i = 0; i <= (weapon.getWeaponData()->max_ammo - 1) / 10; i++)
     {
-      auto& counter = counters.emplace_back(Sprite(m_renderer, weapon.getWeaponData().sprite_ammo));
+      auto& counter =
+        counters.emplace_back(Sprite(m_renderer, weapon.getWeaponData()->sprite_ammo));
       counter.position(ASGE::Point2D(
         position.x - counter.dimensions().x *
-                       std::fmin(static_cast<float>(weapon.getWeaponData().max_ammo), 10.F),
+                       std::fmin(static_cast<float>(weapon.getWeaponData()->max_ammo), 10.F),
         position.y - counter.dimensions().y * static_cast<float>(i)));
     }
-    weapon_name.contents(weapon.getWeaponData().weapon_name);
-    weapon_sprite.loadSprite(m_renderer, weapon.getWeaponData().sprite_floor);
+    weapon_name.contents(weapon.getWeaponData()->weapon_name);
+    weapon_sprite.loadSprite(m_renderer, weapon.getWeaponData()->sprite_floor);
     weapon_sprite.dimensions(
       ASGE::Point2D(weapon_sprite.getTextureSize().x, weapon_sprite.getTextureSize().y * 2));
     weapon_sprite.srcRect(

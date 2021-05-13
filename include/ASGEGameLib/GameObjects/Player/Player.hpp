@@ -31,7 +31,7 @@ class Player : public AnimatedSprite
  public:
   Player(
     ASGE::Renderer* renderer, ASGE::Point2D _position, size_t control_id,
-    SoLoud::Soloud* audio_engine);
+    SoLoud::Soloud* audio_engine, WeaponData* _weapon);
 
   void update(InputTracker& input, float dt) override;
   void render(ASGE::Renderer* renderer) override;
