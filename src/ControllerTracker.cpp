@@ -170,9 +170,9 @@ int ControllerTracker::getLastAxis(size_t controller_index)
   for (int i = 0; i < controller.no_of_axis; i++)
   {
     if (
-      std::fabs(controller.axis[i]) >= CONTROLLER::AXIS_DEADZONE &&
+      controller.axis[i] >= CONTROLLER::AXIS_DEADZONE * 2 &&
       std::fabs(controllers[controller_index].old_data.axis[static_cast<size_t>(i)]) <
-        CONTROLLER::AXIS_DEADZONE)
+        CONTROLLER::AXIS_DEADZONE * 2)
     {
       return i;
     }
