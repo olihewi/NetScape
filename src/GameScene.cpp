@@ -14,7 +14,6 @@
 #include <array>
 #include <utility>
 
-
 GameScene::GameScene(ASGE::Renderer* renderer, std::function<void(Scenes)> _scene_callback) :
   Scene(std::move(_scene_callback)), m_renderer(renderer),
   tile_map(renderer, "levels/dotonbori.json"),
@@ -54,7 +53,7 @@ void GameScene::update(InputTracker& input, float dt)
   Scene::update(input, dt);
   tile_map.update(input, dt);
 
-  if(!game_end)
+  if (!game_end)
   {
     playerMovement(input, dt);
     checkBullets();
@@ -62,32 +61,12 @@ void GameScene::update(InputTracker& input, float dt)
 
     round_timer -= dt;
     round_time_text.contents(std::to_string(static_cast<int>(round_timer)));
-    round_time_text.centrePos(ASGE::Point2D(static_cast<float>(ASGE::SETTINGS.window_width) / 2, 64));
+    round_time_text.centrePos(
+      ASGE::Point2D(static_cast<float>(ASGE::SETTINGS.window_width) / 2, 64));
   }
   else
   {
-    for(int i = 0; i < 4; i++)
-    {
-      players[i].getScore().game_end = true;
-      if (players[0].getScore().kills > players[i].getScore().kills)
-      {
-        winner_text.contents("Player 1 wins");
-
-      }
-      if (players[1].getScore().kills > players[i].getScore().kills)
-      {
-        winner_text.contents("Player 2 wins");
-      }
-      if (players[2].getScore().kills > players[i].getScore().kills)
-      {
-        winner_text.contents("Player 3 wins");
-      }
-      if (players[3].getScore().kills > players[i].getScore().kills)
-      {
-        winner_text.contents("Player 4 wins");
-      }
-    }
-    winner_text.centrePos(ASGE::Point2D(static_cast<float>(ASGE::SETTINGS.window_width) / 2, 150));
+    onVictory();
   }
 
   size_t index = 0;
@@ -108,7 +87,7 @@ void GameScene::update(InputTracker& input, float dt)
     index++;
   }
 
-  for(auto& player : players)
+  for (auto& player : players)
   {
     if (!timer_end)
     {
@@ -122,24 +101,48 @@ void GameScene::update(InputTracker& input, float dt)
         if (player.getLives() > 0)
         {
           winner_text.contents("Player " + std::to_string(player.getID() + 1) + " wins");
-          winner_text.centrePos(ASGE::Point2D(static_cast<float>(ASGE::SETTINGS.window_width) / 2, 150));
+          winner_text.centrePos(
+            ASGE::Point2D(static_cast<float>(ASGE::SETTINGS.window_width) / 2, 150));
         }
         game_end = true;
       }
     }
   }
 
-
-  if(round_timer <= 0)
+  if (round_timer <= 0)
   {
     timer_end = true;
-    game_end = true;
+    game_end  = true;
   }
 
   if (input.getKeyDown(ASGE::KEYS::KEY_ESCAPE))
   {
     setScene(Scenes::TITLE);
   }
+}
+void GameScene::onVictory()
+{
+  for (int i = 0; i < 4; i++)
+  {
+    players[static_cast<size_t>(i)].getScore().game_end = true;
+    if (players[0].getScore().kills > players[static_cast<size_t>(i)].getScore().kills)
+    {
+      winner_text.contents("Player 1 wins");
+    }
+    if (players[1].getScore().kills > players[static_cast<size_t>(i)].getScore().kills)
+    {
+      winner_text.contents("Player 2 wins");
+    }
+    if (players[2].getScore().kills > players[static_cast<size_t>(i)].getScore().kills)
+    {
+      winner_text.contents("Player 3 wins");
+    }
+    if (players[3].getScore().kills > players[static_cast<size_t>(i)].getScore().kills)
+    {
+      winner_text.contents("Player 4 wins");
+    }
+  }
+  winner_text.centrePos(ASGE::Point2D(static_cast<float>(ASGE::SETTINGS.window_width) / 2, 150));
 }
 void GameScene::render(ASGE::Renderer* renderer)
 {
@@ -178,7 +181,7 @@ void GameScene::render(ASGE::Renderer* renderer)
   window_divider.render(renderer);
   round_time_text.render(renderer);
 
-  if(game_end)
+  if (game_end)
   {
     winner_text.render(renderer);
   }
@@ -253,58 +256,63 @@ void GameScene::checkBullets()
       {
         continue;
       }
-      for (int i = 0; i < player.getWeapon().getWeaponData().num_bullets; i++)
-      {
-        ASGE::Point2D origin = player.centre();
-        ASGE::Point2D dir    = ASGE::Point2D(
-          std::cos(player.getWeapon().rotation()), std::sin(player.getWeapon().rotation()));
-        origin            = ASGE::Point2D(origin.x + dir.x * 12, origin.y + dir.y * 12);
-        float dist        = player.getWeapon().getWeaponData().range;
-        ASGE::Point2D end = dir * dist;
-        end               = ASGE::Point2D(end.x + origin.x, end.y + origin.y);
-        end               = bulletVsTiles(origin, end);
-
-        int closest_player_index = -1;
-        float closest_dist       = 9999;
-        for (auto& other_player : players)
-        {
-          if (other_player.getID() == player.getID() || other_player.is_dead)
-          {
-            continue;
-          }
-          float hit_dist = bulletVsPlayer(origin, end, other_player);
-          if (hit_dist >= 0 && hit_dist < closest_dist)
-          {
-            closest_player_index = static_cast<int>(other_player.getID());
-            closest_dist         = hit_dist;
-            dist                 = hit_dist;
-          }
-        }
-        if (closest_player_index != -1) /// Hit
-        {
-          auto& hit_player = players[static_cast<size_t>(closest_player_index)];
-          end              = dir * dist;
-          end              = ASGE::Point2D(end.x + origin.x, end.y + origin.y);
-
-          player.getScore().hit++;
-          auto& this_weapon = player.getWeapon().getWeaponData();
-          float damage      = this_weapon.damage;
-          damage *= 1 - dist / this_weapon.range * this_weapon.range_falloff;
-          hit_player.takeDamage(damage);
-          if (hit_player.is_dead)
-          {
-            onKill(player, hit_player);
-          }
-        }
-        else /// Miss
-        {
-          player.getScore().miss++;
-        }
-
-        player.getWeapon().trace(origin, end, static_cast<size_t>(i));
-      }
+      checkPlayerBullet(player);
     }
   }
+}
+Player& GameScene::checkPlayerBullet(Player& player)
+{
+  for (int i = 0; i < player.getWeapon().getWeaponData().num_bullets; i++)
+  {
+    ASGE::Point2D origin = player.centre();
+    ASGE::Point2D dir =
+      ASGE::Point2D(cos(player.getWeapon().rotation()), sin(player.getWeapon().rotation()));
+    origin            = ASGE::Point2D(origin.x + dir.x * 12, origin.y + dir.y * 12);
+    float dist        = player.getWeapon().getWeaponData().range;
+    ASGE::Point2D end = dir * dist;
+    end               = ASGE::Point2D(end.x + origin.x, end.y + origin.y);
+    end               = bulletVsTiles(origin, end);
+
+    int closest_player_index = -1;
+    float closest_dist       = 9999;
+    for (auto& other_player : players)
+    {
+      if (other_player.getID() == player.getID() || other_player.is_dead)
+      {
+        continue;
+      }
+      float hit_dist = bulletVsPlayer(origin, end, other_player);
+      if (hit_dist >= 0 && hit_dist < closest_dist)
+      {
+        closest_player_index = static_cast<int>(other_player.getID());
+        closest_dist         = hit_dist;
+        dist                 = hit_dist;
+      }
+    }
+    if (closest_player_index != -1) /// Hit
+    {
+      auto& hit_player = players[static_cast<size_t>(closest_player_index)];
+      end              = dir * dist;
+      end              = ASGE::Point2D(end.x + origin.x, end.y + origin.y);
+
+      player.getScore().hit++;
+      auto& this_weapon = player.getWeapon().getWeaponData();
+      float damage      = this_weapon.damage;
+      damage *= 1 - dist / this_weapon.range * this_weapon.range_falloff;
+      hit_player.takeDamage(damage);
+      if (hit_player.is_dead)
+      {
+        onKill(player, hit_player);
+      }
+    }
+    else /// Miss
+    {
+      player.getScore().miss++;
+    }
+
+    player.getWeapon().trace(origin, end, static_cast<size_t>(i));
+  }
+  return player;
 }
 void GameScene::onKill(Player& player, Player& hit_player)
 {
@@ -502,7 +510,7 @@ float GameScene::bulletVsPlayer(ASGE::Point2D origin, ASGE::Point2D end, Player&
   ASGE::Point2D dist = ASGE::Point2D(end.x - origin.x, end.y - origin.y);
   float mag          = std::hypot(dist.x, dist.y);
   float dot = (((p.x - origin.x) * (end.x - origin.x)) + ((p.y - origin.y) * (end.y - origin.y))) /
-              std::powf(mag, 2);
+              powf(mag, 2);
   ASGE::Point2D closest =
     ASGE::Point2D(origin.x + (dot * (end.x - origin.x)), origin.y + (dot * (end.y - origin.y)));
   /// If point is on segment

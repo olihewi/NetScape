@@ -3,6 +3,7 @@
 //
 
 #include "ASGEGameLib/GameObjects/Player/Weapons/Weapon.h"
+#include <chrono>
 #include <cmath>
 Weapon::Weapon(
   ASGE::Renderer* renderer, SoLoud::Soloud* audio_engine, size_t _player_id,
@@ -13,10 +14,9 @@ Weapon::Weapon(
                                Sound(audio_engine, _weapon.sfx_reload),
                                Sound(audio_engine, _weapon.sfx_pickup) }),
   player_id(_player_id), weapon_data(_weapon), current_ammo(_weapon.max_ammo),
-  ammo_reserve(_weapon.ammo_reserve)
+  ammo_reserve(_weapon.ammo_reserve), el(std::random_device{}())
 {
   // zOrder(2);
-  el         = std::default_random_engine(r());
   random_num = std::uniform_real_distribution<float>(-1.F, 1.F);
   for (int i = 0; i < weapon_data.num_bullets; i++)
   {

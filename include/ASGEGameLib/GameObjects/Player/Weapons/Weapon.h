@@ -46,7 +46,6 @@ class Weapon : public AnimatedSprite
   float last_safe_rotation = 0;
 
   /// Random Number Generator
-  std::random_device r;
   std::default_random_engine el;
   std::uniform_real_distribution<float> random_num;
 };

@@ -30,6 +30,9 @@ class LevelEditor : public Scene
   Cursor cursor;
   ASGE::Camera tilemap_camera;
   size_t current_layer = 0;
+  void placeTiles(
+    InputTracker& input, ASGE::Point2D& relative_mouse_pos,
+    const ASGE::Camera::CameraView& camera_view);
 };
 
 #endif // ASGEMOVIEGAME_LEVELEDITOR_H

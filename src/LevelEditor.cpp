@@ -91,39 +91,7 @@ void LevelEditor::update(InputTracker& input, float dt)
   auto camera_view        = tilemap_camera.getView();
   if (relative_mouse_pos.x > 256)
   {
-    relative_mouse_pos.x =
-      (relative_mouse_pos.x - 256) * tilemap_camera.getZoom() + camera_view.min_x;
-    relative_mouse_pos.y =
-      (relative_mouse_pos.y - 125) * tilemap_camera.getZoom() + camera_view.min_y;
-    if (relative_mouse_pos.x >= 0 && relative_mouse_pos.y >= 0)
-    {
-      if (input.getMouseButton(MOUSE::LEFT_CLICK))
-      {
-        placeTiles(relative_mouse_pos, 0);
-      }
-      if (input.getMouseButton(MOUSE::RIGHT_CLICK))
-      {
-        placeTiles(relative_mouse_pos, 1);
-      }
-      if (input.getMouseButton(MOUSE::MIDDLE_CLICK))
-      {
-        placeTiles(relative_mouse_pos, 2);
-      }
-      if (input.getMouseButton(MOUSE::MOUSE_5))
-      {
-        placeTiles(relative_mouse_pos, 3);
-      }
-      if (input.getKeyDown(ASGE::KEYS::KEY_L))
-      {
-        auto x_pos = static_cast<size_t>(relative_mouse_pos.x) / 32;
-        auto y_pos = static_cast<size_t>(relative_mouse_pos.y) / 32;
-        tile_map.setAnimatedTile(
-          current_layer,
-          x_pos + y_pos * 50,
-          "data/images/animations/japanese_city/crow_ground.png",
-          10);
-      }
-    }
+    placeTiles(input, relative_mouse_pos, camera_view);
 
     auto camera_move = input.getWASD();
     tilemap_camera.translate(camera_move.x * 256 * dt, -camera_move.y * 256 * dt, 0);
@@ -146,6 +114,44 @@ void LevelEditor::update(InputTracker& input, float dt)
     if (should_return && input.getMouseButton(MOUSE::LEFT_CLICK))
     {
       return;
+    }
+  }
+}
+void LevelEditor::placeTiles(
+  InputTracker& input, ASGE::Point2D& relative_mouse_pos,
+  const ASGE::Camera::CameraView& camera_view)
+{
+  relative_mouse_pos.x =
+    (relative_mouse_pos.x - 256) * tilemap_camera.getZoom() + camera_view.min_x;
+  relative_mouse_pos.y =
+    (relative_mouse_pos.y - 125) * tilemap_camera.getZoom() + camera_view.min_y;
+  if (relative_mouse_pos.x >= 0 && relative_mouse_pos.y >= 0)
+  {
+    if (input.getMouseButton(MOUSE::LEFT_CLICK))
+    {
+      placeTiles(relative_mouse_pos, 0);
+    }
+    if (input.getMouseButton(MOUSE::RIGHT_CLICK))
+    {
+      placeTiles(relative_mouse_pos, 1);
+    }
+    if (input.getMouseButton(MOUSE::MIDDLE_CLICK))
+    {
+      placeTiles(relative_mouse_pos, 2);
+    }
+    if (input.getMouseButton(MOUSE::MOUSE_5))
+    {
+      placeTiles(relative_mouse_pos, 3);
+    }
+    if (input.getKeyDown(ASGE::KEYS::KEY_L))
+    {
+      auto x_pos = static_cast<size_t>(relative_mouse_pos.x) / 32;
+      auto y_pos = static_cast<size_t>(relative_mouse_pos.y) / 32;
+      tile_map.setAnimatedTile(
+        current_layer,
+        x_pos + y_pos * 50,
+        "data/images/animations/japanese_city/crow_ground.png",
+        10);
     }
   }
 }

@@ -41,11 +41,13 @@ class GameScene : public Scene
   Text winner_text;
   int players_out = 0;
 
-  bool game_end = false;
+  bool game_end  = false;
   bool timer_end = false;
 
   // std::array<ASGE::Camera, 4> player_cameras;
   void onKill(Player& player, Player& hit_player);
+  Player& checkPlayerBullet(Player& player);
+  void onVictory();
 };
 
 #endif // ASGEMOVIEGAME_GAMESCENE_H
